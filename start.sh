@@ -1,0 +1,1 @@
+puma --debug -p 4567 -d -e development

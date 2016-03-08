@@ -1,0 +1,159 @@
+body {
+    padding-top: 50px; /* Required padding for .navbar-fixed-top. Change if height of navigation changes. */
+    background-color: #000;
+}
+
+/* Navbar Defaults
+-------------------------------------------------- */
+
+.navbar-default {
+  background-color: #03498f;
+  border-color: #033567;
+}
+.navbar-default .navbar-brand {
+  color: #ecf0f1;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  color: #ffffff;
+}
+.navbar-default .navbar-text {
+  color: #ecf0f1;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #ecf0f1;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+  color: #ffffff;
+  background-color: #033567;
+}
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+  color: #ffffff;
+  background-color: #033567;
+}
+.navbar-default .navbar-toggle {
+  border-color: #033567;
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+  background-color: #033567;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #ecf0f1;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border-color: #ecf0f1;
+}
+.navbar-default .navbar-link {
+  color: #ecf0f1;
+}
+.navbar-default .navbar-link:hover {
+  color: #ffffff;
+}
+
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #ecf0f1;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #ffffff;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #ffffff;
+    background-color: #033567;
+  }
+}
+
+.rheader {
+	border-bottom: 2px #fff solid;
+}
+
+.niceLink {
+	cursor: pointer;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+
+.footer {
+	background: none repeat scroll 0 0 #033567;
+}
+
+footer #footsearch {
+	margin: 8px 8px 8px 8px;
+}
+
+#footsearch input-group {
+	min-width: 300px;
+}
+
+.consoleBox {
+	height: 100%;
+	background-color: black;
+	padding: 0 10px 0 10px;
+  margin-top: 10px;
+  margin-bottom: 40px;
+	color: #aaa;
+	font-size: 0.9em;
+}
+
+.muted {
+	color: #444;
+}r
+
+.highlighted {
+  background-color: #ffff00; 
+  color: #000;
+}
+
+.fructy {
+  background-color: #ffff00; 
+  color: #000;
+}
+
+.dropup {
+  margin-left: 10px;
+}
+
+.hoursMain  { margin-right: 10px; }
+
+.count { color: #fff; padding: 12px 10px 0 0;}
+
+.tailer {padding-left: 20px;}
+
+#chart {
+  margin-top: 50px;
+}
+
+.c3-xgrid, .c3-ygrid{
+  stroke-dasharray:none !important;
+}
+
+.c3-grid line {
+  stroke: #333 !important;
+}
+
+.c3 text {
+  color: #aaa;
+  stroke: #aaa;
+}
