@@ -9,18 +9,30 @@ $(function()	{
 	var nowTime = new Date(new Date().getTime());
 	var diff = nowTime.getTime() - startTime.getTime();
 	var slice = diff / VIEWSIZE;
+	var logConsole = new LogConsole();
 
 	function massageData(data) {
 		//	Assume	data	in	format	
 		//	{ "xxx" : counts...}
 		var keys = getKeys(data);
 		for (var k=0; k<keys.length; k++) {
-			// Insert name into first entry
-			var rowData = [keys[k]];
-			// Concat count data into array
-			rowData = rowData.concat(data[keys[k]]);
-			chartData["columns"].push(rowData);
+			var sum = sumValues(data[keys[k]]);
+			if (sum > 0) {
+				// Insert name into first entry
+				var rowData = [keys[k] + " (" + sum.toString() + ")"];
+				// Concat count data into array
+				rowData = rowData.concat(data[keys[k]]);
+				chartData["columns"].push(rowData);
+			}
 		}
+	}
+
+	function sumValues(array) {
+		var total = 0;
+		for(var i=0; i<array.length; i++) {
+			total += array[i];
+		}
+		return total;
 	}
 
 	function timeSliceAsTime(timeSliceIndex) {
@@ -36,24 +48,6 @@ $(function()	{
 				}
 		}
 		return keys;
-	}
-
-	function formatDate(date) {
-		var hours = date.getHours();
-		var minutes = date.getMinutes();
-		var ampm = hours >= 12 ? 'pm' : 'am';
-		hours = hours % 12;
-		hours = hours ? hours : 12; // the hour '0' should be '12'
-		minutes = minutes < 10 ? '0'+minutes : minutes;
-		var strTime = hours + ':' + minutes + ' ' + ampm;
-		var returnVal;
-
-		if (rocketLog.hours < 24) {
-			returnVal = strTime;
-		}else {
-			returnVal = date.getMonth()+1 + "/" + date.getDate() + " " + strTime;
-		}
-		return returnVal
 	}
 
 /*
@@ -80,8 +74,7 @@ $(function()	{
 	}
 */
 	function drawChart() {
-		var data	=	{ 
-			
+		var data	=	{
 		};
 
 		data["columns"] = chartData.columns;
@@ -112,15 +105,16 @@ $(function()	{
 					tick: {
 						fit: true,
 						format: function (d) {
-							return formatDate(timeSliceAsTime(d));
+							return Utils.formatDate(timeSliceAsTime(d), rocketLog.hours);
 						}
 					}
 				}
 			},
-/*
-			interaction:	{
-				enabled:	false
-			},*/
+			legend: {
+			  item: {
+			    onclick: legendClick
+			  }
+			},
 			transition:	{
 				duration:	200
 			},
@@ -128,16 +122,69 @@ $(function()	{
 		});
 	}
 
+	function legendClick(id) {
+		logConsole.clear();
+		var eventName = id.split(" ")[0];
+		getEventsList(eventName);
+	}
+
 	function getEventsData(url) {
 		$.get(url, function( data ) {
-			massageData(JSON.parse(data));
-			drawChart();
-			$('#myPleaseWait').modal('hide');
+			try {
+				if (jQuery.isEmptyObject(data) || data === "{}") {
+					showEmptyChart();
+					afterRender();
+					return;
+				}
+				massageData(JSON.parse(data));
+				drawChart();
+				afterRender();
+			}catch(ex) {
+				console.log(ex.stack);
+			}
 		});
 	}
-	
+
+	function getEventsList(eventName) {
+		var url = "/event_list?event_name=" + eventName + "&hours=" + rocketLog.hours + "&name=" + rocketLog.name;
+
+		$.get(url, function( data ) {
+			try {
+				logConsole.addRows(JSON.parse(data));
+			}catch(ex) {
+				console.log(ex.stack);
+			}
+		});
+	}
+
+	function showEmptyChart() {
+		var chart = c3.generate({
+			bindto:	'#chart',
+			data: {
+				columns: [
+					['data', 0]
+				],
+				type: 'gauge',
+				gauge: {
+					label: {
+						format: function(value, ratio) {
+							return "No data available";
+						}
+					}
+				},
+				color: {
+					color: "#ff0000"
+      }} 
+    });
+    $("#belowChart").show();
+	}
+
+	function afterRender() {
+		$('#myPleaseWait').modal('hide');
+	}
+
 	setTimeout( function() {
-		getEventsData("/event_list?name=" + rocketLog.name + "&hours=" + rocketLog.hours);
+		getEventsData("/event_counts?name=" + rocketLog.name + "&hours=" + rocketLog.hours);
 	}, 0 );
 
 	$('#myPleaseWait').modal('show');

@@ -43,19 +43,6 @@ get '/context' do
   slim :context, locals: variables
 end
 
-get '/tail' do
-  content_type :json
-  line_prefix = params['last_prefix']
-
-  search = Search.new(params['name'])
-  results = search.latest(line_prefix)
-  latest = results[:data]
-  file = results[:file]
-
-  syslog_format(latest, file)
-  latest.to_json
-end
-
 get '/li_home' do
   tags = Tags.list
   unless params['name']
@@ -88,84 +75,107 @@ get '/events' do
   slim :events, locals: variables
 end
 
-get '/event_list' do
-  search = Search.new(params['name'])
-  events = search.events(params['hours'].to_i)
-  events.to_json
-end
+# JSON API calls
+get '/tail' do
+  content_type :json
+  line_prefix = params['last_prefix']
 
-def handle_latest_results(tags, search, line_prefix = nil)
+  search = Search.new(params['name'])
   results = search.latest(line_prefix)
   latest = results[:data]
   file = results[:file]
 
   syslog_format(latest, file)
-
-  { tags: tags, latest: latest, count: 0 }.merge(display_variables)
+  latest.to_json
 end
 
-def handle_search_results(tags, search, hours)
-    count = 0
-    query = params["q"]
-    results = search.search(query, hours)
+get '/event_counts' do
+  search = Search.new(params['name'])
+  events = search.events(params['hours'].to_i)
+  events.to_json
+end
+
+get '/event_list' do
+  search = Search.new(params['name'])
+  events = search.event_list_console(params['event_name'], params['hours'].to_i)
+  syslog_format(events[:data], nil)
+  events[:data].to_json
+end
+
+private
+
+  def handle_latest_results(tags, search, line_prefix = nil)
+    results = search.latest(line_prefix)
     latest = results[:data]
-    syslog_format(latest, nil)
+    file = results[:file]
 
-    latest.each do |row|
-      count += row[3].scan(query).count(query)
-      row[3] = wrap_query_term_with_spans(row[3], query)
-    end
+    syslog_format(latest, file)
 
-    { tags: tags, latest: latest, count: count }.merge(display_variables)
-end
+    { tags: tags, latest: latest, count: 0 }.merge(display_variables)
+  end
 
-def wrap_query_term_with_spans(text, query)
-  return text.gsub(query, "<span class='fructy'>#{query}</span>") if text
+  def handle_search_results(tags, search, hours)
+      count = 0
+      query = params["q"]
+      results = search.search(query, hours)
+      latest = results[:data]
+      syslog_format(latest, nil)
 
-  return text
-end
+      latest.each do |row|
+        count += row[3].scan(query).count(query)
+        row[3] = wrap_query_term_with_spans(row[3], query)
+      end
 
-def syslog_format(rows, file)
-  # We only care about metadata. We have fixed length
-  # for most of it, so lets trim whole line and just split
-  # on spaces (we want to make sure we aren't splitting the raw msg)
-  # text because that could be looong and resource
-  # intensive).
-  # Metadata should be time(26) + sequence (6) + host(max64) + tag(max64)
-  rows.map! do |row|
-    if row.start_with?(RocketLog::Config::DEST_FOLDER)
-      recursize_grep_row(row)
-    else
-      simple_grep_row(row, file)
+      { tags: tags, latest: latest, count: count }.merge(display_variables)
+  end
+
+  def wrap_query_term_with_spans(text, query)
+    return text.gsub(query, "<span class='fructy'>#{query}</span>") if text
+
+    return text
+  end
+
+  def syslog_format(rows, file)
+    # We only care about metadata. We have fixed length
+    # for most of it, so lets trim whole line and just split
+    # on spaces (we want to make sure we aren't splitting the raw msg)
+    # text because that could be looong and resource
+    # intensive).
+    # Metadata should be time(26) + sequence (6) + host(max64) + tag(max64)
+    rows.map! do |row|
+      if row.start_with?(RocketLog::Config::DEST_FOLDER)
+        recursize_grep_row(row)
+      else
+        simple_grep_row(row, file)
+      end
     end
   end
-end
 
-def simple_grep_row(row, file)
-    metadata = row[0..180]
-    sub_elements = metadata.split(" ")
-    date = sub_elements[0]
-    seq = sub_elements[1]
-    host = sub_elements[2]
-    tag = sub_elements[3]
+  def simple_grep_row(row, file)
+      metadata = row[0..180]
+      sub_elements = metadata.split(" ")
+      date = sub_elements[0]
+      seq = sub_elements[1]
+      host = sub_elements[2]
+      tag = sub_elements[3]
 
-    meta_size = [date, seq, host, tag].join(" ").length
-    rest = row[meta_size..-1]
+      meta_size = [date, seq, host, tag].join(" ").length
+      rest = row[meta_size..-1]
 
-    [date, seq, host, rest, file]
-end
+      [date, seq, host, rest, file]
+  end
 
-def recursize_grep_row(row)
-    file = row[0..(row.index(":") - 1)]
-    row[0..row.index(":")] = ""
+  def recursize_grep_row(row)
+      file = row[0..(row.index(":") - 1)]
+      row[0..row.index(":")] = ""
 
-    simple_grep_row(row, File.basename(file))
-end
+      simple_grep_row(row, File.basename(file))
+  end
 
-def display_variables
-  {
-    name: params['name'],
-    hours: params['hours'] || 2,
-    q: params["q"]
-  }
-end
+  def display_variables
+    {
+      name: params['name'],
+      hours: params['hours'] || 2,
+      q: params["q"]
+    }
+  end

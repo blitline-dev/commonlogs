@@ -7,13 +7,14 @@ html
     meta name="viewport" content="width=device-width, initial-scale=1"
 
     link(href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous")
-    link(rel="stylesheet" href="/stylesheets/mobile_base.css?1a248")
     link(href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.css" rel="stylesheet")
+    link(rel="stylesheet" href="/stylesheets/mobile_base.css?1a224g8")
     link(href="lib/boostrap-switch/css/bootstrap-switch.css" rel="stylesheet")
 
     script(src="http://code.jquery.com/jquery-2.2.1.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js")
     script(src="javascript/layout.js?f=43444")
+    script(src="javascript/lib/autolink.js?f=43444")
     script(src="lib/boostrap-switch/js/bootstrap-switch.js")
 
     script
@@ -38,8 +39,8 @@ html
             li.active
               a href="../navbar/"  Dashboard
             li
-              a href="./" 
-                | Stuff
+              a href="/events?name=#{name}&hours=1" 
+                | Events
                 span.sr-only (current)
         #nav(style="position: absolute; top: 7px; left: 30px; z-index: 1000;")
           .btn-group

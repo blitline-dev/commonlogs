@@ -141,8 +141,17 @@ footer #footsearch {
 
 .tailer {padding-left: 20px;}
 
+#parentChart {
+  position: fixed;
+  top: 50px;
+  height: 140;
+  width: 100%;
+  background-color: black;
+}
+
 #chart {
-  margin-top: 50px;
+  margin: 20px 10px 0 0;
+  height: 120px;
 }
 
 .c3-xgrid, .c3-ygrid{
@@ -156,4 +165,13 @@ footer #footsearch {
 .c3 text {
   color: #aaa;
   stroke: #aaa;
+}
+
+
+#chart .c3-chart-arc .c3-gauge-value {
+  fill: #aaa;
+}
+
+.al {
+  color: #aaaacc;
 }

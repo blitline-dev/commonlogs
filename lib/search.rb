@@ -1,6 +1,9 @@
 require_relative 'tags'
+require_relative 'util'
 require 'open3'
 require 'time'
+# cat 2016-03-06-14.log | awk '{ print $1}' | uniq -c
+# grouping
 
 # Search handling
 class Search
@@ -31,61 +34,83 @@ class Search
 		return { file: File.basename(latest_file), data: results }
 	end
 
+	def event_list_console(event_name, hours, page = 0)
+		results = []
+		event_file_names = Tags.events_for(@tag, event_name, hours)
+		event_file_names.each do |filename|
+			cmd_string = "cat #{event_file_names.join(' ')}"
+			cmd_results = execute_shell_command(cmd_string)
+			results += cmd_results.map { |r| "#{filename}: #{r}" }
+		end
+		start_index = page * 1000
+		end_index = start_index + 1000
+		results = results[start_index..end_index]
+		return { event: event_name, data: results }
+	end
+
 	def events(hours_ago)
 		fail "Must have hours offset" unless hours_ago
 		results = {}
-		event_files = Tags.all_event_files(@tag, hours_ago)
-		event_files.each do |file_info|
-			name = file_info.event_name
-			results[name] = []
-			file_info.filenames.each do |file_name|
-				results[name] += extract_counts(file_name)
+		return_value = nil
+		time = Util.measure_delta do
+			event_files = Tags.all_event_files(@tag, hours_ago)
+			event_files.each do |file_info|
+				name = file_info.event_name
+				results[name] = []
+				file_info.filenames.each do |file_name|
+					results[name] += extract_counts(file_name)
+				end
 			end
+			return_value = counts_from_events(results, hours_ago)
 		end
-		counts_from_events(results, hours_ago)
-	end
-
-	def extract_counts(filename)
-		results = `cat #{filename} | awk '{ print $1}'`
-		results = results.split("\n")
-		results.map! { |row| Time.parse(row).to_i }
-		return results
-	end
-
-	# Extra counts of events
-	def counts_from_events(events, hours)
-		new_result = {}
-		events.each do |k, v|
-			new_result[k] = bucketize(v, hours)
-		end
-		return new_result
-	end
-
-	# Based on time and timeslice, deterine which time 'bucket'
-	# each count goes into.
-	def bucketize(time_values, hours)
-		now = Time.now
-		puts "hours #{hours}"
-		buckets = Array.new(TIME_SLICE_COUNT)
-		start = (now - (3600 * hours)).to_i
-		end_time = now.to_i
-		slice = (end_time - start) / TIME_SLICE_COUNT
-
-		time_values.each do |tv|
-			index = (tv - start) / slice
-			if tv > end_time
-				puts "!!!!! tv > end_time #{tv} > #{end_time}"
-				break
-			end
-			p "Going in index #{index} #{tv}"
-			b = buckets[index]
-			buckets[index] = b ? b + 1 : 0
-		end
-		return buckets
+		puts "Delta events = #{time}"
+		return_value
 	end
 
 	private
+		# Based on time and timeslice, deterine which time 'bucket'
+		# each count goes into.
+		def bucketize(time_values, hours)
+			now = Time.now
+			puts "hours #{hours}"
+			buckets = Array.new(TIME_SLICE_COUNT)
+			start = (now - (3600 * hours)).to_i
+			end_time = now.to_i
+			slice = (end_time - start) / TIME_SLICE_COUNT
 
+			time_values.each do |tv|
+				index = (tv - start) / slice
+				if tv > end_time
+					puts "!!!!! tv > end_time #{tv} > #{end_time}"
+					break
+				end
+				b = buckets[index]
+				buckets[index] = b ? b + 1 : 0
+			end
+			return buckets
+		end
+
+		def extract_counts(filename)
+			results = `cat #{filename} | awk '{ print $1}'`
+			time = Util.measure_delta do
+				results = results.split("\n")
+				results.map! { |row| row.to_i + 86_400 }
+			end
+			puts "Delta extract_counts = #{time}"
+			return results
+		end
+
+		# Extract counts of events
+		def counts_from_events(events, hours)
+			new_result = {}
+			events.each do |k, v|
+				new_array = bucketize(v, hours)
+				# Don't even return an empty events list
+				new_result[k] = new_array unless new_array.compact.length == 0
+			end
+			return new_result
+		end
+		
 		def execute_search(files, text, with_context = false)
 			file_paths = files.map { |f| tag_folder + "/" + f }
 			if with_context
