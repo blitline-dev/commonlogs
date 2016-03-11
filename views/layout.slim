@@ -16,13 +16,13 @@ html
     script(src="javascript/layout.js?f=43444")
     script(src="javascript/lib/autolink.js?f=43444")
     script(src="lib/boostrap-switch/js/bootstrap-switch.js")
+    script(src="javascript/lib/prettyPrint.js?f=43444")
 
     script
       | 
         var rocketLog = {};
         rocketLog["q"] = "#{q}";
         rocketLog["hours"] = "#{hours}";
-        rocketLog["count"] = #{count};
         rocketLog["name"] = "#{name}";
  
   body
@@ -63,7 +63,7 @@ html
       div.pull-right
         .count
       form.navbar-form#footsearch role="search" action="li_home" 
-        .input-group
+        .input-group.searchBox
           input.form-control id="q" name="q" placeholder="Search" type="text" value="#{q}" /
           input.form-control id="name" name="name" type="hidden" value="#{name}" /
           input.form-control id="hours" name="hours" type="hidden" value="#{hours || 2}" /
@@ -75,6 +75,8 @@ html
             span.hoursMain Last 2hrs&nbsp;
             span.caret
           ul.dropdown-menu.dropup
+              li
+                a.hrs data-val="1" Last 1hr
               li
                 a.hrs data-val="2" Last 2hrs
               li
@@ -94,7 +96,7 @@ html
           .modal-header
             h4.modal-title
               span.glyphicon.glyphicon-time
-              | &nbsp; Searching...
+              | &nbsp; Fetching...
           .modal-body
             .progress
               .progress-bar.progress-bar-info.progress-bar-striped.active style=("width: 100%") 

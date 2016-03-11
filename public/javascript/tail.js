@@ -1,26 +1,19 @@
 $(function() {
-	var isTailable = false;
 	var atBottom = false;
 	var debounce = false;
 	var isTailing = true;
 	var autoScroll = true;
 	var logConsole = new LogConsole();
 
+	$(".tailer").show();
+
 	$(logConsole).on("afterAppend", function() {
+		console.log("afterAppend");
 		// Scroll if necessary
-		if (isTailable && autoScroll) {
+		if (autoScroll) {
 			autoscroll();
 		}
 	});
-
-	function setBottom() {
-		if (debounce) { return; }
-		if($(window).scrollTop() + $(window).height() == $(document).height()) {
-			atBottom = true;
-		}else {
-			atBottom = false;
-		}
-	}
 
 	function autoscroll() {
 		debounce = true;
@@ -37,7 +30,11 @@ $(function() {
 		var $lastLine = $("#console li:last-of-type");
 		var lastLinePrefix = $lastLine.attr("data-rsyspref");
 
-		var url = "tail?&name=" + rocketLog.name + "&last_prefix=" + lastLinePrefix.replace("+", "%2b");
+		var url = "tail?&name=" + rocketLog.name;
+
+		if (lastLinePrefix && lastLinePrefix.length > 0) {
+			url += "&last_prefix=" + lastLinePrefix.replace("+", "%2b");
+		}
 
 		$.get(url, function( data ) {
 			logConsole.addRows(data);
@@ -46,18 +43,16 @@ $(function() {
 
 	$("body").scrollTop($("body").height() + 100);
 
-	if (isTailable) {
-		setInterval(function(){ checkTail(); }, 5000);
+	setInterval(function(){ checkTail(); }, 1000000);
 
-		$('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
-			isTailing = state;
-		});
-	}else {
-		isTailing = false;
-	}
+	$('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
+		isTailing = state;
+	});
 
 	$(window).scroll(function() {
-		setBottom();
+//		setBottom();
 	});
+
+	checkTail();
 
 });

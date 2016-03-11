@@ -26,7 +26,12 @@ class Tags
 		RocketLog::Config::DEST_FOLDER + '/' + tag + '/' + EVENT_FOLDER_NAME + '/' + event
 	end
 
-	def self.events_for(tag, event, last_hours)
+	def self.tag_folder(tag)
+		RocketLog::Config::DEST_FOLDER + '/' + tag
+	end
+
+	# Get list of all possible event files
+	def self.events_files_for(tag, event, last_hours)
 		possible_filenames = last_hours_filenames(last_hours).map { |f| event_folder(tag, event) + "/" + f }
 		actual_filenames = event_files(tag, event)
 
@@ -36,7 +41,7 @@ class Tags
 
 	def self.all_event_files(tag, last_hours)
 		event_names = events(tag)
-		events = event_names.map { |e| EventFiles.new(tag, e, events_for(tag, e, last_hours)) }
+		events = event_names.map { |e| EventFiles.new(tag, e, events_files_for(tag, e, last_hours)) }
 		events
 	end
 

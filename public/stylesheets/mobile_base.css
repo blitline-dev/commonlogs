@@ -1,6 +1,7 @@
 body {
     padding-top: 50px; /* Required padding for .navbar-fixed-top. Change if height of navigation changes. */
     background-color: #000;
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
 }
 
 /* Navbar Defaults
@@ -174,4 +175,45 @@ footer #footsearch {
 
 .al {
   color: #aaaacc;
+}
+
+.tailer {
+  display:none;
+}
+
+.c3 svg {
+    font: 12px sans-serif !important;
+}
+
+.botborder {
+  border-bottom: #aaa solid 2px;
+}
+
+.c3-circle {
+  opacity: 1.0 !important;
+}
+pre {
+    display: block;
+    /* padding: 9.5px; */
+    margin: 0 0 10px;
+    font-size: 10px;
+    line-height: 1.42857143;
+    color: #aaa;
+    word-break: break-all;
+    word-wrap: break-word;
+    background-color: #000;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#pointer {
+  height: 88px;
+  background-color: white;
+  opacity: 0.2;
+  width: 10px;
+  position: absolute;
+  z-index: -1;
+  left: -100px;
+  display: none;
+  top: 8px;
 }

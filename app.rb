@@ -12,6 +12,9 @@ require 'awesome_print'
 
 require_relative 'lib/tags'
 require_relative 'lib/search'
+require_relative 'lib/event'
+require_relative 'lib/sheller'
+require_relative 'lib/util'
 
 # Listen to all non-localhost requests
 set :bind, '0.0.0.0'
@@ -50,16 +53,7 @@ get '/li_home' do
     redirect "/li_home?name=#{tag}"
     return
   end
-
-  search = Search.new(params['name'])
-
-  if params["q"]
-    hours = params['hours'] || 2
-    variables = handle_search_results(tags, search, hours)
-  else
-    variables = handle_latest_results(tags, search)
-  end
-
+  variables = { tags: tags }.merge(display_variables)
   slim :li_home, locals: variables
 end
 
@@ -90,16 +84,77 @@ get '/tail' do
 end
 
 get '/event_counts' do
-  search = Search.new(params['name'])
-  events = search.events(params['hours'].to_i)
+  event = Event.new(params['name'])
+  events = nil
+  time = Util.measure_delta do
+    start_timestamp = params['st']
+    end_timestamp = params['et']
+    hours = params['hours']
+
+    start_timestamp = start_timestamp.to_i if start_timestamp
+    end_timestamp = end_timestamp.to_i if end_timestamp
+
+    start_timestamp = Time.now.to_i - (3600 * hours.to_i) if hours
+
+    events = event.event_and_counts(start_timestamp, end_timestamp)
+  end
+  puts "Delta events = #{time}"
+
   events.to_json
 end
 
 get '/event_list' do
-  search = Search.new(params['name'])
-  events = search.event_list_console(params['event_name'], params['hours'].to_i)
-  syslog_format(events[:data], nil)
+  event = Event.new(params['name'])
+  start_timestamp = params['st']
+  end_timestamp = params['et']
+  hours = params['hours']
+  page = params['page']
+
+  fail "Page required" unless page
+
+  start_timestamp = start_timestamp.to_i if start_timestamp
+  end_timestamp = end_timestamp.to_i if end_timestamp
+
+  start_timestamp = Time.now.to_i - (3600 * hours.to_i) if hours
+
+  events = event.event_list_console(params['event_name'], start_timestamp, end_timestamp, page)
+  if events[:data] && events[:data].length > 0
+    syslog_format(events[:data], nil)
+  else
+    events[:data] = []
+  end
   events[:data].to_json
+end
+
+get '/search' do
+  request.env['HTTP_ACCEPT_ENCODING'] = 'gzip'
+  count = 0
+  hours = params['hours']
+  query = params["q"]
+  search = Search.new(params['name'])
+  p = params["p"] || 0
+  latest = []
+  results = {}
+
+  time = Util.measure_delta do
+    results = search.search(query, hours, p.to_i)
+    latest = results[:data]
+    syslog_format(latest, nil)
+  end
+  puts "Search events = #{time}"
+
+  time = Util.measure_delta do
+    latest.each do |row|
+      count += row[3].scan(query).count(query)
+      row[3] = wrap_query_term_with_spans(row[3], query)
+    end
+  end
+  puts "Search latest events = #{time}"
+
+  results[:data] = latest
+
+  puts "returning..."
+  results.to_json
 end
 
 private
@@ -121,10 +176,11 @@ private
       latest = results[:data]
       syslog_format(latest, nil)
 
-      latest.each do |row|
-        count += row[3].scan(query).count(query)
-        row[3] = wrap_query_term_with_spans(row[3], query)
-      end
+      latest = []
+#      latest.each do |row|
+#        count += row[3].scan(query).count(query)
+#        row[3] = wrap_query_term_with_spans(row[3], query)
+#      end
 
       { tags: tags, latest: latest, count: count }.merge(display_variables)
   end
@@ -142,13 +198,16 @@ private
     # text because that could be looong and resource
     # intensive).
     # Metadata should be time(26) + sequence (6) + host(max64) + tag(max64)
-    rows.map! do |row|
-      if row.start_with?(RocketLog::Config::DEST_FOLDER)
-        recursize_grep_row(row)
-      else
-        simple_grep_row(row, file)
+    time = Util.measure_delta do
+      rows.map! do |row|
+        if row.start_with?(RocketLog::Config::DEST_FOLDER)
+          recursize_grep_row(row)
+        else
+          simple_grep_row(row, file)
+        end
       end
     end
+    puts "SYSLOG FORMAT delta = #{time}"
   end
 
   def simple_grep_row(row, file)
@@ -159,7 +218,7 @@ private
       host = sub_elements[2]
       tag = sub_elements[3]
 
-      meta_size = [date, seq, host, tag].join(" ").length
+      meta_size = [date, seq, host, tag].join(" ").length + 1
       rest = row[meta_size..-1]
 
       [date, seq, host, rest, file]

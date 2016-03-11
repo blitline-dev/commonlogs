@@ -1,15 +1,18 @@
 .consoleBox
   ul.list-unstyled#console
-    - if latest && latest.length > 0
-      - latest.each do |row|
-        li.r(data-rsyspref="#{row[0]} #{row[1]} #{row[2]}")
-          span.muted #{row[0][5..18].tr("T","-")} 
-          a.niceLink(href=="/context?name=#{name}&time=#{row[0]}&server=#{row[2]}&seq=#{row[1]}&file=#{row[4]}") #{row[2]}
-          span &nbsp;&nbsp;#{{row[3]}}
-    - else
-        li.noResults
-          center
-            h3.warning No results found
-
+//    - if latest && latest.length > 0
+//     - latest.each do |row|
+//        li.r(data-rsyspref="#{row[0]} #{row[1]} #{row[2]}")
+//          span.muted #{row[0][5..18].tr("T","-")} 
+//          a.niceLink(href=="/context?name=#{name}&time=#{row[0]}&server=#{row[2]}&seq=#{row[1]}&file=#{row[4]}") #{row[2]}
+//          span &nbsp;&nbsp;#{{row[3]}}
+//    - else
+//        li.noResults
+//          center
+//            h3.warning No results found
+script(src="javascript/utils.js?35a22")
 script(src="javascript/log_console.js?3522")
-script(src="javascript/li_index.js?3522")
+- if q
+  script(src="javascript/search.js?3522")
+-else 
+  script(src="javascript/tail.js?45")

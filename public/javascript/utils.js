@@ -16,26 +16,60 @@ Utils = {
 			returnVal = date.getMonth()+1 + "/" + date.getDate() + " " + strTime;
 		}
 		return returnVal;
+	},
+	getParameterByName: function (name, url) {
+		if (!url) url = window.location.href;
+		name = name.replace(/[\[\]]/g, "\\$&");
+		var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+			results = regex.exec(url);
+		if (!results) return null;
+		if (!results[2]) return '';
+		return decodeURIComponent(results[2].replace(/\+/g, " "));
+	},
+	sumValues: function(array) {
+		var total = 0;
+		for(var i=0; i<array.length; i++) {
+			total += array[i];
+		}
+		return total;
+	},
+	maxValue: function(array) {
+		var max = 0;
+		for(var i=0; i<array.length; i++) {
+			if (array[i] > max) {
+				max = array[i];
+			}
+		}
+		return max;
+	},
+	getKeys: function(obj) {
+		var keys = [], name;
+		for (name in obj) {
+			if (obj.hasOwnProperty(name)) {
+					keys.push(name);
+			}
+		}
+		return keys;
 	}
 };
 
 String.prototype.jsonizer = {
-   replacer: function(match, pIndent, pKey, pVal, pEnd) {
-      var key = '<span class=json-key>';
-      var val = '<span class=json-value>';
-      var str = '<span class=json-string>';
-      var r = pIndent || '';
-      if (pKey)
-         r = r + key + pKey.replace(/[": ]/g, '') + '</span>: ';
-      if (pVal)
-         r = r + (pVal[0] == '"' ? str : val) + pVal + '</span>';
-      return r + (pEnd || '');
-      },
-   prettyPrint: function(obj) {
-      var jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg;
-      return JSON.stringify(obj, null, 3)
-         .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
-         .replace(/</g, '&lt;').replace(/>/g, '&gt;')
-         .replace(jsonLine, String.prototype.jsonizer.replacer);
-      }
+	replacer: function(match, pIndent, pKey, pVal, pEnd) {
+		var key = '<span class=json-key>';
+		var val = '<span class=json-value>';
+		var str = '<span class=json-string>';
+		var r = pIndent || '';
+		if (pKey)
+		 r = r + key + pKey.replace(/[": ]/g, '') + '</span>: ';
+		if (pVal)
+		 r = r + (pVal[0] == '"' ? str : val) + pVal + '</span>';
+		return r + (pEnd || '');
+		},
+	prettyPrint: function(obj) {
+		var jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg;
+		return JSON.stringify(obj, null, 3)
+		 .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
+		 .replace(/</g, '&lt;').replace(/>/g, '&gt;')
+		 .replace(jsonLine, String.prototype.jsonizer.replacer);
+		}
 };
