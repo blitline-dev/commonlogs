@@ -14,10 +14,6 @@ class Tags
 		Dir[RocketLog::Config::DEST_FOLDER + '/' + tag + '/*.log']
 	end
 
-	def self.events(tag)
-		Dir.entries(RocketLog::Config::DEST_FOLDER + '/' + tag + '/' + EVENT_FOLDER_NAME).select { |f| !File.directory?(f) }
-	end
-
 	def self.event_files(tag, event)
 		Dir[event_folder(tag, event) + '/*.log']
 	end

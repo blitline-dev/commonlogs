@@ -2,6 +2,12 @@ body {
     padding-top: 50px; /* Required padding for .navbar-fixed-top. Change if height of navigation changes. */
     background-color: #000;
     font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+    color: #aaa;
+
+}
+
+legend {
+  color: #fff;
 }
 
 /* Navbar Defaults
@@ -106,6 +112,7 @@ footer #footsearch {
 
 #footsearch input-group {
 	min-width: 300px;
+  max-width: 400px;
 }
 
 .consoleBox {
@@ -217,3 +224,40 @@ pre {
   display: none;
   top: 8px;
 }
+
+.dropdown-menu {
+  min-width: 300px;
+}
+.dropdown-menu.columns-2 {
+  min-width: 400px;
+}
+.dropdown-menu li a {
+  padding: 5px 15px;
+  font-weight: 300;
+}
+.multi-column-dropdown {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+.multi-column-dropdown li a {
+  display: block;
+  clear: both;
+  line-height: 1.428571429;
+  color: #333;
+  white-space: normal;
+}
+.multi-column-dropdown li a:hover {
+  text-decoration: none;
+  color: #262626;
+  background-color: #999;
+}
+ 
+
+@media (max-width: 767px) {
+  .dropdown-menu.multi-column {
+    min-width: 400px !important;
+    overflow-x: hidden;
+  }
+}
+

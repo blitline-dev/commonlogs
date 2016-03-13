@@ -1,0 +1,70 @@
+link(rel="stylesheet" href="/stylesheets/events_manager.css?1a224g8")
+div.container(style="margin-top: 40px")
+	div.row
+
+		div.col-md-12
+			div
+				p &nbsp;
+				div
+					h3 Events Manager
+					a.add_event.pull-right.btn.btn-warning.add(data-target="#myModal" data-toggle="modal" type="button") + Add Event
+					table.rwd-table
+						tr
+							th Event Name
+							th Description
+							th Search
+							th Color
+							th Action
+						- events.each do |key, event|
+							tr
+								td data-th=("Event Name") #{event["event_name"]}
+								td data-th="Description" #{event["description"]}
+								td data-th="Search"	"#{event["search"]}"
+								td data-th="Color"	#{event["color"]}
+								td data-th="Options"
+									form accept-charset="UTF-8" action="/event_delete" method="POST" style="display:inline" 
+									  input#event_name(type="hidden" name="event_name" value="#{event["event_name"]}")
+									  input(type="hidden" name="name" value="#{name}")
+									  button.btn.btn-xs.btn-danger data-message=("Are you sure you want to delete this event?") data-target="#confirmDelete" data-title=("Delete Event") data-toggle="modal" type="button" 
+									    i.glyphicon.glyphicon-trash
+script(src="javascript/event_manager.js?3454222")
+
+#myModal.modal.fade role="dialog" 
+  .modal-dialog
+    /! Modal content
+    .modal-content
+      .modal-header
+        button.close data-dismiss="modal" type="button"  &times;
+        h4.modal-title.primary Add Tag
+      .modal-body
+      	div.well.mow
+			form.form-horizontals(action="/events" method="post" data-toggle="validator")
+				input(type="hidden" name="name" value="#{name}")
+				.form-group
+					.col-6
+						label.control-label for="textinput"	Event Name
+						input#textinput.form-control.input-md name="event_name" placeholder="\\A-Za-z0-9_\\" required="true" type="text" data-error="Must start with letter, and only have alphanum or underscore" pattern="^[_A-z]{1}[A-z0-9]*$"/
+						span.help-block Alphanumeric (underscore for spaces)
+				.form-group
+					.col-6
+						label.control-label for="textinput"	Event Description
+						input#textinput.form-control.input-md name="description" placeholder="Describe this event" required="true" type="text" /
+						span.help-block Describe event
+				.form-group
+					.col-6
+						label.control-label for="textinput"	Color
+						.input-group.demo2
+						  input#cp.form-control type="text" value="" name="color"
+						  span.input-group-addon
+						    i
+				/! Search input
+				.form-group
+					.col-6
+						label.control-label for="search_word"	Search Word
+						input#search_word.form-control.input-md name="search" placeholder=("Search for?") required="true" type="search" /
+						p.help-block Word to search for ex: "Exception"
+				/! Button
+				.form-group
+					div.clearfix
+						button#singlebutton.btn.btn-primary.pull-right name="singlebutton"	Save
+

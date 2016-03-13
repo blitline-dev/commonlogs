@@ -15,6 +15,7 @@ require_relative 'lib/search'
 require_relative 'lib/event'
 require_relative 'lib/sheller'
 require_relative 'lib/util'
+require_relative 'lib/event_config_manager'
 
 # Listen to all non-localhost requests
 set :bind, '0.0.0.0'
@@ -61,7 +62,7 @@ get '/events' do
   tags = Tags.list
   unless params['name']
     tag = tags.first
-    redirect "/li_home?name=#{tag}"
+    redirect "/events?name=#{tag}"
     return
   end
 
@@ -157,8 +158,47 @@ get '/search' do
   results.to_json
 end
 
-private
+get '/event_manager' do
+  tags = Tags.list
+  unless params['name']
+    tag = tags.first
+    redirect "/event_manager?name=#{tag}"
+    return
+  end
+  event = EventConfigManager.new(params['name'])
 
+  data = event.get_events_preferences(params['name'])
+  variables = { name: params['name'], tags: tags, events: data }.merge(display_variables)
+  slim :event_manager, locals: variables
+end
+
+post '/event_delete' do
+  event_name = params['event_name']
+  log_group = params['name']
+  event_manager = EventConfigManager.new(log_group)
+  event_manager.delete!(event_name)
+  redirect "/event_manager?name=#{log_group}"
+end
+
+post '/events' do
+  event_name = params['event_name']
+  search = params['search']
+  color = params['color']
+  description = params['description']
+  puts "dasjkfh dasfkadfsafksdhkj"
+  log_group = params['name']
+
+  event_manager = EventConfigManager.new(log_group)
+  event_manager.create!(event_name.strip,
+                        "event_name"  => event_name.strip,
+                        "color"       => color.strip,
+                        "search"      => search.strip,
+                        "description" => description.strip)
+  redirect "/event_manager?name=#{log_group}"
+end
+
+private
+  
   def handle_latest_results(tags, search, line_prefix = nil)
     results = search.latest(line_prefix)
     latest = results[:data]

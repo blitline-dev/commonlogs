@@ -41,7 +41,7 @@ class Search
 		while data.length == 0 && range_end < files.length
 			range_start = PAGE_SIZE * p
 			range_end = range_start + (PAGE_SIZE - 1)
-			get_search_results(data, files, range_start, range_end, text)
+			data = get_search_results(data, files, range_start, range_end, text)
 			p += 1
 		end
 

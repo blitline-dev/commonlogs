@@ -7,7 +7,7 @@ module Sheller
 	def execute_shell_command(cmd_string, with_context = false)
 		results = nil
 		start_time = Time.now.to_i
-		p "Start cmd"
+		p "Start cmd '#{cmd_string}'"
 		Open3.popen3(cmd_string) do |_stdin, stdout, stderr, _wait_thr|
 			output = stdout.read
 			output_error = stderr.read
