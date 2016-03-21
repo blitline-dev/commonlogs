@@ -57,22 +57,22 @@ class EventConfigManager
 
 	def events
 		assure_events_folderpath
-		Dir.entries(RocketLog::Config::DEST_FOLDER + '/' + @tag + '/' + EVENT_FOLDER_NAME).select { |f| !File.directory?(f) }.delete_if { |x| x[0] == '.' }
+		Dir.entries(RocketLog::Config::DEST_FOLDER + '/' + @name + '/' + EVENT_FOLDER_NAME).select { |f| !File.directory?(f) }.delete_if { |x| x[0] == '.' }
 	end
 
 
 		private
 
 		def events_folder
-			RocketLog::Config::DEST_FOLDER + '/' + @tag + '/' + EVENT_FOLDER_NAME
+			RocketLog::Config::DEST_FOLDER + '/' + @name + '/' + EVENT_FOLDER_NAME
 		end
 
 		def template_filepath(event)
-			"#{SYSLOG_ROOT}/#{TEMPLATE_FOLDER}/#{@name}.d/#{event}"
+			"#{SYSLOG_ROOT}/#{TEMPLATE_FOLDER}/#{@name}.d/#{event}.conf"
 		end
 
 		def filter_filepath(event)
-			"#{SYSLOG_ROOT}/#{FILTER_FOLDER}/#{@name}.d/#{event}"
+			"#{SYSLOG_ROOT}/#{FILTER_FOLDER}/#{@name}.d/#{event}.conf"
 		end
 
 		def filter_folderpath

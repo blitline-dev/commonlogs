@@ -78,7 +78,7 @@ class Search
 			if with_context
 				cmd_string = "export LC_ALL=C && fgrep -A 100 -B 100 '#{text}' #{file_paths.join(' ')}"
 			else
-				cmd_string = "export LC_ALL=C && fgrep -m 50000 -ir '#{text}' #{file_paths.join(' ')}"
+				cmd_string = "export LC_ALL=C && fgrep -m 10000 -ir '#{text}' #{file_paths.join(' ')}"
 			end
 			ap "Cmd string = #{cmd_string}"
 			return execute_shell_command(cmd_string, with_context)

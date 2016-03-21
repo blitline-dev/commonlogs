@@ -4,55 +4,92 @@ $(function() {
 	var isTailing = true;
 	var autoScroll = true;
 	var logConsole = new LogConsole();
+	var _scrollTimeout;
+	var _pauseSmoothScroll = false;
+	var _firstLoad = true;
+	var _DELAY = 5000;
+
 
 	$(".tailer").show();
+	$("#footsearch").show();
 
 	$(logConsole).on("afterAppend", function() {
-		console.log("afterAppend");
-		// Scroll if necessary
-		if (autoScroll) {
-			autoscroll();
+		if (!_pauseSmoothScroll) {
+			$("body").stop();
+			if (_firstLoad) {
+				_firstLoad = false;
+				$("body").animate({ scrollTop: $("#console").height() }, 500);
+			}else {
+				$("body").animate({ scrollTop: $("#console").height() }, _DELAY + 1000);
+			}
 		}
 	});
-
-	function autoscroll() {
-		debounce = true;
-		$('html, body').animate({
-			scrollTop: $("#console").height()
-		},	'slow');
-		debounce = false;
-	}
 
 	function checkTail() {
 		if (!isTailing) {
 			return;
 		}
+
 		var $lastLine = $("#console li:last-of-type");
-		var lastLinePrefix = $lastLine.attr("data-rsyspref");
+		var dataT = $lastLine.attr("data-t");
+		var dataR = $lastLine.attr("data-r");
 
 		var url = "tail?&name=" + rocketLog.name;
 
-		if (lastLinePrefix && lastLinePrefix.length > 0) {
-			url += "&last_prefix=" + lastLinePrefix.replace("+", "%2b");
+		if (dataT && dataR) {
+			url += "&last_prefix=" + dataT + " " + dataR;
 		}
 
 		$.get(url, function( data ) {
-			logConsole.addRows(data);
+			logConsole.addRows(data, null, true);
 		});
 	}
 
-	$("body").scrollTop($("body").height() + 100);
+	function checkCookie() {
+		if (Utils.getCookie("is_tailing")) {
+			if (Utils.getCookie("is_tailing").toString() == "false") {
+				isTailing = false;
+				$('input[name="my-checkbox"]').bootstrapSwitch('state', false);
+			}
+		}
+	}
 
-	setInterval(function(){ checkTail(); }, 1000000);
+	function initialize() {
+		$("body").scrollTop($("body").height() + 100);
 
-	$('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
-		isTailing = state;
-	});
+		setInterval(function(){ checkTail(); }, _DELAY);
 
-	$(window).scroll(function() {
-//		setBottom();
-	});
+		$('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
+			isTailing = state;
+			document.cookie = "is_tailing=" + isTailing.toString() + "; expires=0; path=/";
+		});
 
-	checkTail();
+		checkTail();
+		checkCookie();
+
+		$('html, body').bind('scroll mousedown wheel DOMMouseScroll mousewheel keyup', function(evt) {
+			_pauseSmoothScroll = true;
+
+			$("body").stop();
+
+			if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+				_pauseSmoothScroll = false;
+			}
+
+			if (_scrollTimeout) {
+				clearTimeout(myVar);
+			}
+			// detect only user initiated, not by an .animate though
+			_scrollTimeout = setTimeout(function() {
+				if ($("body").scrollTop() > $("#console").height() - 100 ) {
+					_pauseSmoothScroll = false;
+				}
+			}, 1000);
+		
+		});
+	}
+
+	initialize();
+
 
 });

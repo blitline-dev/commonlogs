@@ -21,6 +21,10 @@ require_relative 'lib/event_config_manager'
 set :bind, '0.0.0.0'
 set :timeout, 2
 
+before do
+  response.headers['X-Frame-Options'] = 'ALLOW-FROM http://localhost/'
+end
+
 get '/' do
   variables = { foo: "bar" }
   variables.to_json
@@ -153,6 +157,7 @@ get '/search' do
   puts "Search latest events = #{time}"
 
   results[:data] = latest
+  results[:count] = count
 
   puts "returning..."
   results.to_json
@@ -198,7 +203,7 @@ post '/events' do
 end
 
 private
-  
+
   def handle_latest_results(tags, search, line_prefix = nil)
     results = search.latest(line_prefix)
     latest = results[:data]
@@ -217,10 +222,10 @@ private
       syslog_format(latest, nil)
 
       latest = []
-#      latest.each do |row|
-#        count += row[3].scan(query).count(query)
-#        row[3] = wrap_query_term_with_spans(row[3], query)
-#      end
+      latest.each do |row|
+        count += row[3].scan(query).count(query)
+        row[3] = wrap_query_term_with_spans(row[3], query)
+      end
 
       { tags: tags, latest: latest, count: count }.merge(display_variables)
   end

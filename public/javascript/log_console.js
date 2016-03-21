@@ -38,8 +38,7 @@ LogConsole.prototype = {
 						row[3] = "<pre>" + JSON.stringify(v, null, 2) + "</pre>";
 					}
 				}catch(ex) {
-					console.log("ex" + ex.message);
-					// Do Nothing. Not JSON
+					// Do Nothing. Not JSON...move on
 				}
 			}
 
@@ -65,15 +64,16 @@ LogConsole.prototype = {
 			allHtml.push(html.join(""));
 		}
 
-		$newNode = $(allHtml.join(""));
 
+		$newNode = $(allHtml.join(""));
 		$newNode.mouseenter(function(e) {
 			_this.mouseEnterTimestamp(e, this);
 		});
-
-		$("#console").append($newNode);
+		
+		$("#console").append($newNode);		
+		
 		if (eventName) {
-			$("#console").append("<li class='liEndCap'><img class='spin' src='spin.svg'>&nbsp;Loading more...</li>");
+			$("#console").append("<li class='liEndCap'><img class='spin' src='spin.svg'>&nbsp;Looking around for more...</li>");
 		}
 		this.cleanup();
 		$(this).trigger("afterAppend");

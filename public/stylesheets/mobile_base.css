@@ -14,7 +14,7 @@ legend {
 -------------------------------------------------- */
 
 .navbar-default {
-  background-color: #03498f;
+  background-color: #6164C1;
   border-color: #033567;
 }
 .navbar-default .navbar-brand {
@@ -103,7 +103,7 @@ body {
 }
 
 .footer {
-	background: none repeat scroll 0 0 #033567;
+	background: none repeat scroll 0 0 #6164C1;
 }
 
 footer #footsearch {

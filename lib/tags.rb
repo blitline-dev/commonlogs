@@ -36,7 +36,8 @@ class Tags
 	end
 
 	def self.all_event_files(tag, last_hours)
-		event_names = events(tag)
+		event_config_manager = EventConfigManager.new(tag)
+		event_names = event_config_manager.events
 		events = event_names.map { |e| EventFiles.new(tag, e, events_files_for(tag, e, last_hours)) }
 		events
 	end

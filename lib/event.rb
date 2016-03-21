@@ -66,7 +66,7 @@ class Event
 					break
 				end
 				b = buckets[index]
-				buckets[index] = b ? b + 1 : 0
+				buckets[index] = b ? b + 1 : 1
 			end
 			return buckets
 		end

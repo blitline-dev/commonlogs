@@ -70,8 +70,8 @@ html
     footer.footer.navbar-fixed-bottom
       div.pull-right
         .count
-      form.navbar-form#footsearch role="search" action="li_home" 
-        .input-group.searchBox
+      form.navbar-form role="search" action="li_home" 
+        .input-group.searchBox#footsearch(style="display: none;")
           input.form-control id="q" name="q" placeholder="Search" type="text" value="#{q}" /
           input.form-control id="name" name="name" type="hidden" value="#{name}" /
           input.form-control id="hours" name="hours" type="hidden" value="#{hours || 2}" /

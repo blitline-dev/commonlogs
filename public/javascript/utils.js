@@ -29,7 +29,9 @@ Utils = {
 	sumValues: function(array) {
 		var total = 0;
 		for(var i=0; i<array.length; i++) {
-			total += array[i];
+			if (array[i] !== null) {
+				total += array[i];
+			}
 		}
 		return total;
 	},
@@ -50,6 +52,16 @@ Utils = {
 			}
 		}
 		return keys;
+	},
+	getCookie: function(cname) {
+		var name = cname + "=";
+		var ca = document.cookie.split(';');
+		for (var i = 0; i < ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0) == ' ') c = c.substring(1);
+			if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
+		}
+		return "";
 	}
 };
 

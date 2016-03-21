@@ -1,4 +1,5 @@
 $(function()	{
+	$("#footsearch").show();
 	$(".searchBox").hide();
 
 	var	_VIEWSIZE = 180;
