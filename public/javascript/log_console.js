@@ -23,7 +23,6 @@ LogConsole.prototype = {
 		this.clearLoading();
 
 		if (data.length === 0) {
-			console.log("Data Length =, disabling scroll");
 			this.disableLoadMoreEvent = true;
 			return;
 		}
@@ -42,24 +41,22 @@ LogConsole.prototype = {
 				}
 			}
 
-			if (row[0].indexOf("T") > -1) {
-				rowDate = row[0].substring(5,19).replace("T","-");
-			}else {
-				rowUnixDate = parseInt(row[0], 10);
-				rowDate = Utils.formatDate(new Date(rowUnixDate * 1000));
-			}
+			
+			rowUnixDate = parseInt(row[0], 10);
+			rowDate = Utils.formatDate(new Date(rowUnixDate * 1000));
+			
 
-			href = "/context?name=" + rocketLog.name + "&time=" + row[0] + "&server=" + row[2] + "&seq=" + row[1] + "&file=" + row[4];
+			href = "context?name=" + rocketLog.name + "&time=" + row[0] + "&server=" + row[2] + "&seq=" + row[1] + "&file=" + row[4];
 			html = [
 				"<li class='r ts' data-t='" + rowUnixDate.toString() + "' data-r='" + row[1].toString() + "'>",
 				"<span class='muted'>" + rowDate + "&nbsp;</span>",
-				"<a class='niceLink' href='" + href + "'>" + row[2] + "</a>",
-				"<span>&nbsp;" + row[3].autoLink({ target: "_blank", rel: "nofollow", class: "al" }) + "</span>",
+				"<a class='text-primary' href='" + href + "'>" + row[2] + "</a>",
+				"<span>&nbsp;" + row[3].autoLink({ target: "_blank", rel: "nofollow", class: "text-info" }) + "</span>",
 				"</li>"
 			];
 
 			if (eventName) {
-				html.splice(1, 0, "<span class='btn-xs btn-primary'>" + eventName + "</span><span>&nbsp;&nbsp;<span>");
+				html.splice(1, 0, "<span class='label label-primary'>" + eventName + "</span><span>&nbsp;&nbsp;<span>");
 			}
 			allHtml.push(html.join(""));
 		}

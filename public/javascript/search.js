@@ -1,7 +1,6 @@
 $(function() {
 	var _logConsole = new LogConsole();
 	var _p = 0;
-	$("#footsearch").show();
 	
 	$("body").scrollTop($("body").height() + 100);
 	$('#myPleaseWait').modal('show');
@@ -9,7 +8,7 @@ $(function() {
 
 	function search() {
 		_logConsole.setLoading(true);
-		var url = "/search?&name=" + rocketLog.name + "&q=" + rocketLog.q + "&hours=" + rocketLog.hours + "&p=" + _p.toString();
+		var url = "search?&name=" + rocketLog.name + "&q=" + rocketLog.q + "&hours=" + rocketLog.hours + "&p=" + _p.toString();
 
 		$.get(url, function( data ) {
 			$('#myPleaseWait').modal('hide');

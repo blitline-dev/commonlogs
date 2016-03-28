@@ -1,13 +1,15 @@
-.consoleBox
-  ul.list-unstyled#console
-    - latest.each do |row|
-      li 
-        span.muted #{row[0][5..18].tr("T","-")} 
-        a.niceLink(href=="/context?name=#{name}&time=#{row[0]}&server=#{row[2]}&seq=#{row[1]}&file=#{row[4]}" data_id="#{row[1]}") #{row[2]}
-        span &nbsp;&nbsp;#{{row[3]}}
+.main-content.no-padding.hide-tail.hide-search.hide-hours
+	.consoleBox
+		ul.list-unstyled#console
 
 script
-  | window.seq = "#{seq}";
-script(src="javascript/context.js?f=1")
+  | 
+  	rocketLog["seq"] = "#{seq}";
+    rocketLog["file"] = "#{file}";
+    rocketLog["time"] = "#{time}";
+    rocketLog["server"] = "#{server}";
+
+- content_for :javascripter
+	script(src="javascript/context.js?f=43h")
 
 

@@ -11,5 +11,6 @@ $(function(){
 		setTimeout(function() {
 			_colorPicker.colorpicker('setValue', '#'+Math.floor(Math.random()*16777215).toString(16));
 		}, 0);
-	})
+	});
+    
 });

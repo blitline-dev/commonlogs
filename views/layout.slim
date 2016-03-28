@@ -1,138 +1,247 @@
 doctype html
-html
+html lang="en" 
   head
-    title Rocket Log
-    meta name="description" content=""
-    meta name="keywords" content="rsyslog viewer cheap logging dyi"
-    meta name="viewport" content="width=device-width, initial-scale=1"
-
-    link(href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous")
-    
-    link(href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.css" rel="stylesheet")
-    link(rel="stylesheet" href="/stylesheets/mobile_base.css?1a224g8")
+    meta charset="utf-8"
+    meta content="IE=edge" http-equiv="X-UA-Compatible"
+    meta content="width=device-width, initial-scale=1" name="viewport"
+    title CommongLogs
+    meta charset="utf-8"
+    title Reactor - Bootstrap Admin Template
+    meta content="" name="description"
+    meta content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1" name="viewport"
+    /! page stylesheets
+    /! end page stylesheets
+    /! build:css({.tmp,app}) styles/app.min.css
+    link href="styles/webfont.css" rel="stylesheet" /
+    link href="styles/climacons-font.css" rel="stylesheet" /
+    link href="vendor/bootstrap/dist/css/bootstrap.css" rel="stylesheet" /
+    link href="styles/font-awesome.css" rel="stylesheet" /
+    link href="styles/card.css" rel="stylesheet" /
+    link href="styles/sli.css" rel="stylesheet" /
+    link(rel="stylesheet" href="/stylesheets/mobile_base.css?1ba24g8")
+    link href="styles/animate.css" rel="stylesheet" /
+    link rel="stylesheet" href="vendor/sweetalert/dist/sweetalert.css"
     link(rel="stylesheet" href="/stylesheets/lib/colorpicker.css?1a224g8")
-    link(href="lib/boostrap-switch/css/bootstrap-switch.css" rel="stylesheet")
 
-    script(src="http://code.jquery.com/jquery-2.2.1.min.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js")
-    script(src="javascript/layout.js?f=43644")
-    script(src="javascript/lib/validator.js?f=43444")
-    script(src="javascript/lib/autolink.js?f=43444")
-    script(src="lib/boostrap-switch/js/bootstrap-switch.js")
-    script(src="javascript/lib/prettyPrint.js?f=43444")
-    script(src="javascript/lib/bootstrap-colorpicker.js?f=54444")
-
+    link href="styles/app.css" rel="stylesheet" /
+    link href="styles/app.skins.css" rel="stylesheet" /
+    link(rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/styles/default.min.css")
+    link href="vendor/chosen_v1.4.0/chosen.min.css" rel="stylesheet" /
+    link href="vendor/checkbo/src/0.1.4/css/checkBo.min.css" rel="stylesheet" /
+    link rel="stylesheet" href="/styles/li_home.css?1a3224g8"
     script
       | 
         var rocketLog = {};
         rocketLog["q"] = "#{q}";
         rocketLog["hours"] = "#{hours}";
         rocketLog["name"] = "#{name}";
- 
-  body
-    nav.navbar.navbar.navbar-default.navbar-fixed-top.rheader
-      .container
-        .navbar-header
-          button.navbar-toggle.collapsed aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" type="button" 
-            span.sr-only Toggle navigation
-            span.icon-bar
-            span.icon-bar
-            span.icon-bar
-        #navbar.navbar-collapse.collapse
-          ul.nav.navbar-nav.navbar-right
-            li.active
-              a href="../navbar/"  Dashboard
+
+  body.page-loading
+    main role="main" 
+
+    /! page loading spinner
+    .pageload
+      .pageload-inner
+        .sk-rotating-plane
+    /! /page loading spinner
+
+    .app.layout-fixed-header
+      /! content panel
+      .main-panel
+        /! top header
+        .header.navbar
+          .brand.visible-xs
+            /! toggle offscreen menu
+            .toggle-offscreen
+              a.hamburger-icon.visible-xs data-move="ltr" data-toggle="offscreen" href="javascript:;" 
+                span
+                span
+                span
+            /! /toggle offscreen menu
+
+          ul.nav.navbar-nav.navbar-left.live-tail
             li
-              a href="/events?name=#{name}&hours=1" 
-                | Events
-                span.sr-only (current)
+              br
+              span(style="color:#fff; padding: 0 10px 0 10px;") Live Tail:
             li
-              a href="/event_manager?name=#{name}" 
-                | Tags
-                span.sr-only (current)
-        #nav(style="position: absolute; top: 7px; left: 30px; z-index: 1000;")
-          .btn-group
-            button.btn.btn-primary.dropdown-toggle data-toggle="dropdown" 
-              | Log Group&nbsp;
-              span.caret
-            ul.dropdown-menu
-              - tags.each do |tag|
+              br
+              span
+                label.switch.switch-plain.switch-sm.m-b(style="margin-top: -5px;")
+                  input#tail-checkbox checked="" type="checkbox" /
+                  span
+                    i.handle
+          ul#timer.nav.navbar-nav.navbar-right.hidden-xs
+            li
+              a.ripple data-toggle="dropdown" href="javascript:;" 
+                span Log Name (#{name})&nbsp;
+                span.caret
+              ul.dropdown-menu
+               - tags.each do |tag|
                 li
-                  a(href="/li_home?name=#{tag}") ##{tag}
-                    
-            - unless q && q.length > 0
-              span.tailer
-                .btn-group
-                  input(type="checkbox" name="my-checkbox" checked="checked" data-label-text="Tail" data-inverse="true" data-on-color="success")
-
-    == yield
-
-    footer.footer.navbar-fixed-bottom
-      div.pull-right
-        .count
-      form.navbar-form role="search" action="li_home" 
-        .input-group.searchBox#footsearch(style="display: none;")
-          input.form-control id="q" name="q" placeholder="Search" type="text" value="#{q}" /
-          input.form-control id="name" name="name" type="hidden" value="#{name}" /
-          input.form-control id="hours" name="hours" type="hidden" value="#{hours || 2}" /
-          .input-group-btn
-            button.btn.btn-default type="submit"
-              i.glyphicon.glyphicon-search
-        .btn-group.dropup
-          button.btn.btn-primary.dropdown-toggle data-toggle="dropdown" 
-            span.hoursMain Last 2hrs&nbsp;
-            span.caret
-          ul.dropdown-menu.col-sm-12
-            li.dropdown
+                  a(href="li_home?name=#{tag}") ##{tag}
+            li.hours
+              a.ripple data-toggle="dropdown" href="javascript:;" 
+                i.fa.fa-clock-o
+                span.hours-text Last 2 hrs
+                span.caret
               ul.dropdown-menu.multi-column.columns-2
-              .row
-                .col-sm-6
-                  ul.multi-column-dropdown
-                    li
-                      a.hrs href="#" data-val="5m"  Last 5 min
-                    li
-                      a.hrs href="#" data-val="20m" Last 20 min
-                    li
-                      a.hrs href="#" data-val="1"  Last 1 hr
-                    li
-                      a.hrs href="#" data-val="2"  Last 2 hr
-                    li
-                      a.hrs href="#" data-val="4"  Last 4 hr
-                .col-sm-6
-                  ul.multi-column-dropdown
-                    li
-                      a.hrs href="#" data-val="8" Last 8 hr
-                    li
-                      a.hrs href="#" data-val="24" Last 24 hr
-                    li
-                      a.hrs href="#" data-val="72" Last 3 days
-                    li
-                      a.hrs href="#" data-val="168"  Last 7 days
-                    li.divider
-                    li
-                      a href="#"  Custom
+                .row
+                  .col-sm-6
+                    ul.multi-column-dropdown
+                      li
+                        a.hrs href="#" data-val="5m"  Last 5 min
+                      li.divider
+                      li
+                        a.hrs href="#" data-val="20m" Last 20 min
+                      li.divider
+                      li
+                        a.hrs href="#" data-val="1"  Last 1 hr
+                      li.divider
+                      li
+                        a.hrs href="#" data-val="2"  Last 2 hrs
+                      li.divider
+                      li
+                        a.hrs href="#" data-val="4"  Last 4 hrs
+                  .col-sm-6
+                    ul.multi-column-dropdown
+                      li
+                        a.hrs href="#" data-val="8" Last 8 hrs
+                      li.divider
+                      li
+                        a.hrs href="#" data-val="24" Last 24 hrs
+                      li.divider
+                      li
+                        a.hrs href="#" data-val="72" Last 3 days
+                      li.divider
+                      li
+                        a.hrs href="#" data-val="168"  Last 7 days
+                      li.divider
+                      li
+                        a.hrs href="#" data-val="168"  Custom
+            li
+              a.ripple data-toggle="dropdown" href="javascript:;" 
+                i.fa.fa-cogs
+                span &nbsp;Menu
+                span.caret
+              ul.dropdown-menu
+                li
+                  a href="li_home?name=#{name}"  Main
+                li
+                  a href="events?name=#{name}&hours=1"  Events
+                li
+                  a href="event_manager?name=#{name}"  Event Manager
+                li.divider role="separator" 
+                li
+                  a href="javascript:;"  Help
 
-    /! Modal Start here
-    #myPleaseWait.modal.fade.bs-example-modal-sm aria-hidden="true" data-backdrop="static" role="dialog" tabindex="-1" 
-      .modal-dialog.modal-sm
-        .modal-content
-          .modal-header
-            h4.modal-title
-              span.glyphicon.glyphicon-time
-              | &nbsp; Fetching...
-          .modal-body
-            .progress
-              .progress-bar.progress-bar-info.progress-bar-striped.active style=("width: 100%") 
-    #confirmDelete.modal.fade aria-hidden="true" aria-labelledby="confirmDeleteLabel" role="dialog" 
-      .modal-dialog
-        .modal-content
-          .modal-header
-            button.close aria-hidden="true" data-dismiss="modal" type="button"  &times;
-            h4.modal-title Delete Parmanently
-          .modal-body
-            p Are you sure about this ?
-          .modal-footer
-            button.btn.btn-default data-dismiss="modal" type="button"  Cancel
-            button#confirm.btn.btn-danger type="button"  Delete
-    /! Modal ends Here
+        /! /top header
+        == yield
 
+      footer.content-footer
+        nav.footer-right
+          ul.nav
+            li
+              a href="javascript:;"  Feedback
+            li
+              a.scroll-up href="javascript:;" 
+                i.fa.fa-angle-up
+        nav.footer-left
+          ul(style="width:50%; max-width: 250px; padding-left: 0")
+            li.search-form
+              form (action="li_home")
+                input.form-control id="name" name="name" type="hidden" value="#{name}" /
+                input.form-control id="hours" name="hours" type="hidden" value="#{hours || 2}" /
+                .input-group#footsearch
+                  input.form-control.br0 name="q" type="text" value="#{q}" placeholder="Search..." /
+                  span.input-group-btn
+                    button.btn.btn-info type="button"  Go!
+
+
+    /! /bottom footer
+
+  
+  script src="scripts/helpers/modernizr.js" 
+  script src="vendor/jquery/dist/jquery.js" 
+  script src="vendor/bootstrap/dist/js/bootstrap.js" 
+  script src="vendor/fastclick/lib/fastclick.js" 
+  script src="vendor/perfect-scrollbar/js/perfect-scrollbar.jquery.js" 
+  script src="scripts/helpers/smartresize.js" 
+  script src="scripts/constants.js" 
+  script src="scripts/main.js" 
+  script(src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/highlight.min.js")
+
+  script(src="javascript/layout.js?f=4nn94")
+  script(src="javascript/lib/validator.js?f=43444")
+  script(src="javascript/lib/autolink.js?f=43444")
+  script(src="lib/boostrap-switch/js/bootstrap-switch.js")
+  script(src="javascript/lib/prettyPrint.js?f=43444")
+  script(src="javascript/lib/bootstrap-colorpicker.js?f=54444")
+
+  /! endbuild
+  /! initialize page scripts
+  script src="scripts/helpers/sameheight.js" 
+  
+
+  script src="vendor/chosen_v1.4.0/chosen.jquery.min.js" 
+  script src="vendor/card/lib/js/jquery.card.js" 
+  script src="vendor/jquery-validation/dist/jquery.validate.min.js" 
+  script src="vendor/checkbo/src/0.1.4/js/checkBo.min.js" 
+  script src="scripts/helpers/selectfx.js"
+  script src="vendor/sweetalert/dist/sweetalert.min.js"
+
+  /! end initialize page scripts
+  script src="javascript/utils.js?354a22"
+  script src="javascript/log_console.js?35422"
+
+  == yield_content :javascripter
+
+
+/! Modal Start here
+#myPleaseWait.modal.fade.bs-example-modal-sm data-backdrop="static" role="dialog" tabindex="-1" 
+  .modal-dialog.modal-sm
+    .modal-content
+      .modal-header
+        h4.modal-title
+          span.glyphicon.glyphicon-time
+          | &nbsp; Fetching...
+      .modal-body
+        .sk-wave(style="width: 300px;")
+          .sk-rect.sk-rect1
+          .sk-rect.sk-rect5
+          .sk-rect.sk-rect3
+          .sk-rect.sk-rect4
+          .sk-rect.sk-rect5
+          .sk-rect.sk-rect1
+          .sk-rect.sk-rect2
+          .sk-rect.sk-rect1
+          .sk-rect.sk-rect4
+          .sk-rect.sk-rect5
+          .sk-rect.sk-rect1
+          .sk-rect.sk-rect2
+          .sk-rect.sk-rect3
+          .sk-rect.sk-rect4
+          .sk-rect.sk-rect5
+          .sk-rect.sk-rect1
+          .sk-rect.sk-rect4
+          .sk-rect.sk-rect3
+          .sk-rect.sk-rect4
+          .sk-rect.sk-rect1
+          .sk-rect.sk-rect1
+          .sk-rect.sk-rect2
+          .sk-rect.sk-rect3
+          .sk-rect.sk-rect4
+          .sk-rect.sk-rect5
+          .sk-rect.sk-rect4
+          .sk-rect.sk-rect2
+
+#confirmDelete.modal.fade aria-hidden="true" aria-labelledby="confirmDeleteLabel" role="dialog" 
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close aria-hidden="true" data-dismiss="modal" type="button"  &times;
+        h4.modal-title Delete Parmanently
+      .modal-body
+        p Are you sure about this ?
+      .modal-footer
+        button.btn.btn-default data-dismiss="modal" type="button"  Cancel
+        button#confirm.btn.btn-danger type="button"  Delete

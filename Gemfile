@@ -7,4 +7,3 @@ gem 'awesome_print'
 gem 'dalli'
 gem 'slim'
 gem 'puma'
-

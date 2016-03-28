@@ -9,10 +9,6 @@ $(function() {
 	var _firstLoad = true;
 	var _DELAY = 5000;
 
-
-	$(".tailer").show();
-	$("#footsearch").show();
-
 	$(logConsole).on("afterAppend", function() {
 		if (!_pauseSmoothScroll) {
 			$("body").stop();
@@ -49,7 +45,7 @@ $(function() {
 		if (Utils.getCookie("is_tailing")) {
 			if (Utils.getCookie("is_tailing").toString() == "false") {
 				isTailing = false;
-				$('input[name="my-checkbox"]').bootstrapSwitch('state', false);
+				$('#tail-checkbox').prop('checked', false);
 			}
 		}
 	}
@@ -59,8 +55,9 @@ $(function() {
 
 		setInterval(function(){ checkTail(); }, _DELAY);
 
-		$('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
-			isTailing = state;
+
+		$('#tail-checkbox').change(function() {
+			isTailing = this.checked;
 			document.cookie = "is_tailing=" + isTailing.toString() + "; expires=0; path=/";
 		});
 
@@ -77,7 +74,7 @@ $(function() {
 			}
 
 			if (_scrollTimeout) {
-				clearTimeout(myVar);
+				clearTimeout(_scrollTimeout);
 			}
 			// detect only user initiated, not by an .animate though
 			_scrollTimeout = setTimeout(function() {
@@ -90,6 +87,5 @@ $(function() {
 	}
 
 	initialize();
-
 
 });

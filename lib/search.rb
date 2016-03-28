@@ -57,6 +57,8 @@ class Search
 	# Latest is just the 'tail' functionality
 	def latest(from_line_prefix = nil)
 		latest_file = Tags.files(@tag).sort.last
+
+		p "Latests #{Tags.files(@tag).sort}"
 		cmd_string = "tail -n 1000 #{latest_file}"
 		results = execute_shell_command(cmd_string)
 		results = trim_results(results, from_line_prefix)

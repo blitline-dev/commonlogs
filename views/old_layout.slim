@@ -1,0 +1,138 @@
+doctype html
+html
+  head
+    title Rocket Log
+    meta name="description" content=""
+    meta name="keywords" content="rsyslog viewer cheap logging dyi"
+    meta name="viewport" content="width=device-width, initial-scale=1"
+
+    link(href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous")
+    
+    link(href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.css" rel="stylesheet")
+    link(rel="stylesheet" href="/stylesheets/mobile_base.css?1a224g8")
+    link(rel="stylesheet" href="/stylesheets/lib/colorpicker.css?1a224g8")
+    link(href="lib/boostrap-switch/css/bootstrap-switch.css" rel="stylesheet")
+
+    script(src="http://code.jquery.com/jquery-2.2.1.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js")
+    script(src="javascript/layout.js?f=43644")
+    script(src="javascript/lib/validator.js?f=43444")
+    script(src="javascript/lib/autolink.js?f=43444")
+    script(src="lib/boostrap-switch/js/bootstrap-switch.js")
+    script(src="javascript/lib/prettyPrint.js?f=43444")
+    script(src="javascript/lib/bootstrap-colorpicker.js?f=54444")
+
+    script
+      | 
+        var rocketLog = {};
+        rocketLog["q"] = "#{q}";
+        rocketLog["hours"] = "#{hours}";
+        rocketLog["name"] = "#{name}";
+ 
+  body
+    nav.navbar.navbar.navbar-default.navbar-fixed-top.rheader
+      .container
+        .navbar-header
+          button.navbar-toggle.collapsed aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" type="button" 
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+        #navbar.navbar-collapse.collapse
+          ul.nav.navbar-nav.navbar-right
+            li.active
+              a href="../navbar/"  Dashboard
+            li
+              a href="/events?name=#{name}&hours=1" 
+                | Events
+                span.sr-only (current)
+            li
+              a href="/event_manager?name=#{name}" 
+                | Tags
+                span.sr-only (current)
+        #nav(style="position: absolute; top: 7px; left: 30px; z-index: 1000;")
+          .btn-group
+            button.btn.btn-primary.dropdown-toggle data-toggle="dropdown" 
+              | Log Group&nbsp;
+              span.caret
+            ul.dropdown-menu
+              - tags.each do |tag|
+                li
+                  a(href="/li_home?name=#{tag}") ##{tag}
+                    
+            - unless q && q.length > 0
+              span.tailer
+                .btn-group
+                  input(type="checkbox" name="my-checkbox" checked="checked" data-label-text="Tail" data-inverse="true" data-on-color="success")
+
+      = yield
+
+    footer.footer.navbar-fixed-bottom
+      div.pull-right
+        .count
+      form.navbar-form role="search" action="li_home" 
+        .input-group.searchBox#footsearch(style="display: none;")
+          input.form-control id="q" name="q" placeholder="Search" type="text" value="#{q}" /
+          input.form-control id="name" name="name" type="hidden" value="#{name}" /
+          input.form-control id="hours" name="hours" type="hidden" value="#{hours || 2}" /
+          .input-group-btn
+            button.btn.btn-default type="submit"
+              i.glyphicon.glyphicon-search
+        .btn-group.dropup
+          button.btn.btn-primary.dropdown-toggle data-toggle="dropdown" 
+            span.hoursMain Last 2hrs&nbsp;
+            span.caret
+          ul.dropdown-menu.col-sm-12
+            li.dropdown
+              ul.dropdown-menu.multi-column.columns-2
+              .row
+                .col-sm-6
+                  ul.multi-column-dropdown
+                    li
+                      a.hrs href="#" data-val="5m"  Last 5 min
+                    li
+                      a.hrs href="#" data-val="20m" Last 20 min
+                    li
+                      a.hrs href="#" data-val="1"  Last 1 hr
+                    li
+                      a.hrs href="#" data-val="2"  Last 2 hr
+                    li
+                      a.hrs href="#" data-val="4"  Last 4 hr
+                .col-sm-6
+                  ul.multi-column-dropdown
+                    li
+                      a.hrs href="#" data-val="8" Last 8 hr
+                    li
+                      a.hrs href="#" data-val="24" Last 24 hr
+                    li
+                      a.hrs href="#" data-val="72" Last 3 days
+                    li
+                      a.hrs href="#" data-val="168"  Last 7 days
+                    li.divider
+                    li
+                      a href="#"  Custom
+
+    /! Modal Start here
+    #myPleaseWait.modal.fade.bs-example-modal-sm aria-hidden="true" data-backdrop="static" role="dialog" tabindex="-1" 
+      .modal-dialog.modal-sm
+        .modal-content
+          .modal-header
+            h4.modal-title
+              span.glyphicon.glyphicon-time
+              | &nbsp; Fetching...
+          .modal-body
+            .progress
+              .progress-bar.progress-bar-info.progress-bar-striped.active style=("width: 100%") 
+    #confirmDelete.modal.fade aria-hidden="true" aria-labelledby="confirmDeleteLabel" role="dialog" 
+      .modal-dialog
+        .modal-content
+          .modal-header
+            button.close aria-hidden="true" data-dismiss="modal" type="button"  &times;
+            h4.modal-title Delete Parmanently
+          .modal-body
+            p Are you sure about this ?
+          .modal-footer
+            button.btn.btn-default data-dismiss="modal" type="button"  Cancel
+            button#confirm.btn.btn-danger type="button"  Delete
+    /! Modal ends Here
+

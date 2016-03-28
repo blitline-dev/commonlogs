@@ -1,7 +1,4 @@
 $(function()	{
-	$("#footsearch").show();
-	$(".searchBox").hide();
-
 	var	_VIEWSIZE = 180;
 	var _chartData = { "columns" : [], "maxY" : 0};
 	var _logConsole = new LogConsole();
@@ -160,7 +157,7 @@ $(function()	{
 			try {
 				var data = JSON.parse(rawData);
 				if (jQuery.isEmptyObject(data["event_data"]) || data["event_data"] === "{}") {
-					showEmptyChart();
+					showEmptyHelp();
 					afterRender();
 					return;
 				}
@@ -185,7 +182,7 @@ $(function()	{
 		var st = Utils.getParameterByName("st");
 		var et = Utils.getParameterByName("et");
 
-		var url = "/event_list?name=" + rocketLog.name + "&event_name=" + eventName + "&page=" + _page;
+		var url = "event_list?name=" + rocketLog.name + "&event_name=" + eventName + "&page=" + _page;
 
 
 		if (!_customRange) {
@@ -215,26 +212,8 @@ $(function()	{
 		});
 	}
 
-	function showEmptyChart() {
-		var chart = c3.generate({
-			bindto:	'#chart',
-			data: {
-				columns: [
-					['data', 0]
-				],
-				type: 'gauge',
-				gauge: {
-					label: {
-						format: function(value, ratio) {
-							return "No data available";
-						}
-					}
-				},
-				color: {
-					color: "#ff0000"
-			}}
-		});
-
+	function showEmptyHelp() {
+		$(".main-content").hide();
 		$("#belowChart").show();
 	}
 
@@ -248,7 +227,7 @@ $(function()	{
 		var st = Utils.getParameterByName("st");
 		var et = Utils.getParameterByName("et");
 
-		var url = "/event_counts?name=" + rocketLog.name;
+		var url = "event_counts?name=" + rocketLog.name;
 		if (hours) {
 			url += "&hours=" + hours.toString();
 		}else if(st) {
@@ -263,7 +242,7 @@ $(function()	{
 	$(".hrs").click(function() {
 		var $item = $(this);
 		var hours = $item.attr("data-val");
-		window.location.assign("/events?name=" + rocketLog.name + "&hours=" + hours);
+		window.location.assign("events?name=" + rocketLog.name + "&hours=" + hours);
 	});
 
 	$(_logConsole).on("loadMore", function() {

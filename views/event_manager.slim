@@ -1,70 +1,74 @@
-link(rel="stylesheet" href="/stylesheets/events_manager.css?1a224g8")
-div.container(style="margin-top: 40px")
-	div.row
+link(rel="stylesheet" href="/stylesheets/events_manager.css?222f4g8")
 
-		div.col-md-12
-			div
-				p &nbsp;
-				div
-					h3 Events Manager
-					a.add_event.pull-right.btn.btn-warning.add(data-target="#myModal" data-toggle="modal" type="button") + Add Event
-					table.rwd-table
+.main-content.hide-search.hide-tail.hide-hours
+	.page-title
+		.title Events Manager for #{name}
+		.sub-title Track individual text occurances in your logs
+	.card.bg-white.m-b
+		.card-header &nbsp;
+		a.add_event.pull-right.btn.btn-warning.add(data-target="#myModal" data-toggle="modal" type="button") <i class="fa fa-plus-square"></i> &nbsp;Add Event
+
+		.card-block.p-a-0
+			.table-responsive
+				table.table.m-b-0
+					thead
 						tr
-							th Event Name
-							th Description
-							th Search
-							th Color
-							th Action
+							th <b>Event Name</b>
+							th.hidden-xs <b>Description</b>
+							th.hidden-xs <b>Search</b>
+							th.hidden-xs <b>Color</b>
+							th <b>Action</b>
+					tbody
 						- events.each do |key, event|
 							tr
-								td data-th=("Event Name") #{event["event_name"]}
-								td data-th="Description" #{event["description"]}
-								td data-th="Search"	"#{event["search"]}"
-								td data-th="Color"	#{event["color"]}
-								td data-th="Options"
-									form accept-charset="UTF-8" action="/event_delete" method="POST" style="display:inline" 
-									  input#event_name(type="hidden" name="event_name" value="#{event["event_name"]}")
-									  input(type="hidden" name="name" value="#{name}")
-									  button.btn.btn-xs.btn-danger data-message=("Are you sure you want to delete this event?") data-target="#confirmDelete" data-title=("Delete Event") data-toggle="modal" type="button" 
-									    i.glyphicon.glyphicon-trash
-script(src="javascript/event_manager.js?3454222")
+								td  #{event["event_name"]}
+								td.hidden-xs #{event["description"]}
+								td.hidden-xs "#{event["search"]}"
+								td.hidden-xs
+									div(style="background-color: #{event["color"]}")&nbsp;
+								td
+									button.btn.btn-xs.btn-danger.confirmDelete type="button"
+										i.glyphicon.glyphicon-trash
+											form accept-charset="UTF-8" action="/event_delete" method="POST" style="display:inline" 
+											  input#event_name(type="hidden" name="event_name" value="#{event["event_name"]}")
+											  input(type="hidden" name="name" value="#{name}")
+
 
 #myModal.modal.fade role="dialog" 
-  .modal-dialog
-    /! Modal content
-    .modal-content
-      .modal-header
-        button.close data-dismiss="modal" type="button"  &times;
-        h4.modal-title.primary Add Tag
-      .modal-body
-      	div.well.mow
-			form.form-horizontals(action="/events" method="post" data-toggle="validator")
-				input(type="hidden" name="name" value="#{name}")
-				.form-group
-					.col-6
-						label.control-label for="textinput"	Event Name
-						input#textinput.form-control.input-md name="event_name" placeholder="\\A-Za-z0-9_\\" required="true" type="text" data-error="Must start with letter, and only have alphanum or underscore" pattern="^[_A-z]{1}[A-z0-9]*$"/
-						span.help-block Alphanumeric (underscore for spaces)
-				.form-group
-					.col-6
-						label.control-label for="textinput"	Event Description
-						input#textinput.form-control.input-md name="description" placeholder="Describe this event" required="true" type="text" /
-						span.help-block Describe event
-				.form-group
-					.col-6
-						label.control-label for="textinput"	Color
-						.input-group.demo2
-						  input#cp.form-control type="text" value="" name="color"
-						  span.input-group-addon
-						    i
-				/! Search input
-				.form-group
-					.col-6
-						label.control-label for="search_word"	Search Word
-						input#search_word.form-control.input-md name="search" placeholder=("Search for?") required="true" type="search" /
-						p.help-block Word to search for ex: "Exception"
-				/! Button
-				.form-group
-					div.clearfix
-						button#singlebutton.btn.btn-primary.pull-right name="singlebutton"	Save
+	.modal-dialog#add-dialog
+		/! Modal content
+		.modal-content
+			.modal-header.bg-default
+				button.close data-dismiss="modal" type="button"	&times;
+				h4.modal-title.primary Add Event
+			.modal-body
+				form.form-horizontals(action="/events" method="post" data-toggle="validator")
+					input(type="hidden" name="name" value="#{name}")
+					.form-group
+						.col-6
+							label.control-label for="textinput"	Event Name <a href="javascript:;" class="text-info fa fa-question-circle" data-toggle="popover" data-trigger="focus" data-placement="right" title="Event Name" data-content="This is what the event will appear as in the UI. This field MUST be alphanumeric or underscore only. Addtionally, it cannot start with a number." ></a>
+							input#textinput.form-control.input-md name="event_name" placeholder="\\A-Za-z0-9_\\" required="true" type="text" data-error="Must start with letter, and only have alphanum or underscore" pattern="^[_A-z]{1}[A-z0-9]*$"/
+					.form-group
+						.col-6
+							label.control-label for="textinput"	Event Description <a href="javascript:;" class="text-info fa fa-question-circle" data-toggle="popover" data-trigger="focus" data-placement="right" title="Event Description" data-content="This is a description of the event so you can remember later why you created it :)" ></a>
+							input#textinput.form-control.input-md name="description" placeholder="Describe this event" required="true" type="text" /
+					.form-group
+						.col-6
+							label.control-label for="textinput"	Color <a href="javascript:;" class="text-info fa fa-question-circle" data-toggle="popover" data-trigger="focus" data-placement="right" title="Color" data-content="This is the color we will display the event in the UI. If you do not pick one, we will automatically choose one." ></a>
+							.input-group.demo2
+								input#cp.form-control type="text" value="" name="color"
+								span.input-group-addon
+									i
+					/! Search input
+					.form-group
+						.col-6
+							label.control-label for="search_word"	Search Word <a href="javascript:;" class="text-info fa fa-question-circle" data-trigger="focus" data-toggle="popover" data-placement="right" title="Search Word" data-content="This is the text we will watch for. We will do a case insensitve search." ></a>
+							input#search_word.form-control.input-md name="search" placeholder=("Search for?") required="true" type="search" /
+					/! Button
+					.form-group
+						div.clearfix
+							button#singlebutton.btn.btn-success.pull-right name="singlebutton"	Save
 
+- content_for :javascripter
+	script(src="javascript/event_manager.js?345544222")
+	script(src="javascript/lib/bootstrap-colorpicker.js?f=5445444")

@@ -14,6 +14,7 @@ class Event
 		@tag = tag
 		@now = Time.now
 		@now_sec = @now.to_i
+
 		@rsyslog_unix_weird_offset = 24 * 3600 # 1 Full Day in Seconds
 		@timeslice = TIME_SLICE_COUNT
 	end

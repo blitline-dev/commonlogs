@@ -1,10 +1,29 @@
 $(function() {
 
+	function hideComponents() {
+		if ($(".main-content.hide-search").length > 0) {
+			$(".search-form").hide();
+		}
+		if ($(".main-content.hide-tail").length > 0) {
+			$(".live-tail").hide();
+		}
+		if ($(".main-content.hide-hours").length > 0) {
+			$(".hours").hide();
+		}
+		if ($("#q").length > 0 && $("#q").val().length > 0) {
+			$(".live-tail").hide();
+		}
+	}
+
 	function setHours() {
 		if(rocketLog && rocketLog.hours) {
+			console.log("a[data-val='" + rocketLog.hours.toString() + "']");
+			console.dir($("a[data-val='" + rocketLog.hours.toString() + "']"));
+
 			var linkText = $("a[data-val='" + rocketLog.hours.toString() + "']").text();
+			console.log(linkText);
 			if (linkText) {
-				$(".hoursMain").text(linkText);
+				$(".hours-text").html(linkText);
 			}
 		}
 	}
@@ -31,7 +50,7 @@ $(function() {
 	$(".hrs").click(function() {
 		var $item = $(this);
 		$("#hours").val($item.attr("data-val"));
-		$(".hoursMain").text($item.text());
+		$(".hours-text").text($item.text());
 	});
 
 	$(".niceLink").click(function() {
@@ -43,20 +62,40 @@ $(function() {
 	setHours();
 	setCount();
 
-
-	$('#confirmDelete').on('show.bs.modal', function (e) {
-		$message = $(e.relatedTarget).attr('data-message');
-		$(this).find('.modal-body p').text($message);
-		$title = $(e.relatedTarget).attr('data-title');
-		$(this).find('.modal-title').text($title);
-
-		// Pass form reference to modal for submission on yes/ok
-		var form = $(e.relatedTarget).closest('form');
-		$(this).find('.modal-footer #confirm').data('form', form);
+/*
+	$(function(){
+		var height = window.innerHeight;
+		$('.consoleBox').css('height', height - 100);
+		console.log("here");
 	});
 
-	// Form confirm (yes/ok) handler, submits form
-	$('#confirmDelete').find('.modal-footer #confirm').on('click', function(){
-		$(this).data('form').submit();
+	//And if the outer div has no set specific height set.. 
+	$(window).resize(function(){
+		var height = window.innerHeight;
+		$('.consoleBox').css('height', height - 100);
+		console.log("here" + height.toString());
+
 	});
+*/
+
+	$('.confirmDelete').on('click', function (e) {
+		var _this = $(e.target);
+		var form = $(_this).find("form");
+		console.dir(form)
+		swal({
+			title: 'Are you sure?',
+			text: 'You will not be able to recover this item!',
+			type: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#DD6B55',
+			confirmButtonText: 'Yes, delete it!',
+			closeOnConfirm: false,
+		}, function () {
+				$(_this).find('form').submit();
+				swal('Deleted!', 'Your imaginary file has been deleted!', 'success');
+			});
+		});
+
+	$('[data-toggle="popover"]').popover();
+	hideComponents();
 });
