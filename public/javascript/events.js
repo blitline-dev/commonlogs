@@ -30,6 +30,7 @@ $(function()	{
 				// Concat count data into array
 				rowData = rowData.concat(data[keys[k]]);
 				_chartData["columns"].push(rowData);
+
 			}
 		}
 		_chartData.maxY = maxAll;
@@ -60,7 +61,9 @@ $(function()	{
 		getEventsList(_eventName);
 	}
 
-	function drawChart() {
+	function drawChart(colors) {
+		console.dir(colors);
+
 		var data	=	{
 			selection: {
 				enabled: true,
@@ -73,13 +76,24 @@ $(function()	{
 			},
 			onselected: function(e) {
 			},
-			type: 'scatter'
+			type: 'scatter',
+			color: function (color, d) {
+            	// d will be 'id' when called for legends
+            	var cname = d.toString().split(" ")[0];
+            	if (cname && colors[cname] != null) {
+	            	return colors[cname];
+            	}
+
+            	cname = d.id.split(" ")[0];
+                if (cname && colors[cname] != null) {
+	            	return colors[cname];
+            	}
+
+            	return;
+        	}
 		};
 
 		data["columns"] = _chartData.columns;
-		data["colors"] = {};
-		data["colors"][_chartData["columns"][0][0]] = '#ff0000';
-
 		_chartData.maxY = _chartData.maxY * 1.20;
 		var chartMax  = Math.ceil(_chartData.maxY / (Math.pow(10, Math.floor(Math.log10(_chartData.maxY))) / 10)) * (Math.pow(10, Math.floor(Math.log10(_chartData.maxY))) / 10);
 
@@ -167,9 +181,10 @@ $(function()	{
 				event_data = data["event_data"];
 				_startTime = start_timestamp;
 				_slice = (end_timestamp - _startTime) / _VIEWSIZE;
+				var colors = data["colors"] || {};
 
 				massageData(event_data);
-				drawChart();
+				drawChart(colors);
 				afterRender();
 			}catch(ex) {
 				console.log(ex.stack);
@@ -182,7 +197,7 @@ $(function()	{
 		var st = Utils.getParameterByName("st");
 		var et = Utils.getParameterByName("et");
 
-		var url = "event_list?name=" + rocketLog.name + "&event_name=" + eventName + "&page=" + _page;
+		var url = "/events/event_list?name=" + rocketLog.name + "&event_name=" + eventName + "&page=" + _page;
 
 
 		if (!_customRange) {
@@ -227,7 +242,7 @@ $(function()	{
 		var st = Utils.getParameterByName("st");
 		var et = Utils.getParameterByName("et");
 
-		var url = "event_counts?name=" + rocketLog.name;
+		var url = "/events/event_counts?name=" + rocketLog.name;
 		if (hours) {
 			url += "&hours=" + hours.toString();
 		}else if(st) {

@@ -120,3 +120,16 @@ pre {
 .hours-text {
   margin-left: 5px;
 }
+
+footer.content-footer nav ul#bottom-hours  li {
+  display: block;
+}
+
+#when input{
+  text-align: center;
+  width: 30px;
+}
+
+#when .input-group {
+  line-height: 2rem;
+}

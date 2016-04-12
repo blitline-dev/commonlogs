@@ -8,7 +8,7 @@ $(function() {
 
 	function search() {
 		_logConsole.setLoading(true);
-		var url = "search?&name=" + rocketLog.name + "&q=" + rocketLog.q + "&hours=" + rocketLog.hours + "&p=" + _p.toString();
+		var url = "/features/search?&name=" + rocketLog.name + "&q=" + rocketLog.q + "&hours=" + rocketLog.hours + "&p=" + _p.toString();
 
 		$.get(url, function( data ) {
 			$('#myPleaseWait').modal('hide');

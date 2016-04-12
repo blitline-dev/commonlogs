@@ -27,7 +27,7 @@ $(function() {
 
 	function loadContextData() {
 		_logConsole.setLoading(true);
-		var url = "context_data?&name=" + rocketLog.name + "&seq=" + rocketLog.seq + "&server=" + rocketLog.server + "&file=" +rocketLog.file + "&time=" + rocketLog.time.toString();
+		var url = "/features/context_data?&name=" + rocketLog.name + "&seq=" + rocketLog.seq + "&server=" + rocketLog.server + "&file=" +rocketLog.file + "&time=" + rocketLog.time.toString();
 
 		$.get(url, function( data ) {
 			$('#myPleaseWait').modal('hide');

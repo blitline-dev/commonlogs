@@ -1498,6 +1498,7 @@ footer.session-footer {
     margin: 0;
     font-weight: normal;
     line-height: 1; }
+
     footer.content-footer nav ul li,
     footer.session-footer nav ul li {
       display: inline-block;
@@ -1505,8 +1506,8 @@ footer.session-footer {
       footer.content-footer nav ul li a,
       footer.session-footer nav ul li a {
         color: #59595A;
-        padding-top: 0.656rem;
-        padding-bottom: 0.656rem;
+        padding-top: 0.0rem;
+        padding-bottom: 0.0rem;
         padding-right: 0.625rem;
         padding-left: 0.625rem;
         line-height: 1.25rem;
@@ -1519,9 +1520,6 @@ footer.session-footer {
       footer.content-footer nav ul li:first-child,
       footer.session-footer nav ul li:first-child {
         margin-left: 0; }
-        footer.content-footer nav ul li:first-child a,
-        footer.session-footer nav ul li:first-child a {
-          padding-left: 0; }
   footer.content-footer li:hover,
   footer.content-footer li a:hover,
   footer.content-footer li a:active,

@@ -18,7 +18,7 @@ html lang="en"
     link href="styles/font-awesome.css" rel="stylesheet" /
     link href="styles/card.css" rel="stylesheet" /
     link href="styles/sli.css" rel="stylesheet" /
-    link(rel="stylesheet" href="/stylesheets/mobile_base.css?1ba24g8")
+    link(rel="stylesheet" href="/stylesheets/mobile_base.css?1bag24g8")
     link href="styles/animate.css" rel="stylesheet" /
     link rel="stylesheet" href="vendor/sweetalert/dist/sweetalert.css"
     link(rel="stylesheet" href="/stylesheets/lib/colorpicker.css?1a224g8")
@@ -28,6 +28,7 @@ html lang="en"
     link(rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/styles/default.min.css")
     link href="vendor/chosen_v1.4.0/chosen.min.css" rel="stylesheet" /
     link href="vendor/checkbo/src/0.1.4/css/checkBo.min.css" rel="stylesheet" /
+    link href="vendor/c3/c3.min.css" rel="stylesheet" /
     link rel="stylesheet" href="/styles/li_home.css?1a3224g8"
     script
       | 
@@ -50,15 +51,6 @@ html lang="en"
       .main-panel
         /! top header
         .header.navbar
-          .brand.visible-xs
-            /! toggle offscreen menu
-            .toggle-offscreen
-              a.hamburger-icon.visible-xs data-move="ltr" data-toggle="offscreen" href="javascript:;" 
-                span
-                span
-                span
-            /! /toggle offscreen menu
-
           ul.nav.navbar-nav.navbar-left.live-tail
             li
               br
@@ -70,7 +62,7 @@ html lang="en"
                   input#tail-checkbox checked="" type="checkbox" /
                   span
                     i.handle
-          ul#timer.nav.navbar-nav.navbar-right.hidden-xs
+          ul#timer.nav.navbar-nav.navbar-right
             li
               a.ripple data-toggle="dropdown" href="javascript:;" 
                 span Log Name (#{name})&nbsp;
@@ -125,7 +117,9 @@ html lang="en"
                 span.caret
               ul.dropdown-menu
                 li
-                  a href="li_home?name=#{name}"  Main
+                  a href="li_home?name=#{name}"  Home
+                li
+                  a href="li_home?name=#{name}"  Search
                 li
                   a href="events?name=#{name}&hours=1"  Events
                 li
@@ -138,24 +132,52 @@ html lang="en"
         == yield
 
       footer.content-footer
-        nav.footer-right
-          ul.nav
-            li
-              a href="javascript:;"  Feedback
-            li
-              a.scroll-up href="javascript:;" 
-                i.fa.fa-angle-up
         nav.footer-left
-          ul(style="width:50%; max-width: 250px; padding-left: 0")
-            li.search-form
-              form (action="li_home")
+          ul(style="width:90%; padding-left: 0;")
+            li.search-form(style="width: 50%;")
+              form#footsearch (action="li_home")
                 input.form-control id="name" name="name" type="hidden" value="#{name}" /
                 input.form-control id="hours" name="hours" type="hidden" value="#{hours || 2}" /
-                .input-group#footsearch
-                  input.form-control.br0 name="q" type="text" value="#{q}" placeholder="Search..." /
+                .input-group
+                  input.form-control.br0 id="q" name="q" type="text" value="#{q}" placeholder="Search..." /
                   span.input-group-btn
-                    button.btn.btn-info type="button"  Go!
-
+                    button.btn.btn-info#search-go type="button"  Go!
+            li.hours-bottom(style="width: 40%; overflow: none;")
+              ul#bottom-hours(style="padding-left: 0px;")
+                .dropup
+                  button#dropdownMenu2.btn.btn-default.dropdown-toggle.hours-text aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" type="button" 
+                    | Last 2 hrs.
+                    span.caret
+                  ul.dropdown-menu aria-labelledby="dropdownMenu2" 
+                    li
+                      a.hrs href="#" data-val="5m"  Last 5 min
+                    li.divider
+                    li
+                      a.hrs href="#" data-val="20m" Last 20 min
+                    li.divider
+                    li
+                      a.hrs href="#" data-val="1"  Last 1 hr
+                    li.divider
+                    li
+                      a.hrs href="#" data-val="2"  Last 2 hrs
+                    li.divider
+                    li
+                      a.hrs href="#" data-val="4"  Last 4 hrs
+                    li.divider
+                    li
+                      a.hrs href="#" data-val="8" Last 8 hrs
+                    li.divider
+                    li
+                      a.hrs href="#" data-val="24" Last 24 hrs
+                    li.divider
+                    li
+                      a.hrs href="#" data-val="72" Last 3 days
+                    li.divider
+                    li
+                      a.hrs href="#" data-val="168"  Last 7 days
+                    li.divider
+                    li
+                      a.hrs href="#" data-val="168"  Custom
 
     /! /bottom footer
 
@@ -170,7 +192,7 @@ html lang="en"
   script src="scripts/main.js" 
   script(src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/highlight.min.js")
 
-  script(src="javascript/layout.js?f=4nn94")
+  script(src="javascript/layout.js?f=4nyn94")
   script(src="javascript/lib/validator.js?f=43444")
   script(src="javascript/lib/autolink.js?f=43444")
   script(src="lib/boostrap-switch/js/bootstrap-switch.js")
@@ -239,9 +261,10 @@ html lang="en"
     .modal-content
       .modal-header
         button.close aria-hidden="true" data-dismiss="modal" type="button"  &times;
-        h4.modal-title Delete Parmanently
+        h4.modal-title Delete Permanently
       .modal-body
         p Are you sure about this ?
       .modal-footer
         button.btn.btn-default data-dismiss="modal" type="button"  Cancel
         button#confirm.btn.btn-danger type="button"  Delete
+

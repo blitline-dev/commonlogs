@@ -30,7 +30,7 @@ $(function() {
 		var dataT = $lastLine.attr("data-t");
 		var dataR = $lastLine.attr("data-r");
 
-		var url = "tail?&name=" + rocketLog.name;
+		var url = "/features/tail?&name=" + rocketLog.name;
 
 		if (dataT && dataR) {
 			url += "&last_prefix=" + dataT + " " + dataR;

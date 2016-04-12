@@ -1,0 +1,14 @@
+Metrics/LineLength:
+  Enabled: false
+Styles/StringLiterals:
+  Enabled: false
+Styles/RedundantBegin:
+  Enabled: false
+Metrics/MethodLength:
+  Max: 25
+Styles/RedundantReturn:
+  Enabled: false
+Styles/Next:
+  Enabled: false
+Styles/SignalException:
+  Enabled: false

@@ -27,13 +27,15 @@ link(rel="stylesheet" href="/stylesheets/events_manager.css?222f4g8")
 								td.hidden-xs
 									div(style="background-color: #{event["color"]}")&nbsp;
 								td
-									button.btn.btn-xs.btn-danger.confirmDelete type="button"
+									button.btn.btn-xs.btn-danger.confirmDelete type="button" data-toggle="tooltip" title="Delete"
 										i.glyphicon.glyphicon-trash
-											form accept-charset="UTF-8" action="/event_delete" method="POST" style="display:inline" 
+											form accept-charset="UTF-8" action="/p/event_delete" method="POST" style="display:inline" 
 											  input#event_name(type="hidden" name="event_name" value="#{event["event_name"]}")
 											  input(type="hidden" name="name" value="#{name}")
-
-
+									button.btn.btn-xs.btn-success.notify type="button" style="margin-left: 4px;" data-toggle="tooltip" title="Notification" data-nav="/p/notification?name=#{name}&event_name=#{event["event_name"]}"
+										i.glyphicon.glyphicon-bell
+									button.btn.btn-xs.btn-info.evedit type="button" style="margin-left: 4px;" data-toggle="tooltip" title="Edit Event" data-event-id="#{event["event_name"]}"
+										i.glyphicon.glyphicon-pencil
 #myModal.modal.fade role="dialog" 
 	.modal-dialog#add-dialog
 		/! Modal content
@@ -42,16 +44,16 @@ link(rel="stylesheet" href="/stylesheets/events_manager.css?222f4g8")
 				button.close data-dismiss="modal" type="button"	&times;
 				h4.modal-title.primary Add Event
 			.modal-body
-				form.form-horizontals(action="/events" method="post" data-toggle="validator")
+				form.form-horizontals(action="/p/events" method="post" data-toggle="validator")
 					input(type="hidden" name="name" value="#{name}")
 					.form-group
 						.col-6
 							label.control-label for="textinput"	Event Name <a href="javascript:;" class="text-info fa fa-question-circle" data-toggle="popover" data-trigger="focus" data-placement="right" title="Event Name" data-content="This is what the event will appear as in the UI. This field MUST be alphanumeric or underscore only. Addtionally, it cannot start with a number." ></a>
-							input#textinput.form-control.input-md name="event_name" placeholder="\\A-Za-z0-9_\\" required="true" type="text" data-error="Must start with letter, and only have alphanum or underscore" pattern="^[_A-z]{1}[A-z0-9]*$"/
+							input#eventName.form-control.input-md name="event_name" placeholder="\\A-Za-z0-9_\\" required="true" type="text" data-error="Must start with letter, and only have alphanum or underscore" pattern="^[_A-z]{1}[A-z0-9]*$"/
 					.form-group
 						.col-6
 							label.control-label for="textinput"	Event Description <a href="javascript:;" class="text-info fa fa-question-circle" data-toggle="popover" data-trigger="focus" data-placement="right" title="Event Description" data-content="This is a description of the event so you can remember later why you created it :)" ></a>
-							input#textinput.form-control.input-md name="description" placeholder="Describe this event" required="true" type="text" /
+							input#description.form-control.input-md name="description" placeholder="Describe this event" required="true" type="text" /
 					.form-group
 						.col-6
 							label.control-label for="textinput"	Color <a href="javascript:;" class="text-info fa fa-question-circle" data-toggle="popover" data-trigger="focus" data-placement="right" title="Color" data-content="This is the color we will display the event in the UI. If you do not pick one, we will automatically choose one." ></a>
@@ -62,8 +64,8 @@ link(rel="stylesheet" href="/stylesheets/events_manager.css?222f4g8")
 					/! Search input
 					.form-group
 						.col-6
-							label.control-label for="search_word"	Search Word <a href="javascript:;" class="text-info fa fa-question-circle" data-trigger="focus" data-toggle="popover" data-placement="right" title="Search Word" data-content="This is the text we will watch for. We will do a case insensitve search." ></a>
-							input#search_word.form-control.input-md name="search" placeholder=("Search for?") required="true" type="search" /
+							label.control-label for="searchWord"	Search Word <a href="javascript:;" class="text-info fa fa-question-circle" data-trigger="focus" data-toggle="popover" data-placement="right" title="Search Word" data-content="This is the text we will watch for. We will do a case insensitve search." ></a>
+							input#searchWord.form-control.input-md name="search" placeholder=("Search for?") required="true" type="search" /
 					/! Button
 					.form-group
 						div.clearfix

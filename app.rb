@@ -1,8 +1,12 @@
 require 'sinatra'
+require 'sinatra/base'
 require 'sinatra/reloader' if development?
+require 'rubygems'
+require 'logger'
 
 # Basic home/visitor route without auth
 class App < Sinatra::Base
+
   get '/' do
     variables = { foo: "bar" }
     variables.to_json
@@ -16,4 +20,6 @@ class App < Sinatra::Base
   error 404 do
     redirect to('/pages/404.html')
   end
+
+
 end
