@@ -39,6 +39,17 @@ $(function() {
 		search();
 	});
 
+	function eventChanged($el) {
+		var name = $el.attr("data-group");
+		var url = "li_home?name=" + name + "&hours=" + rocketLog.hours.toString() + "&q=" + rocketLog.q;
+		window.location = url;
+	}
+
+	$(".group").click(function() {
+		eventChanged($(this));
+		return false;
+	});
+
 	search();
 
 });

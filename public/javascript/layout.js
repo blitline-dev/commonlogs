@@ -1,4 +1,5 @@
 $(function() {
+	debounce = false;
 
 	function hideComponents() {
 		if ($(".main-content.hide-search").length > 0) {
@@ -29,12 +30,50 @@ $(function() {
 
 	function setHours() {
 		if(rocketLog && rocketLog.hours) {
-
-			var linkText = $("a[data-val='" + rocketLog.hours.toString() + "']").first().text();
-			if (linkText) {
-				$(".hours-text").html(linkText);
+			if ((rocketLog.hours).indexOf("-") > 0) {
+				setCustomTime();
+				$(".hours-text").html("Custom");
+			} else {
+				var linkText = $("a[data-val='" + rocketLog.hours.toString() + "']").first().text();
+				if (linkText) {
+					$(".hours-text").html(linkText);
+				}
 			}
 		}
+	}
+
+	function setCustomTime() {
+		var times = rocketLog.hours.split("-");
+		var startTime = new Date(1000 * parseInt(times[0]));
+		var endTime = new Date(1000 * parseInt(times[1]));
+
+		 $("#startTime").val(startTime.toString("MMMM d, HH:mm tt"));
+		 $("#endTime").val(endTime.toString("MMMM d, HH:mm tt"));
+	}
+
+	function customTime() {
+		var startVal = $("#startTime").val();
+		var endVal = $("#endTime").val();
+		var startTime = null;
+		var endTime = null;
+
+		if (startVal) {
+			startTime = Date.parse(startVal);
+		}
+		if (endVal) {
+			endTime = Date.parse(endVal);
+		}else {
+			endTime = Math.round(new Date());
+		}
+
+		if (startTime < endTime) {
+			var startSec = startTime.getTime() / 1000;
+			var endSec = endTime.getTime() / 1000;
+			var range = startSec.toString() + "-" + endSec.toString();
+			$("#hours").val(range);
+			$("#footsearch").submit();
+		}
+
 	}
 
 	function setCount() {
@@ -43,46 +82,59 @@ $(function() {
 		}
 	}
 
+	function performSearch() {
+		if (debounce) {
+			return true;
+		}
+		var searchText = $("#q").val();
+		if (searchText && searchText.length < 4) {
+			swal({
+				title: 'Are you sure?',
+				text: "'" + searchText + "' is a small search term. It may result in MANY return results. Are you sure you want to query that?",
+				type: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#DD6B55',
+				confirmButtonText: 'Yes, Go!',
+				closeOnConfirm: false,
+			}, function () {
+				$('#myPleaseWait').modal('show');
+				debounce = true;
+				return true;
+				// Yes, continue kind 
+			});
+		}else {
+			debounce = true;
+			return true;
+		}
+		return false;
+	}
+
 	function hookupEvents() {
-		var debounce = false;
+		debounce = false;
+
+    $('#customRange input').on('keydown', function(e) {
+        if (e.which == 13) {
+          customTime();
+        }
+    });
+
+		$("#customGo").click(function() {
+			customTime();
+		});
 
 		$("#search-go").click(function() {
 			$("#footsearch").submit();
 		});
 
 		$("#footsearch").submit(function() {
-			if (debounce) {
-				return true;
-			}
-			var searchText = $("#q").val();
-			if (searchText && searchText.length < 4) {
-				swal({
-					title: 'Are you sure?',
-					text: "'" + searchText + "' is a small search term. It may result in MANY return results. Are you sure you want to query that?",
-					type: 'warning',
-					showCancelButton: true,
-					confirmButtonColor: '#DD6B55',
-					confirmButtonText: 'Yes, Go!',
-					closeOnConfirm: false,
-				}, function () {
-					$('#myPleaseWait').modal('show');
-					debounce = true;
-					$("#footsearch").submit();
-					// Yes, continue kind 
-				});
-			}else {
-				debounce = true;
-				$("#footsearch").submit();
-			}
-			return false;
-
-			// Pre-submit code
+			return performSearch();
 		});
 
-		$(".hrs").click(function() {
+		$(".search-hrs").click(function() {
 			var $item = $(this);
 			$("#hours").val($item.attr("data-val"));
 			$(".hours-text").text($item.text());
+			$("#footsearch").submit();
 		});
 
 		$(".niceLink").click(function() {
@@ -90,7 +142,6 @@ $(function() {
 		});
 
 		$("[name='my-checkbox']").bootstrapSwitch();
-
 
 		$('.confirmDelete').on('click', function (e) {
 			var _this = $(e.target);
@@ -112,11 +163,8 @@ $(function() {
 		$('[data-toggle="popover"]').popover();
 	}
 
-
-
 	setHours();
 	setCount();
-
 	hookupEvents();
 	hideComponents();
 

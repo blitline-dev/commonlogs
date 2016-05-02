@@ -1,0 +1,20 @@
+.bhighlight {
+  border: 1px #ddd solid;
+}
+
+.instructions {
+  margin-top: 7px;
+  margin-bottom: 10px;
+}
+
+#webhook {
+  text-align: left;
+}
+
+input#sid {
+  width: 70%;
+}
+
+input#sc {
+  width: 50%;
+}

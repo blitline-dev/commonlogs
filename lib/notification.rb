@@ -28,23 +28,9 @@ class Notification
     JSON.parse(IO.read(filepath))
   end
 
-  def self.run_all_notifications
-    log_groups = Tags.list
-    log_groups.each do |log_group|
-      ecm = EventConfigManager.new(log_group)
-      events = ecm.events
-      events.each do |event|
-        base_event_folder = Tags.event_folder(log_group, event.strip)
-        filepath = base_event_folder + "/notification.json"
-        if File.exist?(filepath)
-          #Thread.new do
-            p "New Thread > Running Notifier.new(#{[log_group, event, base_event_folder]})"
-            notifier = Notifier.new(log_group, event, base_event_folder)
-            notifier.run
-          #end
-        end
-      end
-    end
+  def delete
+    filepath = Tags.event_folder(@tag, @event.strip) + "/notification.json"
+    File.delete filepath
   end
 
 end

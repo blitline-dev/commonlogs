@@ -13,6 +13,12 @@ $(function()	{
 		$("#pointer").css({ left: -100});
 	}
 
+	function eventChanged($el) {
+		var name = $el.attr("data-group");
+		var url = "events?name=" + name + "&hours=" + rocketLog.hours.toString();
+		window.location = url;
+	}
+
 	function massageData(data) {
 		//	Assume	data	in	format	
 		//	{ "xxx" : counts...}
@@ -76,7 +82,7 @@ $(function()	{
 			},
 			onselected: function(e) {
 			},
-			type: 'scatter',
+			type: 'spline',
 			color: function (color, d) {
             	// d will be 'id' when called for legends
             	var cname = d.toString().split(" ")[0];
@@ -115,6 +121,9 @@ $(function()	{
 						show: true
 				}
 			},
+			tooltip: {
+  			grouped: false
+			},
 			axis: {
 				y: {
 					min: 0,
@@ -151,6 +160,8 @@ $(function()	{
 			},
 			data:	data
 		});
+
+		chart.flush();
 	}
 
 	function chartRendered() {
@@ -260,6 +271,11 @@ $(function()	{
 		window.location.assign("events?name=" + rocketLog.name + "&hours=" + hours);
 	});
 
+	$(".group").click(function() {
+		eventChanged($(this));
+		return false;
+	});
+
 	$(_logConsole).on("loadMore", function() {
 		_logConsole.setLoading(true);
 		_page += 1;
@@ -268,17 +284,13 @@ $(function()	{
 
 	$(_logConsole).on("mouseOverTimestamp", function(e, eventObj) {
 		//console.dir(targetObj);
-		console.dir(eventObj);
 		var offset = $("#chart").width() / 180;
 
 
 		var ts = parseInt($(eventObj).attr("data-t"), 10) * 1000;
-		console.dir(ts);
-		console.dir(new Date(ts + 86400));
 		index = timeAsTimeSlice(new Date(ts + 86400000));
 		index = Math.floor(index);
 		var tickLocation = $(".tick:eq(" + index.toString() + ")").offset().left;
-		console.dir(tickLocation);
 		$("#pointer").css({left: tickLocation});
 	});
 

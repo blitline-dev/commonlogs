@@ -70,7 +70,7 @@ html lang="en"
               ul.dropdown-menu
                - tags.each do |tag|
                 li
-                  a(href="li_home?name=#{tag}") ##{tag}
+                  a.group(data-group="#{tag}") #{tag}
             li.hours
               a.ripple data-toggle="dropdown" href="javascript:;" 
                 i.fa.fa-clock-o
@@ -81,12 +81,6 @@ html lang="en"
                   .col-sm-6
                     ul.multi-column-dropdown
                       li
-                        a.hrs href="#" data-val="5m"  Last 5 min
-                      li.divider
-                      li
-                        a.hrs href="#" data-val="20m" Last 20 min
-                      li.divider
-                      li
                         a.hrs href="#" data-val="1"  Last 1 hr
                       li.divider
                       li
@@ -94,11 +88,11 @@ html lang="en"
                       li.divider
                       li
                         a.hrs href="#" data-val="4"  Last 4 hrs
+                      li.divider
+                      li
+                        a.hrs href="#" data-val="8"  Last 8 hrs
                   .col-sm-6
                     ul.multi-column-dropdown
-                      li
-                        a.hrs href="#" data-val="8" Last 8 hrs
-                      li.divider
                       li
                         a.hrs href="#" data-val="24" Last 24 hrs
                       li.divider
@@ -150,34 +144,28 @@ html lang="en"
                     span.caret
                   ul.dropdown-menu aria-labelledby="dropdownMenu2" 
                     li
-                      a.hrs href="#" data-val="5m"  Last 5 min
+                      a.search-hrs href="#" data-val="1"  Last 1 hr
                     li.divider
                     li
-                      a.hrs href="#" data-val="20m" Last 20 min
+                      a.search-hrs href="#" data-val="2"  Last 2 hrs
                     li.divider
                     li
-                      a.hrs href="#" data-val="1"  Last 1 hr
+                      a.search-hrs href="#" data-val="4"  Last 4 hrs
                     li.divider
                     li
-                      a.hrs href="#" data-val="2"  Last 2 hrs
+                      a.search-hrs href="#" data-val="8" Last 8 hrs
                     li.divider
                     li
-                      a.hrs href="#" data-val="4"  Last 4 hrs
+                      a.search-hrs href="#" data-val="24" Last 24 hrs
                     li.divider
                     li
-                      a.hrs href="#" data-val="8" Last 8 hrs
+                      a.search-hrs href="#" data-val="72" Last 3 days
                     li.divider
                     li
-                      a.hrs href="#" data-val="24" Last 24 hrs
+                      a.search-hrs href="#" data-val="168"  Last 7 days
                     li.divider
                     li
-                      a.hrs href="#" data-val="72" Last 3 days
-                    li.divider
-                    li
-                      a.hrs href="#" data-val="168"  Last 7 days
-                    li.divider
-                    li
-                      a.hrs href="#" data-val="168"  Custom
+                      a#custom href="#" data-val="168" data-target="#customRange" data-toggle="modal" type="button" Custom
 
     /! /bottom footer
 
@@ -192,7 +180,7 @@ html lang="en"
   script src="scripts/main.js" 
   script(src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/highlight.min.js")
 
-  script(src="javascript/layout.js?f=4nyn94")
+  script(src="javascript/layout.js?f=45v94")
   script(src="javascript/lib/validator.js?f=43444")
   script(src="javascript/lib/autolink.js?f=43444")
   script(src="lib/boostrap-switch/js/bootstrap-switch.js")
@@ -213,7 +201,7 @@ html lang="en"
 
   /! end initialize page scripts
   script src="javascript/utils.js?354a22"
-  script src="javascript/log_console.js?35422"
+  script src="javascript/log_console.js?35b22"
 
   == yield_content :javascripter
 
@@ -267,4 +255,24 @@ html lang="en"
       .modal-footer
         button.btn.btn-default data-dismiss="modal" type="button"  Cancel
         button#confirm.btn.btn-danger type="button"  Delete
-
+#customRange.modal.fade role="dialog" 
+  .modal-dialog
+    /! Modal content
+    .modal-content
+      .modal-header.bg-default
+        button.close data-dismiss="modal" type="button" &times;
+        h4.modal-title.primary Custom Range
+      .modal-body
+        div.form-horizontals(action="#" data-toggle="validator")
+          .form-group
+            .col-6
+              label.control-label for="textinput" Start Time
+              input#startTime.form-control.input-md name="startTime" placeholder="Example '1:30pm'" required="true" type="text" 
+          .form-group
+            .col-6
+              label.control-label for="textinput" End Time
+              input#endTime.form-control.input-md name="endTime" placeholder="Example '2:30pm'" type="text"
+          /! Button
+          .form-group
+            div.clearfix
+              button#customGo.btn.btn-success.pull-right name="goCustom"  Go

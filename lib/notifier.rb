@@ -2,34 +2,66 @@ require 'net/http'
 require 'json'
 require 'uri'
 require 'awesome_print'
-
-# ------------------------------------------
-# Standalone class for sending notifications
-# ------------------------------------------
+require_relative 'cron/cron_service'
 
 class Notifier
 
-  def initialize(log_group, event, path)
+  def initialize(log_group, event, path, log_file_folder)
     raise "Must have a tag and event and path for Notification" unless log_group && event && path
     @log_group = log_group
     @event = event
     @path = path
+    @log_file_folder = log_file_folder
+
+    @config = JSON.parse(IO.read("#{@path}/notification.json"))
+    count = @config["notify_max"]
+
+    cron_function = lambda do |data|
+      new_line = data[:latest_line]
+      last_f = data[:last_file]
+      notify(new_line, last_f)
+    end
+
+    args = {
+      name: log_group + event,
+      max_count: count,
+      period: 3_600,
+      function: cron_function
+    }
+
+    @cron_service = CronService.new(args)
   end
 
   def run
     begin
       last_f = last_file
       latest_line = last_line(last_f)
-      last_marker = marker
-      return unless latest_line != last_marker
+      last_marker = marker(1)
+      return nil unless latest_line != last_marker
       save_marker(latest_line)
-      notify(latest_line, "#{@path}/#{last_f}")
+      @cron_service.notify(latest_line: latest_line, last_file: "#{@path}/#{last_f}")
     rescue => ex
       puts ex.message
+      puts ex.backtrace
+    end
+  end
+
+  def notify(new_line, last_f)
+    data = JSON.parse(IO.read("#{@path}/notification.json"))
+
+    if data && data["ntype"]
+      case data["ntype"]
+      when "webhook" then call_webhook(data, new_line, last_f)
+      when "slack" then call_slack(data, new_line, last_f)
+      else
+        puts "Unknown Type for Notification Notify"
+      end
     end
   end
 
   def last_line(file)
+    return "" unless  File.exist?("#{@path}/#{file}")
+
     last_line = `tail -n 1 #{@path}/#{file}`
     last_line
   end
@@ -40,38 +72,49 @@ class Notifier
     return files.last
   end
 
-  def marker
-    data = `cat #{@path}/.marker`
-    return data
+  def original_log_file
+    @log_file_folder + "/" + last_file
+  end
+
+  def marker(count)
+    return "" unless  File.exist?("#{@path}/.marker")
+
+    return `tail -n #{count} #{@path}/.marker`
   end
 
   def save_marker(marker)
     File.open("#{@path}/.marker", 'w') { |f| f.write(marker) }
   end
 
-  def notify(new_line, last_f)
-    data = JSON.parse(IO.read("#{@path}/notification.json"))
-    if data && data["type"]
-      case data["type"]
-      when "webhook" then call_webhook(data, new_line, last_f)
-      else
-        puts "Unknown Type for Notification Notify"
+  def call_slack(config_data, new_line, last_f)
+    type_data = config_data["type_data"]
+    return unless type_data
+
+    slack_webhook_url = type_data["slack_webhook"]
+    context = nil
+    if type_data["context"].to_s.casecmp("true") == 0
+      line_prefix = build_line_prefix(new_line)
+      context = build_context(line_prefix, last_f)
+      context = context.map do |r|
+        r["msg"][0..80]
       end
     end
+    data = build_slack_webhook_data(@event, context.join("\n"))
+    json_call(slack_webhook_url, data)
   end
 
   def call_webhook(config_data, new_line, last_f)
     type_data = config_data["type_data"]
-    if type_data
-      url = type_data["webhook"]
-      data = build_webhook_data(new_line)
-      if type_data["context"].to_s.casecmp("true") == 0
-        line_prefix = build_line_prefix(new_line)
-        data["context"] = build_context(line_prefix, last_f)
-      end
+    return unless type_data
 
-      json_call(url, data)
+    url = type_data["webhook"]
+    data = build_webhook_data(new_line)
+    if type_data["context"].to_s.casecmp("true") == 0
+      line_prefix = build_line_prefix(new_line)
+      data["context"] = build_context(line_prefix, last_f)
     end
+
+    json_call(url, data)
   end
 
   def build_line_prefix(line)
@@ -82,8 +125,7 @@ class Notifier
   def build_context(text, last_file_used)
     begin
       results = nil
-      cmd_string = "export LC_ALL=C && fgrep -A 10 -B 10 '#{text}' #{last_file_used}"
-      p "Running #{cmd_string}"
+      cmd_string = "export LC_ALL=C && fgrep -A 5 -B 5 '#{text}' #{original_log_file}"
       Open3.popen3(cmd_string) do |_stdin, stdout, stderr, _wait_thr|
         output = stdout.read
         output_error = stderr.read
@@ -97,7 +139,6 @@ class Notifier
     end
   end
 
-
   def build_webhook_data(new_line)
     {
       event: @event,
@@ -106,14 +147,33 @@ class Notifier
     }
   end
 
+  def build_slack_webhook_data(event_name, context)
+    {
+      attachments: [
+        {
+          fallback: "CommonLogs Notification [#{event_name}]",
+          pretext: "CommonLogs Notification [#{event_name}]",
+          color: "#6164C1",
+          fields: [
+            {
+              title: "Context",
+              value: context.to_s,
+              short: false
+            }
+          ]
+        }
+      ]
+    }
+  end
+
   def json_call(url, data)
-    p "Calling #{url} with #{data.to_json}"
     uri = URI.parse(url)
     http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = (uri.scheme == "https")
+
     request = Net::HTTP::Post.new(
       uri.request_uri,
-      'Content-Type' => 'application/json',
-      'User-Agent' => 'CommonLogs Notifier'
+      'Content-Type' => 'application/json'
     )
     request.body = data.to_json
     result = http.request(request)

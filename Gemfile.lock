@@ -4,7 +4,10 @@ GEM
     awesome_print (1.6.1)
     backports (3.6.8)
     dalli (2.7.6)
+    mini_portile2 (2.0.0)
     multi_json (1.11.2)
+    nokogiri (1.6.7.2)
+      mini_portile2 (~> 2.0.0.rc2)
     oj (2.14.5)
     puma (2.15.3)
     rack (1.6.4)
@@ -37,6 +40,7 @@ PLATFORMS
 DEPENDENCIES
   awesome_print
   dalli
+  nokogiri
   oj
   puma
   sinatra

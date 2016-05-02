@@ -30,12 +30,18 @@ class Search
   # results and return them to the user with a page number so that the
   # client knows where to page from.
   def search(text, hours_ago, p)
-    files = Tags.files(@tag).sort.last(hours_ago.to_i + 1)
     data = []
-
-    range_start = PAGE_SIZE * p
-    range_end = range_start + (PAGE_SIZE - 1)
+    file_and_range = calculate_files_and_range(hours_ago, p)
+    return unless file_and_range
+    files = file_and_range[:files]
+    range_start = file_and_range[:range_start]
+    range_end = file_and_range[:range_end]
+    ap ["s", files, range_start, range_end]
     data = get_search_results(data, files, range_start, range_end, text)
+    if file_and_range[:filter] == true
+      filter_search_result(data, file_and_range[:start_seconds], file_and_range[:end_seconds])
+    end
+
     p += 1
 
     while data.empty? && range_end < files.length
@@ -48,6 +54,12 @@ class Search
     return { data: data, page: p, has_more: range_end < files.length, count: data.length }
   end
 
+  def filter_search_result(data, start_seconds, end_seconds)
+    data.reject! do |row|
+      timestamp = row.to_s.split(" ")[0].split(":")[1].to_i + @rsyslog_unix_weird_offset
+      timestamp.to_i < start_seconds.to_i || timestamp.to_i > end_seconds.to_i
+    end
+  end
   # Context just searches for the explicit line within a particular
   # file.
   def context(filename, search_text)
@@ -67,6 +79,59 @@ class Search
 
   private
 
+  def calculate_files_and_range(hours_ago, p)
+    results = nil
+
+    if hours_ago.include?("-")
+      start_seconds, end_seconds = hours_ago.split("-")
+      start_seconds = start_seconds.to_i
+      end_seconds = end_seconds.to_i
+      results = calculate_files_and_range_form_timestamps(start_seconds, end_seconds, p)
+    else
+      results = calculate_files_and_range_form_hours_ago(hours_ago, p)
+    end
+
+    return results
+  end
+
+  def calculate_files_and_range_form_timestamps(start_seconds, end_seconds, p)
+    start_seconds = start_seconds.to_i
+    end_seconds = end_seconds.to_i
+    files = calculate_files_from_timestamp(start_seconds, end_seconds)
+    range_start = PAGE_SIZE * p
+    range_end = range_start + (PAGE_SIZE - 1)
+    return nil if start_seconds == 0 || end_seconds == 0
+
+    return { files: files, range_start: range_start, range_end: range_end, filter: true, start_seconds: start_seconds, end_seconds: end_seconds }
+  end
+
+  def calculate_files_and_range_form_hours_ago(hours_ago, p)
+    files = Tags.files(@tag).sort.last(hours_ago.to_i + 1)
+    range_start = PAGE_SIZE * p
+    range_end = range_start + (PAGE_SIZE - 1)
+
+    return { files: files, range_start: range_start, range_end: range_end }
+  end
+
+  def calculate_files_from_timestamp(start_timestamp, end_timestamp)
+    files = []
+    # We need to tack on 1 to the end to make sure we get sub hours(minutes/seconds)
+    # at the end.
+    (start_timestamp..end_timestamp + 3600).step(3600) do |t|
+      files << calculate_filename_from_timestamp(t)
+    end
+
+    return files
+  end
+
+  def calculate_hours_ago_from_timestamp(timestamp)
+    (Time.now - Time.at(timestamp)) / 3600
+  end
+
+  def calculate_filename_from_timestamp(timestamp)
+    Time.at(timestamp).strftime("%Y-%m-%d-%H.log")
+  end
+
   def get_search_results(data, files, range_start, range_end, text)
     sub_files = files[range_start..range_end]
     sub_files.map! { |f| File.basename(f) }
@@ -77,10 +142,17 @@ class Search
   def execute_search(files, text, with_context = false)
     file_paths = files.map { |f| Tags.tag_folder(@tag) + "/" + f }
 
-    if with_context
-      cmd_string = "export LC_ALL=C && fgrep -A 100 -B 100 '#{text}' #{file_paths.join(' ')}"
+    if text.start_with?('/') &&  text.end_with?('/')
+      app = "egrep"
+      text = text[1..text.length - 2]
     else
-      cmd_string = "export LC_ALL=C && fgrep -m 10000 -ir '#{text}' #{file_paths.join(' ')}"
+      app = "fgrep"
+    end
+
+    if with_context
+      cmd_string = "export LC_ALL=C && #{app} -A 100 -B 100 '#{text}' #{file_paths.join(' ')}"
+    else
+      cmd_string = "export LC_ALL=C && #{app} -m 10000 -ir '#{text}' #{file_paths.join(' ')}"
     end
 
     ap "Cmd string = #{cmd_string}"
@@ -91,7 +163,10 @@ class Search
     return results unless line_prefix
 
     results.each_with_index do |row, i|
-      return results.drop(i - 500) if row.start_with? line_prefix
+      if row.start_with? line_prefix
+        count = [0, i - 500].min
+        return results.drop(count)
+      end
     end
 
     results

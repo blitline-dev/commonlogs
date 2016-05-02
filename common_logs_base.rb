@@ -123,7 +123,7 @@ class CommonLogsBase < Sinatra::Base
     date = sub_elements[0]
     seq = sub_elements[1]
     host = sub_elements[2]
-    tag = sub_elements[3]
+    tag = Util.clean_html(sub_elements[3])
 
     meta_size = [date, seq, host, tag].join(" ").length + 1
     rest = row[meta_size..-1]
@@ -145,8 +145,6 @@ class CommonLogsBase < Sinatra::Base
       q: params["q"]
     }
   end
-
-
 
 end
 

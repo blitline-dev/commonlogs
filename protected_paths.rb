@@ -77,9 +77,13 @@ class ProtectedPaths < CommonLogsBase
     redirect "/p/event_manager?name=#{log_group}"
   end
 
-  get '/run_notifications' do
-    Notification.run_all_notifications
-    redirect 'li_home'
+  post '/notification_delete' do
+    ap params
+    event_name = params['event_name']
+    name = params['name']
+    notification = Notification.new(name, event_name)
+    notification.delete
+    redirect "/p/event_manager?name=#{name}"
   end
 
   post '/events' do

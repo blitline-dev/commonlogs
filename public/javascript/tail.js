@@ -52,7 +52,10 @@ $(function() {
 
 	function initialize() {
 		$("body").scrollTop($("body").height() + 100);
+		$(".group").click(function() {
 
+		});
+		
 		setInterval(function(){ checkTail(); }, _DELAY);
 
 
@@ -63,6 +66,11 @@ $(function() {
 
 		checkTail();
 		checkCookie();
+
+		$(".group").click(function() {
+			eventChanged($(this));
+			return false;
+		});
 
 		$('html, body').bind('scroll mousedown wheel DOMMouseScroll mousewheel keyup', function(evt) {
 			_pauseSmoothScroll = true;
@@ -84,6 +92,12 @@ $(function() {
 			}, 1000);
 		
 		});
+	}
+
+	function eventChanged($el) {
+		var name = $el.attr("data-group");
+		var url = "li_home?name=" + name + "&hours=" + rocketLog.hours.toString();
+		window.location = url;
 	}
 
 	initialize();

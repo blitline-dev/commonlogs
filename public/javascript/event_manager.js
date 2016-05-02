@@ -26,6 +26,19 @@ $(function(){
     	$("#searchWord").val("");
 	})
 
+  // ------- Log Group Switch
+  $(".group").click(function() {
+    eventChanged($(this));
+    return false;
+  });
+
+  function eventChanged($el) {
+    var name = $el.attr("data-group");
+    var url = "event_manager?name=" + name;
+    window.location = url;
+  }
+  // ------- End Group Switch
+
 	$(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip(); 
 	});

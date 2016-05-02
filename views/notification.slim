@@ -1,87 +1,117 @@
+link(rel="stylesheet" href="/stylesheets/notifications.css?222f4g8")
+
 .main-content.hide-search.hide-tail.hide-hours
   .page-title
     .title Notifications for #{name}/#{event_name}
     .sub-title Track individual text occurances in your logs
 
   .card.bg-white
-    .card-header Add an alert
+    .card-header 
+      span Add an alert
+      button#cancel.pull-right x
     .card-block
       .row.m-a-0
         .col-lg-12
           form.form-horizontal role="form" 
             .form-group
-              label.col-sm-2.control-label Webhook
+              label.col-sm-2.control-label &nbsp;
               .col-sm-10
-                .btn.btn-xs.btn-info#testUrl(style="display: none; position:absolute; right: 13px; top: 0.35rem; z-index: 50")
-                  span Test
-                .input-group
-                  .input-group-btn
-                    button.btn.btn-default#wm tabindex="-1" type="button"
-                      span Post
-                    button.btn.btn-default aria-expanded="false" data-toggle="dropdown" tabindex="-1" type="button" 
-                      span.caret
-                      span.sr-only Toggle Dropdown
-                    ul.dropdown-menu role="menu" 
-                      li
-                        a href="javascript:;"  Post
-                      li
-                        a href="javascript:;"  Get
-                      li
-                        a href="javascript:;"  Put
-                  input.form-control#webhookUrl type="text" placeholder="http://my.example.com/callback"
+                h5.instructions Choose one:
+                ul.nav.nav-pills.tab-container
+                  li.bhighlight(data-name="webhook")
+                    a href="#webhook" data-toggle="tab"
+                      i.fa.fa-globe
+                      span &nbsp;Generic Webhook
+                  li.bhighlight(data-name="slack")
+                    a href="#slack" data-toggle="tab"
+                      i.fa.fa-slack 
+                      span &nbsp;Slack
+
             .form-group.m-b
               label.col-sm-2.control-label &nbsp;
               .col-sm-10
                 .input-group
                   .cs-checkbox
                     input#r3 checked="checked" type="checkbox" value="" /
-                    label for="r3"  Include context in Webhook?
-                  .cs-checkbox
-                    input#r4 type="checkbox" value="" /
-                    img(src="images/slack.png" style="width: 32px; height: 32px;")
-                    label for="r3" This is a slack webhook
+                    label for="r3"  Include context?
+            .form-group
+              div.tab-content#tabs
+                div.tab-pane.active#webhook
+                  label.col-sm-2.control-label  &nbsp;
+                  .col-sm-10
+                    .input-group(style="margin-bottom: 10px;")
+                      .input-group-btn
+                        button.btn.btn-default#wm tabindex="-1" type="button"
+                          span Post
+                        button.btn.btn-default aria-expanded="false" data-toggle="dropdown" tabindex="-1" type="button" 
+                          span.caret
+                          span.sr-only Toggle Dropdown
+                        ul.dropdown-menu role="menu" 
+                          li
+                            a href="javascript:;"  Post
+                          li
+                            a href="javascript:;"  Get
+                          li
+                            a href="javascript:;"  Put
+                      input.form-control#webhookUrl style="width: 100%;" type="text" placeholder="http://my.example.com/callback"
+                    .card.bg-white
+                        .card-header How often would you like to be notified about events that occur? Sometimes you only want to be notified once an hour about bad events.
+                        input(type="hidden" name="na" value="1")
+                        .card-block
+                          .input-group.m-b
+                            label for="nm" Notify me a maximum of&nbsp;&nbsp;
+                            select#nm
+                              option 1
+                              option 2
+                              option 3
+                              option 4
+                              option 5
+                              option 6
+                              option 10
+                              option 20
+                              option 30
+                              option 60
+                            label &nbsp;&nbsp;times per hour
+                div.tab-pane#slack
+                  label.col-sm-2.control-label  &nbsp;
+                  .col-sm-10
+                    .card.bg-white
+                        .card-header How often would you like to be notified about events that occur? Sometimes you only want to be notified once an hour about bad events.
+                        input(type="hidden" name="na2" value="1")
+                        .card-block
+                          .input-group.m-b
+                            label for="nm2" Notify me a maximum of&nbsp;&nbsp;
+                            select#nm2
+                              option 1
+                              option 2
+                              option 3
+                              option 4
+                              option 5
+                              option 6
+                              option 10
+                              option 20
+                              option 30
+                              option 60
+                            label &nbsp;&nbsp;times per hour
+                          .input-group.m-b
+                            .input-group-btn
+                              button.btn.btn-success type="button" 
+                                i.fa.fa-slack 
+                                span &nbsp;Slack Webhook
+                            input#sw.form-control.bl0 type="text" placeholder="https://hooks.slack.com/services/exampl9283/kdsfksadf/lsdfsdfj"
 
-            .form-group#when
-              label.col-sm-2.control-label  &nbsp;
-              .col-sm-10
-                .card.bg-white
-                    .card-header How often would you like to be notified about events that occur? Sometimes you only care if events happen 'a lot', and sometimes you only want to be notified once an hour about bad events.
-                    .card-block
-                      .input-group.m-b
-                        label for="na" Notify me after&nbsp;&nbsp;
-                        select#na
-                          option 1
-                          option 2
-                          option 3
-                          option 4
-                          option 5
-                          option 10
-                          option 50
-                          option 100
-                          option 1000
-                        label &nbsp;&nbsp;occurances
-                      .input-group.m-b
-                        label for="nm" Notify me a maximum of&nbsp;&nbsp;
-                        select#nm
-                          option 1
-                          option 2
-                          option 3
-                          option 4
-                          option 5
-                          option 6
-                          option 10
-                          option 20
-                          option 30
-                          option 60
-                        label &nbsp;&nbsp;times per hour
           /! Button
-          .form-group
+          .form-group#actionButtons
             div.clearfix
-              button#createButton.btn.btn-success.pull-right name="createButton" style="margin-left: 10px;"  Save
-              button#cancel.btn.btn-danger.pull-right Done
+              button#delete.btn.btn-danger.pull-right.confirmDelete name="deleteButton" style="margin-left: 10px;"
+                span <i class="glyphicon glyphicon-trash"></i>&nbsp;Delete
+                form accept-charset="UTF-8" action="/p/notification_delete" method="POST" style="display:inline" 
+                  input#event_name(type="hidden" name="event_name" value="#{event_name}")
+                  input#name(type="hidden" name="name" value="#{name}")
 
+              button#createButton.btn.btn-success.pull-right name="createButton" style="margin-left: 10px;"  Save
 - content_for :javascripter
-  script(src="javascript/notification.js?fewr444")
+  script(src="javascript/notification.js?fe5wr444")
   script
       | 
         rocketLog["eventName"] = "#{event_name}";

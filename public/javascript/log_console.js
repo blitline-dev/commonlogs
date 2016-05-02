@@ -85,11 +85,17 @@ LogConsole.prototype = {
 	setLoading: function(isLoading) {
 		this.skipLoadMoreEvent = isLoading;
 	},
+	// Use the browser's built-in functionality to quickly and safely escape the
+	// string
+	escapeHtml: function(str) {
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+	},
 	activateInfinityScroll: function() {
 		var _this = this;
 
 		if (!this.infinityScrollActivated) {
-			console.log("Infinity Scroll Activated");
 			$(window).on('scroll', function(){
 				if( $(window).scrollTop() + 100 > $(document).height() - $(window).height() && !_this.skipLoadMoreEvent && !_this.disableLoadMoreEvent ) {
 					$(_this).trigger("loadMore");
