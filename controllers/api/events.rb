@@ -38,8 +38,6 @@ module Api
 
       events = event.event_list_console(params['event_name'], start_timestamp, end_timestamp, page)
 
-      ap events
-
       if events[:data] && !events[:data].empty?
         syslog_format(events[:data], nil)
       else

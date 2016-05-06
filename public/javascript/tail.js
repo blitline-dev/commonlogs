@@ -37,7 +37,11 @@ $(function() {
 		}
 
 		$.get(url, function( data ) {
-			logConsole.addRows(data, null, true);
+			if (data.length > 0) {
+				logConsole.addRows(data, null, true);
+			} else {
+				logConsole.setEmpty();
+			}
 		});
 	}
 

@@ -46,7 +46,6 @@ class Event
       # Awk for only items past X timestamp
       cmd_string = "cat #{filename} | awk -v x=#{start} -v y=#{end_time} '$1 > x && $1 < y'"
       cmd_results = execute_shell_command(cmd_string)
-      ap cmd_results
       results += cmd_results.map { |r| "#{filename}: #{r}" }
     end
     start_index = page.to_i * 1000

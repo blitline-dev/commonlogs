@@ -78,7 +78,6 @@ class ProtectedPaths < CommonLogsBase
   end
 
   post '/notification_delete' do
-    ap params
     event_name = params['event_name']
     name = params['name']
     notification = Notification.new(name, event_name)

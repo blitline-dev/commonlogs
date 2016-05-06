@@ -36,7 +36,6 @@ class Search
     files = file_and_range[:files]
     range_start = file_and_range[:range_start]
     range_end = file_and_range[:range_end]
-    ap ["s", files, range_start, range_end]
     data = get_search_results(data, files, range_start, range_end, text)
     if file_and_range[:filter] == true
       filter_search_result(data, file_and_range[:start_seconds], file_and_range[:end_seconds])

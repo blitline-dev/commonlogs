@@ -29,8 +29,14 @@ LogConsole.prototype = {
 
 		for(var i = 0; i < data.length; i++) {
 			row = data[i];
+			if (null == row[3]) {
+				row[3] = "";
+			}
+			if (null == row[2]) {
+				row[2] = "";
+			}
 
-			if (row[3].toString().charAt(0) === "{") {
+			if (row[3] && row[3].toString().charAt(0) === "{") {
 				try {
 					v = JSON.parse(row[3]);
 					if (v) {
@@ -106,7 +112,11 @@ LogConsole.prototype = {
 	},
 	mouseEnterTimestamp: function(e, eventObj) {
 		$(this).trigger("mouseOverTimestamp", [eventObj]);
+	},
+	setEmpty: function() {
+		$("#console").html("<div class='noResults'><i class=\"fa fa-eye-slash\"></i>&nbsp;No Results Found</div>")
 	}
+
 };
  
 

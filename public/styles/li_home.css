@@ -49,3 +49,10 @@
 #timer .dropdown-menu {
 	width: 220px;
 }
+
+.noResults {
+  font-size: 50px;
+  color: #444;
+  text-align: center;
+}
+

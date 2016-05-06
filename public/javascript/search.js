@@ -26,9 +26,14 @@ $(function() {
 				$(".count").text(count.toString());
 			}
 			_p = parsedData["page"];
-			_logConsole.addRows(parsedData["data"], "search");
+
+			if(parsedData["data"] && parsedData["data"].length > 0) {
+				_logConsole.addRows(parsedData["data"], "search");
+			}else {
+				_logConsole.setEmpty();
+			}
 			_logConsole.setLoading(false);
-			$(".count").text();
+
 			if (!parsedData["has_more"]) {
 				_logConsole.clearLoading();
 			}
