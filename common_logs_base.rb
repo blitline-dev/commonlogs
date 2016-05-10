@@ -27,7 +27,6 @@ class CommonLogsBase < Sinatra::Base
   configure { set :server, :puma }
 
   # Listen to all non-localhost requests
-  #set :bind, '0.0.0.0'
   set :timeout, 60
 
   # HELPERS

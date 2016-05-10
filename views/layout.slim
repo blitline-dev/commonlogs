@@ -63,47 +63,49 @@ html lang="en"
                   span
                     i.handle
           ul#timer.nav.navbar-nav.navbar-right
-            li
-              a.ripple data-toggle="dropdown" href="javascript:;" 
-                span Log Name (#{name})&nbsp;
-                span.caret
-              ul.dropdown-menu
-               - tags.each do |tag|
-                li
-                  a.group(data-group="#{tag}") #{tag}
-            li.hours
-              a.ripple data-toggle="dropdown" href="javascript:;" 
-                i.fa.fa-clock-o
-                span.hours-text Last 2 hrs
-                span.caret
-              ul.dropdown-menu.multi-column.columns-2
-                .row
-                  .col-sm-6
-                    ul.multi-column-dropdown
-                      li
-                        a.hrs href="#" data-val="1"  Last 1 hr
-                      li.divider
-                      li
-                        a.hrs href="#" data-val="2"  Last 2 hrs
-                      li.divider
-                      li
-                        a.hrs href="#" data-val="4"  Last 4 hrs
-                      li.divider
-                      li
-                        a.hrs href="#" data-val="8"  Last 8 hrs
-                  .col-sm-6
-                    ul.multi-column-dropdown
-                      li
-                        a.hrs href="#" data-val="24" Last 24 hrs
-                      li.divider
-                      li
-                        a.hrs href="#" data-val="72" Last 3 days
-                      li.divider
-                      li
-                        a.hrs href="#" data-val="168"  Last 7 days
-                      li.divider
-                      li
-                      a#custom href="#" data-val="" data-target="#customRange" data-toggle="modal" type="button" Custom
+            - if tags && tags.length > 0
+              li
+                a.ripple data-toggle="dropdown" href="javascript:;" 
+                  span Log Name (#{name})&nbsp;
+                  span.caret
+                ul.dropdown-menu
+                 - tags.each do |tag|
+                  li
+                    a.group(data-group="#{tag}") #{tag}
+            - if tags && tags.length > 0
+              li.hours
+                a.ripple data-toggle="dropdown" href="javascript:;" 
+                  i.fa.fa-clock-o
+                  span.hours-text Last 2 hrs
+                  span.caret
+                ul.dropdown-menu.multi-column.columns-2
+                  .row
+                    .col-sm-6
+                      ul.multi-column-dropdown
+                        li
+                          a.hrs href="#" data-val="1"  Last 1 hr
+                        li.divider
+                        li
+                          a.hrs href="#" data-val="2"  Last 2 hrs
+                        li.divider
+                        li
+                          a.hrs href="#" data-val="4"  Last 4 hrs
+                        li.divider
+                        li
+                          a.hrs href="#" data-val="8"  Last 8 hrs
+                    .col-sm-6
+                      ul.multi-column-dropdown
+                        li
+                          a.hrs href="#" data-val="24" Last 24 hrs
+                        li.divider
+                        li
+                          a.hrs href="#" data-val="72" Last 3 days
+                        li.divider
+                        li
+                          a.hrs href="#" data-val="168"  Last 7 days
+                        li.divider
+                        li
+                        a#custom href="#" data-val="" data-target="#customRange" data-toggle="modal" type="button" Custom
             li
               a.ripple data-toggle="dropdown" href="javascript:;" 
                 i.fa.fa-cogs
@@ -112,13 +114,14 @@ html lang="en"
               ul.dropdown-menu
                 li
                   a href="li_home?name=#{name}"  Home
-                li
-                  a href="li_home?name=#{name}"  Search
-                li
-                  a href="events?name=#{name}&hours=1"  Events
-                li
-                  a href="event_manager?name=#{name}"  Event Manager
-                li.divider role="separator" 
+                -if tags && tags.length > 0
+                  li
+                    a href="li_home?name=#{name}"  Search
+                  li
+                    a href="events?name=#{name}&hours=1"  Events
+                  li
+                    a href="event_manager?name=#{name}"  Event Manager
+                  li.divider role="separator" 
                 li
                   a href="javascript:;"  Help
 

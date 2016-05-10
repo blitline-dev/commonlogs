@@ -1,0 +1,10 @@
+.configSample div{
+  line-height: 24px;
+}
+
+.configSample div span{
+  padding: 2px;
+  margin: 0 3px 0 3px;
+  background-color: rgb(221, 221, 221);
+  color: rgb(85, 85, 85);
+}
