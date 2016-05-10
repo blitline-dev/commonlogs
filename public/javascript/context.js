@@ -3,6 +3,17 @@ $(function() {
 
 	$('#myPleaseWait').modal('show');
 
+	function eventChanged($el) {
+		var name = $el.attr("data-group");
+		var url = "li_home?name=" + name + "&hours=" + commonLog.hours.toString();
+		window.location = url;
+	}
+
+	$(".group").click(function() {
+		eventChanged($(this));
+		return false;
+	});
+
 	function scrollToCenter(el) {
 		var elOffset = el.offset().top;
 		var elHeight = el.height();
@@ -20,14 +31,14 @@ $(function() {
 	}
 
 	function highlight() {
-		var $item = $("li[data-t='" + rocketLog.time.toString() + "'][data-r='" + rocketLog.seq+ "']");
+		var $item = $("li[data-t='" + commonLog.time.toString() + "'][data-r='" + commonLog.seq+ "']");
 		$item.attr("style", "background-color: #fff06e; color: #000;");
 		scrollToCenter($item);
 	}
 
 	function loadContextData() {
 		_logConsole.setLoading(true);
-		var url = "/features/context_data?&name=" + rocketLog.name + "&seq=" + rocketLog.seq + "&server=" + rocketLog.server + "&file=" +rocketLog.file + "&time=" + rocketLog.time.toString();
+		var url = "/features/context_data?&name=" + commonLog.name + "&seq=" + commonLog.seq + "&server=" + commonLog.server + "&file=" +commonLog.file + "&time=" + commonLog.time.toString();
 
 		$.get(url, function( data ) {
 			$('#myPleaseWait').modal('hide');

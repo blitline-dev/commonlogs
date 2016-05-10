@@ -4,10 +4,10 @@
 
 script
   | 
-  	rocketLog["seq"] = "#{seq}";
-    rocketLog["file"] = "#{file}";
-    rocketLog["time"] = "#{time}";
-    rocketLog["server"] = "#{server}";
+  	commonLog["seq"] = "#{seq}";
+    commonLog["file"] = "#{file}";
+    commonLog["time"] = "#{time}";
+    commonLog["server"] = "#{server}";
 
 - content_for :javascripter
 	script(src="javascript/context.js?f=43h")

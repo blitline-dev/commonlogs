@@ -3,7 +3,7 @@ $(function(){
   function loadData() {
     $.ajax({
       method: "GET",
-      url: "/notifications?name=" + rocketLog.name + "&event=" + rocketLog.eventName,
+      url: "/notifications?name=" + commonLog.name + "&event=" + commonLog.eventName,
       success: function(data) {
         console.dir(data);
         if (data.ntype == "webhook") {
@@ -38,8 +38,8 @@ $(function(){
     var notifyMax = $("#nm2").val();
 
     var submitData = {
-        "name" : rocketLog.name,
-        "event" : rocketLog.eventName,
+        "name" : commonLog.name,
+        "event" : commonLog.eventName,
         "ntype" : "slack",
         "notifyMax" : notifyMax,
         "notifyAfter" : notifyAfter,
@@ -57,8 +57,8 @@ $(function(){
     var notifyMax = $("#nm").val();
 
     var submitData = {
-      "name" : rocketLog.name,
-      "event" : rocketLog.eventName,
+      "name" : commonLog.name,
+      "event" : commonLog.eventName,
       "ntype" : "webhook",
       "notifyMax" : notifyMax,
       "notifyAfter" : notifyAfter,
@@ -202,7 +202,7 @@ $(function(){
 
 
   $("#createButton").click(createNotification);
-  $('#cancel').click(function(){ window.location="event_manager?name=" + rocketLog.name});
+  $('#cancel').click(function(){ window.location="event_manager?name=" + commonLog.name});
   $("#testUrl").click(sendTest);
   $("#webhookUrl").keypress(showHideTest);
   $("#webhookUrl").focusout(showHideTest);

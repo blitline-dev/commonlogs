@@ -1,5 +1,5 @@
-module RocketLog
-	class Config
-		DEST_FOLDER = "/var/log/rocket_log"
-	end
+module CommonLog
+  class Config
+    DEST_FOLDER = ENV['COMMON_LOG_FOLDER'] || "/var/log/common_log".freeze
+  end
 end

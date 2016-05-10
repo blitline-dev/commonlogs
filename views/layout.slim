@@ -32,10 +32,10 @@ html lang="en"
     link rel="stylesheet" href="/styles/li_home.css?1a3224g8"
     script
       | 
-        var rocketLog = {};
-        rocketLog["q"] = "#{q}";
-        rocketLog["hours"] = "#{hours}";
-        rocketLog["name"] = "#{name}";
+        var commonLog = {};
+        commonLog["q"] = "#{q}";
+        commonLog["hours"] = "#{hours}";
+        commonLog["name"] = "#{name}";
 
   body.page-loading
     main role="main" 
@@ -103,7 +103,7 @@ html lang="en"
                         a.hrs href="#" data-val="168"  Last 7 days
                       li.divider
                       li
-                        a.hrs href="#" data-val="168"  Custom
+                      a#custom href="#" data-val="" data-target="#customRange" data-toggle="modal" type="button" Custom
             li
               a.ripple data-toggle="dropdown" href="javascript:;" 
                 i.fa.fa-cogs
@@ -127,8 +127,8 @@ html lang="en"
 
       footer.content-footer
         nav.footer-left
-          ul(style="width:90%; padding-left: 0;")
-            li.search-form(style="width: 50%;")
+          ul(style="width: 30%; padding-left: 0; float: left;")
+            li.search-form(style="width: 100%")
               form#footsearch (action="li_home")
                 input.form-control id="name" name="name" type="hidden" value="#{name}" /
                 input.form-control id="hours" name="hours" type="hidden" value="#{hours || 2}" /
@@ -136,7 +136,8 @@ html lang="en"
                   input.form-control.br0 id="q" name="q" type="text" value="#{q}" placeholder="Search..." /
                   span.input-group-btn
                     button.btn.btn-info#search-go type="button"  Go!
-            li.hours-bottom(style="width: 40%; overflow: none;")
+          ul(style="padding-left: 0; float: left;")
+            li.hours-bottom
               ul#bottom-hours(style="padding-left: 0px;")
                 .dropup
                   button#dropdownMenu2.btn.btn-default.dropdown-toggle.hours-text aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" type="button" 
@@ -165,11 +166,14 @@ html lang="en"
                       a.search-hrs href="#" data-val="168"  Last 7 days
                     li.divider
                     li
-                      a#custom href="#" data-val="168" data-target="#customRange" data-toggle="modal" type="button" Custom
+                      a#custom href="#" data-val="" data-target="#customRange" data-toggle="modal" type="button" Custom
+          ul(style="padding-left: 0; float: right; padding: 4px 0 0 0;")
+            li
+              a.count
 
     /! /bottom footer
-
-  
+    
+  script src="vendor/sugar/sugar.js" 
   script src="scripts/helpers/modernizr.js" 
   script src="vendor/jquery/dist/jquery.js" 
   script src="vendor/bootstrap/dist/js/bootstrap.js" 

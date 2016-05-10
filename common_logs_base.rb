@@ -107,7 +107,7 @@ class CommonLogsBase < Sinatra::Base
     # Metadata should be time(26) + sequence (6) + host(max64) + tag(max64)
     time = Util.measure_delta do
       rows.map! do |row|
-        if row.start_with?(RocketLog::Config::DEST_FOLDER)
+        if row.start_with?(CommonLog::Config::DEST_FOLDER)
           recursize_grep_row(row)
         else
           simple_grep_row(row, file)

@@ -64,10 +64,7 @@ class Event
 
     time_values.each do |tv|
       index = (tv - start_timestamp) / slice
-      if tv > end_timestamp
-        puts "!!!!! tv > end_time #{tv} > #{end_time}"
-        break
-      end
+      break if tv > end_timestamp
       b = buckets[index]
       buckets[index] = b ? b + 1 : 1
     end

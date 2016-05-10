@@ -52,7 +52,7 @@ LogConsole.prototype = {
 			rowDate = Utils.formatDate(new Date(rowUnixDate * 1000));
 			
 
-			href = "context?name=" + rocketLog.name + "&time=" + row[0] + "&server=" + row[2] + "&seq=" + row[1] + "&file=" + row[4];
+			href = "context?name=" + commonLog.name + "&time=" + row[0] + "&server=" + row[2] + "&seq=" + row[1] + "&file=" + row[4];
 			html = [
 				"<li class='r ts' data-t='" + rowUnixDate.toString() + "' data-r='" + row[1].toString() + "'>",
 				"<span class='muted'>" + rowDate + "&nbsp;</span>",

@@ -29,12 +29,12 @@ $(function() {
 	}
 
 	function setHours() {
-		if(rocketLog && rocketLog.hours) {
-			if ((rocketLog.hours).indexOf("-") > 0) {
+		if(commonLog && commonLog.hours) {
+			if ((commonLog.hours).indexOf("-") > 0) {
 				setCustomTime();
 				$(".hours-text").html("Custom");
 			} else {
-				var linkText = $("a[data-val='" + rocketLog.hours.toString() + "']").first().text();
+				var linkText = $("a[data-val='" + commonLog.hours.toString() + "']").first().text();
 				if (linkText) {
 					$(".hours-text").html(linkText);
 				}
@@ -43,7 +43,7 @@ $(function() {
 	}
 
 	function setCustomTime() {
-		var times = rocketLog.hours.split("-");
+		var times = commonLog.hours.split("-");
 		var startTime = new Date(1000 * parseInt(times[0]));
 		var endTime = new Date(1000 * parseInt(times[1]));
 
@@ -58,10 +58,10 @@ $(function() {
 		var endTime = null;
 
 		if (startVal) {
-			startTime = Date.parse(startVal);
+			startTime =  Date.create(startVal);
 		}
 		if (endVal) {
-			endTime = Date.parse(endVal);
+			endTime =  Date.create(endVal);
 		}else {
 			endTime = Math.round(new Date());
 		}
@@ -72,13 +72,14 @@ $(function() {
 			var range = startSec.toString() + "-" + endSec.toString();
 			$("#hours").val(range);
 			$("#footsearch").submit();
+			$("#customGo").trigger("event:customTimeSet");
 		}
 
 	}
 
 	function setCount() {
-		if (rocketLog.count > 0) {
-			$(".count").text(Number(rocketLog.count).toLocaleString()	+ " items");
+		if (commonLog.count > 0) {
+			$(".count").text(Number(commonLog.count).toLocaleString()	+ " items");
 		}
 	}
 
@@ -87,6 +88,10 @@ $(function() {
 			return true;
 		}
 		var searchText = $("#q").val();
+		if ("" == searchText) {
+			return false;
+		}
+
 		if (searchText && searchText.length < 4) {
 			swal({
 				title: 'Are you sure?',
@@ -112,24 +117,29 @@ $(function() {
 	function hookupEvents() {
 		debounce = false;
 
+		// Hit enter on custom Time
     $('#customRange input').on('keydown', function(e) {
         if (e.which == 13) {
           customTime();
         }
     });
 
+    // Submit button on custom Time
 		$("#customGo").click(function() {
 			customTime();
 		});
 
+		// Go button on search field
 		$("#search-go").click(function() {
 			$("#footsearch").submit();
 		});
 
+		// Submit event on Search
 		$("#footsearch").submit(function() {
 			return performSearch();
 		});
 
+		// Hours dropup clicked
 		$(".search-hrs").click(function() {
 			var $item = $(this);
 			$("#hours").val($item.attr("data-val"));
@@ -141,6 +151,7 @@ $(function() {
 			$('#myPleaseWait').modal('show');
 		});
 
+		// Clicked no tail
 		$("[name='my-checkbox']").bootstrapSwitch();
 
 		$('.confirmDelete').on('click', function (e) {

@@ -47,7 +47,7 @@ $(function(){
 		var eventName = $(this).attr("data-event-id");
     $.ajax({
       method: "GET",
-      url: "/events?name=" + rocketLog.name + "&event=" + eventName,
+      url: "/events?name=" + commonLog.name + "&event=" + eventName,
       success: function(data) {
       	$("#eventName").val(data.event_name);
       	$("#cp").val(data.color);

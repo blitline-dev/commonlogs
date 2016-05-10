@@ -59,6 +59,7 @@ class Search
       timestamp.to_i < start_seconds.to_i || timestamp.to_i > end_seconds.to_i
     end
   end
+
   # Context just searches for the explicit line within a particular
   # file.
   def context(filename, search_text)
