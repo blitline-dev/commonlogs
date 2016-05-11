@@ -117,7 +117,7 @@ class EventConfigManager
     FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
   end
 
-  def assure_name_folderpath
+  def assure_name_folderpath(event)
     dirname = filter_folderpath
     puts "assure_filter_folderpath #{dirname}"
     FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
@@ -150,7 +150,7 @@ class EventConfigManager
   end
 
   def create_syslog_template(event)
-    assure_name_folderpath
+    assure_name_folderpath(event)
     filepath = template_filepath(event)
     puts "create_syslog_template #{filepath}"
     data = "template (name=\"DynFile_#{event}\" type=\"string\" string=\"#{CommonLog::Config::DEST_FOLDER}/%syslogtag%/events/#{event}/%$now%-%$hour%.log\")"
@@ -158,7 +158,7 @@ class EventConfigManager
   end
 
   def create_syslog_filter(event, search)
-    assure_name_folderpath
+    assure_name_folderpath(event)
     filepath = filter_filepath(event)
     puts "create_syslog_filter #{filepath}"
 
