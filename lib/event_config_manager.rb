@@ -63,20 +63,20 @@ class EventConfigManager
 
   def events
     assure_events_folderpath
-    Dir.entries(CommonLog::Config::DEST_FOLDER + '/' + @name + '/' + EVENT_FOLDER_NAME).select { |f| !File.directory?(f) }.delete_if { |x| x[0] == '.' }
+    Dir.entries(CommonLog::Config.destination_folder + '/' + @name + '/' + EVENT_FOLDER_NAME).select { |f| !File.directory?(f) }.delete_if { |x| x[0] == '.' }
   end
 
   private
 
   def events_folder
-    CommonLog::Config::DEST_FOLDER + '/' + @name + '/' + EVENT_FOLDER_NAME
+    CommonLog::Config.destination_folder + '/' + @name + '/' + EVENT_FOLDER_NAME
   end
 
   def template_include_filepath(event)
     "#{SYSLOG_ROOT}/#{TEMPLATE_FOLDER}/#{event}.conf"
   end
 
-  def file_include_filepath(event)
+  def filter_include_filepath(event)
     "#{SYSLOG_ROOT}/#{FILTER_FOLDER}/#{event}.conf"
   end
 
@@ -145,7 +145,7 @@ class EventConfigManager
   def assure_syslog_template_include_file(event)
     filepath = template_include_filepath(event)
     puts "create_syslog_template_include_file #{filepath}"
-    data = "template (name=\"DynFile_#{event}\" type=\"string\" string=\"#{CommonLog::Config::DEST_FOLDER}/%syslogtag%/events/#{event}/%$now%-%$hour%.log\")"
+    data = "template (name=\"DynFile_#{event}\" type=\"string\" string=\"#{CommonLog::Config.destination_folder}/%syslogtag%/events/#{event}/%$now%-%$hour%.log\")"
     File.write(filepath, data) unless File.exist?(filepath)
   end
 
@@ -153,7 +153,7 @@ class EventConfigManager
     assure_name_folderpath(event)
     filepath = template_filepath(event)
     puts "create_syslog_template #{filepath}"
-    data = "template (name=\"DynFile_#{event}\" type=\"string\" string=\"#{CommonLog::Config::DEST_FOLDER}/%syslogtag%/events/#{event}/%$now%-%$hour%.log\")"
+    data = "template (name=\"DynFile_#{event}\" type=\"string\" string=\"#{CommonLog::Config.destination_folder}/%syslogtag%/events/#{event}/%$now%-%$hour%.log\")"
     File.write(filepath, data)
   end
 

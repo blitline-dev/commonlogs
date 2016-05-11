@@ -53,3 +53,7 @@ RUN cd commonlogs && bundle install
 EXPOSE 4567/tcp
 WORKDIR /commonlogs
 ENTRYPOINT exec puma -p 4567 -e production
+
+#sudo docker build --rm=true -t commonlogs_web .
+#sudo docker run -d -p 80:4567 -e "CL_BASIC_AUTH_USERNAME=someusername" -e "CL_BASIC_AUTH_PASSWORD=strongpassword" -v /var/log/commonlog:/var/log/commonlog commonlogs_web:latest
+

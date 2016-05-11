@@ -6,11 +6,11 @@ class Tags
   EVENT_FOLDER_NAME = "events".freeze
 
   def self.list
-    Dir.entries(CommonLog::Config::DEST_FOLDER).select { |f| !File.directory? f }
+    Dir.entries(CommonLog::Config.destination_folder).select { |f| !File.directory? f }
   end
 
   def self.files(tag)
-    Dir[CommonLog::Config::DEST_FOLDER + '/' + tag + '/*.log']
+    Dir[CommonLog::Config.destination_folder + '/' + tag + '/*.log']
   end
 
   def self.event_files(tag, event)
@@ -18,11 +18,11 @@ class Tags
   end
 
   def self.event_folder(tag, event)
-    CommonLog::Config::DEST_FOLDER + '/' + tag + '/' + EVENT_FOLDER_NAME + '/' + event
+    CommonLog::Config.destination_folder + '/' + tag + '/' + EVENT_FOLDER_NAME + '/' + event
   end
 
   def self.tag_folder(tag)
-    CommonLog::Config::DEST_FOLDER + '/' + tag
+    CommonLog::Config.destination_folder + '/' + tag
   end
 
   # Get list of all possible event files
