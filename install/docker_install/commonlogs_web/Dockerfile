@@ -1,0 +1,55 @@
+FROM ubuntu:14.04.4
+ENV DEBIAN_FRONTEND noninteractive
+
+# Ensure UTF-8 locale
+RUN echo "LANG=\"en_GB.UTF-8\"" > /etc/default/locale
+RUN locale-gen en_GB.UTF-8
+RUN dpkg-reconfigure locales
+
+ENV RUBY_MAJOR 2.1
+ENV RUBY_VERSION 2.1.6
+ENV RUBY_DOWNLOAD_SHA256 1e1362ae7427c91fa53dc9c05aee4ee200e2d7d8970a891c5bd76bee28d28be4
+
+# some of ruby's build scripts are written in ruby
+# we purge this later to make sure our final image uses what we just built
+RUN apt-get update \
+	&& apt-get install -y zlib1g-dev libssl-dev libreadline-dev libyaml-dev autoconf build-essential curl bison libgdbm-dev ruby \
+	&& rm -rf /var/lib/apt/lists/* \
+	&& mkdir -p /usr/src/ruby \
+	&& curl -fSL -o ruby.tar.gz "http://cache.ruby-lang.org/pub/ruby/$RUBY_MAJOR/ruby-$RUBY_VERSION.tar.gz" \
+	&& echo "$RUBY_DOWNLOAD_SHA256 *ruby.tar.gz" | sha256sum -c - \
+	&& tar -xzf ruby.tar.gz -C /usr/src/ruby --strip-components=1 \
+	&& rm ruby.tar.gz \
+	&& cd /usr/src/ruby \
+	&& autoconf \
+	&& ./configure --disable-install-doc \
+	&& make -j"$(nproc)" \
+	&& make install \
+	&& apt-get purge -y --auto-remove bison libgdbm-dev ruby \
+	&& rm -r /usr/src/ruby
+
+# skip installing gem documentation
+RUN echo 'gem: --no-rdoc --no-ri' >> "$HOME/.gemrc"
+
+# install things globally, for great justice
+ENV GEM_HOME /usr/local/bundle
+ENV PATH $GEM_HOME/bin:$PATH
+RUN gem install bundler \
+	&& bundle config --global path "$GEM_HOME" \
+	&& bundle config --global bin "$GEM_HOME/bin"
+
+# don't create ".bundle" in all our apps
+ENV BUNDLE_APP_CONFIG $GEM_HOME
+
+RUN apt-get update \
+	&& apt-get -y install wget memcached build-essential zlib1g-dev libssl-dev libreadline-dev libyaml-dev \
+	&& apt-get -y install libcurl4-openssl-dev curl git-core python-software-properties  \
+	&& apt-get -y install openssl libreadline6 libreadline6-dev curl git-core zlib1g libsqlite3-dev sqlite3 libxml2-dev libxslt-dev \ 
+        && apt-get -y install libc6-dev ncurses-dev automake libtool subversion
+
+RUN git clone https://github.com/blitline-dev/commonlogs.git
+RUN cd commonlogs && bundle install
+
+EXPOSE 4567/tcp
+WORKDIR /commonlogs
+ENTRYPOINT exec puma -p 4567 -e production
