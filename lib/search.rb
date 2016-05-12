@@ -165,6 +165,7 @@ class Search
     results.each_with_index do |row, i|
       if row.start_with? line_prefix
         count = [0, i - 500].min
+        
         return results.drop(count)
       end
     end

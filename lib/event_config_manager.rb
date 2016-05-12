@@ -5,13 +5,30 @@ require_relative 'sheller'
 
 # Class for managing rsyslog config files associated with
 # events.
-
-
+# -------------------------------------
+# Template Folder (Templates $Included in rsyslog)
+#
+# rsyslog.tl
+#   |
+#   |---- <GROUP_NAME>.conf
+#   |---- <GROUP_NAME>.d
+#       |
+#       |---- <SEACH_TERM>.conf
+#
+# Log Config (Search terms to make events of)
+#
+# rsyslog.rl
+#   |
+#   |---- <GROUP_NAME>.conf
+#   |---- <GROUP_NAME>.d
+#       |
+#       | ---- <SEARCH_TERM>.conf
+# -------------------------------------
 class EventConfigManager
   include Sheller
 
   EVENT_FOLDER_NAME = "events".freeze
-  SYSLOG_ROOT = "/etc/rsyslog.d".freeze
+  SYSLOG_ROOT = CommonLog::Config.destination_folder + "/.config_includes"
   TEMPLATE_FOLDER = "rsyslog.tl".freeze
   FILTER_FOLDER = "rsyslog.rl".freeze
 
@@ -103,7 +120,7 @@ class EventConfigManager
   end
 
   def flag_for_rsyslog_restart
-    `echo 'true' > /tmp/restart_rsyslog`
+    `echo 'true' > #{SYSLOG_ROOT}/restart_rsyslog`
   end
 
   def delete_syslog_template(event)
@@ -121,10 +138,8 @@ class EventConfigManager
 
   def assure_name_folderpath(event)
     dirname = filter_folderpath
-    puts "assure_filter_folderpath #{dirname}"
     FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
     dirname = template_folderpath
-    puts "assure_template_folderpath #{dirname}"
     FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
     assure_syslog_filter_include_file
     assure_syslog_template_include_file
@@ -140,9 +155,9 @@ class EventConfigManager
 
   def assure_syslog_filter_include_file
     filepath = filter_include_filepath
-     data = %{
+    data = %{
 if ($syslogtag == '#{@name}') then {
-  $IncludeConfig /etc/rsyslog.d/rsyslog.rl/#{@name}.d/*
+  $IncludeConfig #{@name}.d/*
 }
     }
     File.write(filepath, data) unless File.exist?(filepath)
@@ -151,7 +166,7 @@ if ($syslogtag == '#{@name}') then {
   def assure_syslog_template_include_file
     filepath = template_include_filepath
     puts "create_syslog_template_include_file #{filepath}"
-    data = "$IncludeConfig /etc/rsyslog.d/rsyslog.tl/#{@name}.d/*"
+    data = "$IncludeConfig #{@name}.d/*"
     File.write(filepath, data) unless File.exist?(filepath)
   end
 

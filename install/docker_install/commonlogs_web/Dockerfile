@@ -44,16 +44,13 @@ ENV BUNDLE_APP_CONFIG $GEM_HOME
 RUN apt-get update \
 	&& apt-get -y install wget memcached build-essential zlib1g-dev libssl-dev libreadline-dev libyaml-dev \
 	&& apt-get -y install libcurl4-openssl-dev curl git-core python-software-properties  \
-	&& apt-get -y install openssl libreadline6 libreadline6-dev curl git-core zlib1g libsqlite3-dev sqlite3 libxml2-dev libxslt-dev \ 
+	&& apt-get -y install openssl libreadline6 libreadline6-dev curl git-core zlib1g libsqlite3-dev sqlite3 libxml2-dev libxslt-dev \
         && apt-get -y install libc6-dev ncurses-dev automake libtool subversion
 
+RUN echo "touch4"
 RUN git clone https://github.com/blitline-dev/commonlogs.git
 RUN cd commonlogs && bundle install
 
 EXPOSE 4567/tcp
 WORKDIR /commonlogs
-ENTRYPOINT exec puma -p 4567 -e production
-
-#sudo docker build --rm=true -t commonlogs_web .
-#sudo docker run -d -p 80:4567 -e "CL_BASIC_AUTH_USERNAME=someusername" -e "CL_BASIC_AUTH_PASSWORD=strongpassword" -v /var/log/commonlog:/var/log/commonlog commonlogs_web:latest
-
+ENTRYPOINT exec puma -p 4567 -e development

@@ -6,7 +6,9 @@ class Tags
   EVENT_FOLDER_NAME = "events".freeze
 
   def self.list
-    Dir.entries(CommonLog::Config.destination_folder).select { |f| !File.directory? f }
+    Dir.entries(CommonLog::Config.destination_folder).select do |f|
+      File.directory?(CommonLog::Config.destination_folder + "/" + f) unless f.start_with?(".")
+    end
   end
 
   def self.files(tag)
