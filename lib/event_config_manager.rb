@@ -5,6 +5,8 @@ require_relative 'sheller'
 
 # Class for managing rsyslog config files associated with
 # events.
+
+
 class EventConfigManager
   include Sheller
 
@@ -72,12 +74,12 @@ class EventConfigManager
     CommonLog::Config.destination_folder + '/' + @name + '/' + EVENT_FOLDER_NAME
   end
 
-  def template_include_filepath(event)
-    "#{SYSLOG_ROOT}/#{TEMPLATE_FOLDER}/#{event}.conf"
+  def template_include_filepath
+    "#{SYSLOG_ROOT}/#{TEMPLATE_FOLDER}/#{@name}.conf"
   end
 
-  def filter_include_filepath(event)
-    "#{SYSLOG_ROOT}/#{FILTER_FOLDER}/#{event}.conf"
+  def filter_include_filepath
+    "#{SYSLOG_ROOT}/#{FILTER_FOLDER}/#{@name}.conf"
   end
 
   def template_filepath(event)
@@ -124,8 +126,8 @@ class EventConfigManager
     dirname = template_folderpath
     puts "assure_template_folderpath #{dirname}"
     FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
-    assure_syslog_filter_include_file(event)
-    assure_syslog_template_include_file(event)
+    assure_syslog_filter_include_file
+    assure_syslog_template_include_file
   end
 
   def create_prefs_file(event_data)
@@ -136,16 +138,20 @@ class EventConfigManager
     end
   end
 
-  def assure_syslog_filter_include_file(event)
-    filepath = filter_include_filepath(event)
-    data = "if ($syslogtag == '#{event}') then {$IncludeConfig /etc/rsyslog.d/rsyslog.rl/#{event}.d/*}"
+  def assure_syslog_filter_include_file
+    filepath = filter_include_filepath
+     data = %{
+if ($syslogtag == '#{@name}') then {
+  $IncludeConfig /etc/rsyslog.d/rsyslog.rl/#{@name}.d/*
+}
+    }
     File.write(filepath, data) unless File.exist?(filepath)
   end
 
-  def assure_syslog_template_include_file(event)
-    filepath = template_include_filepath(event)
+  def assure_syslog_template_include_file
+    filepath = template_include_filepath
     puts "create_syslog_template_include_file #{filepath}"
-    data = "template (name=\"DynFile_#{event}\" type=\"string\" string=\"#{CommonLog::Config.destination_folder}/%syslogtag%/events/#{event}/%$now%-%$hour%.log\")"
+    data = "$IncludeConfig /etc/rsyslog.d/rsyslog.tl/#{@name}.d/*"
     File.write(filepath, data) unless File.exist?(filepath)
   end
 
