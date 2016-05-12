@@ -33,7 +33,7 @@ class Util
     begin
       FileUtils.mkdir_p(path)
       FileUtils.chown_R nil, 'syslog', path
-      FileUtils.chmod 077, path, verbose: false
+      FileUtils.chmod 770, path, verbose: false
     rescue => ex
       puts "Failed to create and set perms on folder #{ex.message}"
     end
