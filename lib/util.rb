@@ -32,7 +32,7 @@ class Util
   def self.cl_mkdir_p(path)
     begin
       FileUtils.mkdir_p(path)
-      FileUtils.chown_R nil, 'syslog', verbose: false
+      FileUtils.chown_R nil, 'syslog', path
       FileUtils.chmod 077, path, verbose: false
     rescue => ex
       puts "Failed to create and set perms on folder #{ex.message}"
