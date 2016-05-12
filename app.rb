@@ -8,8 +8,7 @@ require 'logger'
 class App < Sinatra::Base
 
   get '/' do
-    variables = { foo: "bar" }
-    variables.to_json
+    redirect to("/p/li_home")
   end
 
   # ERROR PAGES

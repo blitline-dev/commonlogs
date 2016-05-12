@@ -44,16 +44,18 @@ link(rel="stylesheet" href="/stylesheets/events_manager.css?222f4g8")
 				button.close data-dismiss="modal" type="button"	&times;
 				h4.modal-title.primary Add Event
 			.modal-body
-				form.form-horizontals(action="/p/events" method="post" data-toggle="validator")
+				form#eform.form-horizontals.form-validation(action="/p/events" method="post" data-toggle="validator" role="form")
 					input(type="hidden" name="name" value="#{name}")
 					.form-group
 						.col-6
 							label.control-label for="textinput"	Event Name <a href="javascript:;" class="text-info fa fa-question-circle" data-toggle="popover" data-trigger="focus" data-placement="right" title="Event Name" data-content="This is what the event will appear as in the UI. This field MUST be alphanumeric or underscore only. Addtionally, it cannot start with a number." ></a>
-							input#eventName.form-control.input-md name="event_name" placeholder="\\A-Za-z0-9_\\" required="true" type="text" data-error="Must start with letter, and only have alphanum or underscore" pattern="^[_A-z]{1}[A-z0-9]*$"/
+							input#eventName.form-control.input-md name="event_name" placeholder="\\A-Za-z0-9_\\" required="require" type="text" data-error="Must start with letter, and only have alphanum or underscore. No spaces" pattern="^[_A-z]{1}[A-z0-9]*$"/
+							div.help-block.with-errors
 					.form-group
 						.col-6
 							label.control-label for="textinput"	Event Description <a href="javascript:;" class="text-info fa fa-question-circle" data-toggle="popover" data-trigger="focus" data-placement="right" title="Event Description" data-content="This is a description of the event so you can remember later why you created it :)" ></a>
-							input#description.form-control.input-md name="description" placeholder="Describe this event" required="true" type="text" /
+							input#description.form-control.input-md name="description" placeholder="Describe this event" type="text" /
+							div.help-block.with-errors
 					.form-group
 						.col-6
 							label.control-label for="textinput"	Color <a href="javascript:;" class="text-info fa fa-question-circle" data-toggle="popover" data-trigger="focus" data-placement="right" title="Color" data-content="This is the color we will display the event in the UI. If you do not pick one, we will automatically choose one." ></a>
@@ -66,10 +68,11 @@ link(rel="stylesheet" href="/stylesheets/events_manager.css?222f4g8")
 						.col-6
 							label.control-label for="searchWord"	Search Word <a href="javascript:;" class="text-info fa fa-question-circle" data-trigger="focus" data-toggle="popover" data-placement="right" title="Search Word" data-content="This is the text we will watch for. We will do a case insensitve search." ></a>
 							input#searchWord.form-control.input-md name="search" placeholder=("Search for?") required="true" type="search" /
+							div.help-block.with-errors
 					/! Button
 					.form-group
 						div.clearfix
-							button#singlebutton.btn.btn-success.pull-right name="singlebutton"	Save
+							button#singlebutton.btn.btn-success.pull-right name="singlebutton" type="submit"	Save
 
 - content_for :javascripter
 	script(src="javascript/event_manager.js?3455b44222")

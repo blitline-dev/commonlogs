@@ -33,6 +33,7 @@ class EventConfigManager
   FILTER_FOLDER = "rsyslog.rl".freeze
 
   def initialize(name)
+    assure_syslog_root
     fail "Log Group must be specified!" unless name
     @name = name
   end
@@ -151,6 +152,10 @@ class EventConfigManager
     File.open(filepath, "w") do |f|
       f.write(event_data.to_json)
     end
+  end
+
+  def assure_syslog_root
+    FileUtils.mkdir_p(SYSLOG_ROOT) unless File.directory?(SYSLOG_ROOT)
   end
 
   def assure_syslog_filter_include_file

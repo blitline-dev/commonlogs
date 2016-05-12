@@ -15,7 +15,7 @@ RUN echo '$FileOwner syslog' >> /etc/rsyslog.conf
 RUN echo '$FileGroup syslog' >> /etc/rsyslog.conf
 RUN echo '$FileCreateMode 0770'  >> /etc/rsyslog.conf
 RUN echo '$DirCreateMode 0770'  >> /etc/rsyslog.conf
-RUN echo '$Umask 0000'  >> /etc/rsyslog.conf
+RsudosdddUN echo '$Umask 0000'  >> /etc/rsyslog.conf
 RUN echo '$PrivDropToUser syslog'  >> /etc/rsyslog.conf
 RUN echo '$PrivDropToGroup syslog' >> /etc/rsyslog.conf
 RUN echo '$WorkDirectory /var/spool/rsyslog' >> /etc/rsyslog.conf

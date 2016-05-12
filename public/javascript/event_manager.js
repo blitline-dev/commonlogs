@@ -26,6 +26,18 @@ $(function(){
     	$("#searchWord").val("");
 	})
 
+  $('#myModal').on('shown.bs.modal', function () {
+    $('#myModal form').validator('destroy')
+    var validator = $('#myModal form').validator();
+      validator.on('submit', function (e) {
+        if (e.isDefaultPrevented()) {
+          // handle the invalid form...
+          alert("Please correct the form errors before continuing");
+          return false;
+        }
+      });
+  })
+
   // ------- Log Group Switch
   $(".group").click(function() {
     eventChanged($(this));
