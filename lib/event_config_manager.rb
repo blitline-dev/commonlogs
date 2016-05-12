@@ -162,7 +162,7 @@ class EventConfigManager
     filepath = filter_include_filepath
     data = %{
 if ($syslogtag == '#{@name}') then {
-  $IncludeConfig #{@name}.d/*
+  $IncludeConfig  #{SYSLOG_ROOT}/rsyslog.rl/#{@name}.d/*
 }
     }
     File.write(filepath, data) unless File.exist?(filepath)
@@ -171,7 +171,7 @@ if ($syslogtag == '#{@name}') then {
   def assure_syslog_template_include_file
     filepath = template_include_filepath
     puts "create_syslog_template_include_file #{filepath}"
-    data = "$IncludeConfig #{@name}.d/*"
+    data = "$IncludeConfig #{SYSLOG_ROOT}/rsyslog.tl/#{@name}.d/*"
     File.write(filepath, data) unless File.exist?(filepath)
   end
 
