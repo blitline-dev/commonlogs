@@ -172,7 +172,7 @@ if ($syslogtag == '#{@name}') then {
     filepath = template_include_filepath
     puts "create_syslog_template_include_file #{filepath}"
     data = %{
-      $IncludeConfig #{SYSLOG_ROOT}/rsyslog.tl/#{@name}.d/*"
+$IncludeConfig #{SYSLOG_ROOT}/rsyslog.tl/#{@name}.d/*
     }
     File.write(filepath, data) unless File.exist?(filepath)
   end
@@ -182,7 +182,7 @@ if ($syslogtag == '#{@name}') then {
     filepath = template_filepath(event)
     puts "create_syslog_template #{filepath}"
     data = %{
-      template (name=\"DynFile_#{event}\" type=\"string\" string=\"#{CommonLog::Config.destination_folder}/%syslogtag%/events/#{event}/%$now%-%$hour%.log\")"
+template (name="DynFile_#{event}" type="string" string="#{CommonLog::Config.destination_folder}/%syslogtag%/events/#{event}/%$now%-%$hour%.log")
     }
     File.write(filepath, data)
   end
