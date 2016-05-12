@@ -1,4 +1,5 @@
 require 'nokogiri'
+require 'fileutils'
 
 class Util
 
@@ -26,6 +27,16 @@ class Util
   def self.clean_html(text)
     a = Nokogiri::HTML.parse text
     a.text
+  end
+
+  def self.cl_mkdir_p(path)
+    begin
+      FileUtils.mkdir_p(path)
+      FileUtils.chown_R nil, 'syslog', verbose: false
+      FileUtils.chmod 077, path, verbose: false
+    rescue => ex
+      puts "Failed to create and set perms on folder #{ex.message}"
+    end
   end
 
 end

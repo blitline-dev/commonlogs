@@ -52,7 +52,7 @@ class EventConfigManager
 
   def create!(event, event_data)
     full_folder = full_event_folder(event)
-    FileUtils.mkdir_p full_folder
+    Util.cl_mkdir_p full_folder
     create_prefs_file(event_data)
     create_syslog_template(event)
     create_syslog_filter(event, event_data["search"])
@@ -134,14 +134,14 @@ class EventConfigManager
 
   def assure_events_folderpath
     dirname = events_folder
-    FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
+    Util.cl_mkdir_p(dirname) unless File.directory?(dirname)
   end
 
   def assure_name_folderpath(event)
     dirname = filter_folderpath
-    FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
+    Util.cl_mkdir_p(dirname) unless File.directory?(dirname)
     dirname = template_folderpath
-    FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
+    Util.cl_mkdir_p(dirname) unless File.directory?(dirname)
     assure_syslog_filter_include_file
     assure_syslog_template_include_file
   end
@@ -155,7 +155,7 @@ class EventConfigManager
   end
 
   def assure_syslog_root
-    FileUtils.mkdir_p(SYSLOG_ROOT) unless File.directory?(SYSLOG_ROOT)
+    Util.cl_mkdir_p(SYSLOG_ROOT) unless File.directory?(SYSLOG_ROOT)
   end
 
   def assure_syslog_filter_include_file
