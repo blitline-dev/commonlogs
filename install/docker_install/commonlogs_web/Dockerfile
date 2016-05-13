@@ -47,10 +47,10 @@ RUN apt-get update \
 	&& apt-get -y install openssl libreadline6 libreadline6-dev curl git-core zlib1g libsqlite3-dev sqlite3 libxml2-dev libxslt-dev \
         && apt-get -y install libc6-dev ncurses-dev automake libtool subversion
 
-RUN echo "touch21"
+RUN echo "touch22"
 RUN git clone https://github.com/blitline-dev/commonlogs.git
 RUN cd commonlogs && bundle install
 
 EXPOSE 4567/tcp
 WORKDIR /commonlogs
-ENTRYPOINT exec puma -p 4567 -e development
+#ENTRYPOINT exec puma -p 4567 -e development 
