@@ -15,7 +15,7 @@ class Event
     @now = Time.now
     @now_sec = @now.to_i
 
-    @rsyslog_unix_weird_offset = 24 * 3600 # 1 Full Day in Seconds
+    @rsyslog_unix_weird_offset = ENV['CLOFFSET'] ? ENV['offset'].to_i : 0 # 1 Full Day in Seconds
     @timeslice = TIME_SLICE_COUNT
   end
 
@@ -24,7 +24,6 @@ class Event
     results = {}
     colors = {}
     event_files = Tags.all_event_files(@tag, Util.hours_ago(start_timestamp))
-    p "E&C event_files=#{event_files.inspect} for #{@tag}"
     event_files.each do |file_info|
       name = file_info.event_name
       results[name] = []
@@ -40,9 +39,7 @@ class Event
   def event_list_console(event_name, start_timestamp, end_timestamp, page)
     start_timestamp, end_timestamp = clean_timestamps(start_timestamp, end_timestamp)
     results = []
-    p "Getting files for #{@tag} and #{event_name}, #{Util.hours_ago(start_timestamp)}"
     event_file_names = Tags.events_files_for(@tag, event_name, Util.hours_ago(start_timestamp))
-    p "event_file_names = #{event_file_names}"
 
     start = start_timestamp - @rsyslog_unix_weird_offset
     end_time = end_timestamp - @rsyslog_unix_weird_offset
