@@ -194,10 +194,12 @@ template (name="DynFile_#{event}" type="string" string="#{CommonLog::Config.dest
 
     data = %{
 if ($msg contains '#{search}') then {
-action(template="FileFormat" type="omfile" dynaFile="DynFile_#{event}")
+action(template="FileFormat" type="omfile" dynaFile="DynFile_#{event}" FileOwner="syslog" FileGroup="syslog" DirOwner="syslog" DirGroup="syslog" DirCreateMode="0770" FileCreateMode="0644")
 }
     }
 
     File.write(filepath, data)
   end
 end
+
+
