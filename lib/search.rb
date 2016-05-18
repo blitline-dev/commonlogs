@@ -18,7 +18,7 @@ class Search
     @tag = tag
     @now = Time.now
     @now_sec = @now.to_i
-    @rsyslog_unix_weird_offset = 24 * 3600 # 1 Full Day in Seconds
+    @rsyslog_unix_weird_offset = ENV['CLOFFSET'] ? ENV['offset'].to_i : 0 # 1 Full Day in Seconds
   end
 
   # Search should do one of two things.
@@ -37,6 +37,7 @@ class Search
     range_start = file_and_range[:range_start]
     range_end = file_and_range[:range_end]
     data = get_search_results(data, files, range_start, range_end, text)
+    ap data
     if file_and_range[:filter] == true
       filter_search_result(data, file_and_range[:start_seconds], file_and_range[:end_seconds])
     end
@@ -86,7 +87,7 @@ class Search
       start_seconds, end_seconds = hours_ago.split("-")
       start_seconds = start_seconds.to_i
       end_seconds = end_seconds.to_i
-      results = calculate_files_and_range_form_timestamps(start_seconds, end_seconds, p)
+      results = calculate_files_and_range_from_timestamps(start_seconds, end_seconds, p)
       p "calculate_files_and_range = #{results}"
     else
       results = calculate_files_and_range_form_hours_ago(hours_ago, p)
@@ -95,7 +96,7 @@ class Search
     return results
   end
 
-  def calculate_files_and_range_form_timestamps(start_seconds, end_seconds, p)
+  def calculate_files_and_range_from_timestamps(start_seconds, end_seconds, p)
     start_seconds = start_seconds.to_i
     end_seconds = end_seconds.to_i
     files = calculate_files_from_timestamp(start_seconds, end_seconds)
