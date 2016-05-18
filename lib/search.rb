@@ -87,6 +87,7 @@ class Search
       start_seconds = start_seconds.to_i
       end_seconds = end_seconds.to_i
       results = calculate_files_and_range_form_timestamps(start_seconds, end_seconds, p)
+      p "calculate_files_and_range = #{results}"
     else
       results = calculate_files_and_range_form_hours_ago(hours_ago, p)
     end
@@ -98,6 +99,8 @@ class Search
     start_seconds = start_seconds.to_i
     end_seconds = end_seconds.to_i
     files = calculate_files_from_timestamp(start_seconds, end_seconds)
+    p "calculate_files_from_timestamp #{files.inspect}"
+    p start_seconds, end_seconds
     range_start = PAGE_SIZE * p
     range_end = range_start + (PAGE_SIZE - 1)
     return nil if start_seconds == 0 || end_seconds == 0
@@ -133,7 +136,7 @@ class Search
   end
 
   def get_search_results(data, files, range_start, range_end, text)
-    sub_files = files[range_start..range_end]
+    sub_files = files[range_start..range_end] || []
     sub_files.map! { |f| File.basename(f) }
     data += execute_search(sub_files, text)
     return data
@@ -164,8 +167,8 @@ class Search
 
     results.each_with_index do |row, i|
       if row.start_with? line_prefix
-        count = [0, i - 500].min
-        
+        count = i > 500 ? [0, i - 500].min : 0
+
         return results.drop(count)
       end
     end
