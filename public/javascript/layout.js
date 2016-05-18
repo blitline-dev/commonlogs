@@ -29,9 +29,18 @@ $(function() {
 	}
 
 	function setHours() {
+		// If it's an event base time, set event time 
+		if (Utils.getParameterByName("st") && Utils.getParameterByName("et")) {
+			setCustomTime(Utils.getParameterByName("st"), Utils.getParameterByName("et"));
+			$(".hours-text").html("Custom");
+			return;
+		}
+
+		// If it's a search base time, set search time 
 		if(commonLog && commonLog.hours) {
 			if ((commonLog.hours).indexOf("-") > 0) {
-				setCustomTime();
+				var times = commonLog.hours.split("-");
+				setCustomTime(time[0], time[1]);
 				$(".hours-text").html("Custom");
 			} else {
 				var linkText = $("a[data-val='" + commonLog.hours.toString() + "']").first().text();
@@ -42,10 +51,9 @@ $(function() {
 		}
 	}
 
-	function setCustomTime() {
-		var times = commonLog.hours.split("-");
-		var startTime = new Date(1000 * parseInt(times[0]));
-		var endTime = new Date(1000 * parseInt(times[1]));
+	function setCustomTime(start, end) {
+		var startTime = new Date(1000 * parseInt(start));
+		var endTime = new Date(1000 * parseInt(end));
 
 		 $("#startTime").val(startTime.toString("MMMM d, HH:mm tt"));
 		 $("#endTime").val(endTime.toString("MMMM d, HH:mm tt"));

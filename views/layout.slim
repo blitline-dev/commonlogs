@@ -30,7 +30,7 @@ html lang="en"
     link href="vendor/chosen_v1.4.0/chosen.min.css" rel="stylesheet" /
     link href="vendor/checkbo/src/0.1.4/css/checkBo.min.css" rel="stylesheet" /
     link href="vendor/c3/c3.min.css" rel="stylesheet" /
-    link rel="stylesheet" href="/styles/li_home.css?1a3224g8"
+    link rel="stylesheet" href="/styles/li_home.css?b33224g8"
     script
       | 
         var commonLog = {};
@@ -127,8 +127,7 @@ html lang="en"
                     a href="event_manager?name=#{name}"  Event Manager
                   li.divider role="separator" 
                 li
-                  a href="javascript:;"  Help
-
+                  a href="http://www.commonlogs.com/help"  Help
         /! /top header
         == yield
 
@@ -140,7 +139,8 @@ html lang="en"
                 input.form-control id="name" name="name" type="hidden" value="#{name}" /
                 input.form-control id="hours" name="hours" type="hidden" value="#{hours || 2}" /
                 .input-group
-                  input.form-control.br0 id="q" name="q" type="text" value="#{q}" placeholder="Search..." /
+                  input.form-control.br0 id="q" name="q" type="text" value="#{q}" placeholder="Search..."
+                    a(href="javascript:;" style="color:#6EC7E6" class="hidden-xs br1 text-info fa fa-question-circle" data-toggle="popover" data-trigger="focus" data-placement="right" title="Search For:" data-content="Enter text to search for. Surround with '/' for regex. Example: /foo[A-z]/")
                   span.input-group-btn
                     button.btn.btn-info#search-go type="button"  Go!
           ul(style="padding-left: 0; float: left;")
