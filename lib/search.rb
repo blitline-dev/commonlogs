@@ -37,7 +37,6 @@ class Search
     range_start = file_and_range[:range_start]
     range_end = file_and_range[:range_end]
     data = get_search_results(data, files, range_start, range_end, text)
-    ap data
     if file_and_range[:filter] == true
       filter_search_result(data, file_and_range[:start_seconds], file_and_range[:end_seconds])
     end
@@ -88,7 +87,6 @@ class Search
       start_seconds = start_seconds.to_i
       end_seconds = end_seconds.to_i
       results = calculate_files_and_range_from_timestamps(start_seconds, end_seconds, p)
-      p "calculate_files_and_range = #{results}"
     else
       results = calculate_files_and_range_form_hours_ago(hours_ago, p)
     end
@@ -100,8 +98,6 @@ class Search
     start_seconds = start_seconds.to_i
     end_seconds = end_seconds.to_i
     files = calculate_files_from_timestamp(start_seconds, end_seconds)
-    p "calculate_files_from_timestamp #{files.inspect}"
-    p start_seconds, end_seconds
     range_start = PAGE_SIZE * p
     range_end = range_start + (PAGE_SIZE - 1)
     return nil if start_seconds == 0 || end_seconds == 0
