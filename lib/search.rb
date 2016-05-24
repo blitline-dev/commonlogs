@@ -155,7 +155,7 @@ class Search
       cmd_string = "export LC_ALL=C && #{app} -m 10000 -ir '#{text}' #{file_paths.join(' ')}"
     end
 
-    ap "Cmd string = #{cmd_string}"
+    p "Cmd string = #{cmd_string}"
     return execute_shell_command(cmd_string, with_context)
   end
 

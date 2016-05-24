@@ -18,7 +18,6 @@ module Api
 
         events = event.event_and_counts(start_timestamp, end_timestamp)
       end
-      puts "Delta events = #{time}"
       events.to_json
     end
 

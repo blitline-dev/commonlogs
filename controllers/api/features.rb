@@ -34,7 +34,6 @@ module Api
       latest.to_json
     end
 
-
     get '/search' do
       request.env['HTTP_ACCEPT_ENCODING'] = 'gzip'
       count = 0
@@ -45,25 +44,22 @@ module Api
       latest = []
       results = {}
 
-      time = Util.measure_delta do
+      _time = Util.measure_delta do
         results = search.search(query, hours, p.to_i)
         latest = results[:data]
         syslog_format(latest, nil)
       end
-      puts "Search events = #{time}"
 
-      time = Util.measure_delta do
+      _time = Util.measure_delta do
         latest.each do |row|
           count += row[3].scan(query).count(query)
           row[3] = wrap_query_term_with_spans(row[3], query)
         end
       end
-      puts "Search latest events = #{time}"
 
       results[:data] = latest
       results[:count] = count
 
-      puts "returning..."
       results.to_json
     end
   end
