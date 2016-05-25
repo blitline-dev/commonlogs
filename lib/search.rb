@@ -3,8 +3,6 @@ require_relative 'util'
 require_relative 'sheller'
 
 require 'time'
-# cat 2016-03-06-14.log | awk '{ print $1}' | uniq -c
-# grouping
 
 # Search handling
 class Search
@@ -53,6 +51,7 @@ class Search
     return { data: data, page: p, has_more: range_end < files.length, count: data.length }
   end
 
+  # Remove everything but items between timestamps
   def filter_search_result(data, start_seconds, end_seconds)
     data.reject! do |row|
       timestamp = row.to_s.split(" ")[0].split(":")[1].to_i + @rsyslog_unix_weird_offset
@@ -159,15 +158,13 @@ class Search
     return execute_shell_command(cmd_string, with_context)
   end
 
+  # Drop results before a particular line prefix so they
+  # aren't duped in the output.
   def trim_results(results, line_prefix)
     return results unless line_prefix
 
     results.each_with_index do |row, i|
-      if row.start_with? line_prefix
-        count = i > 500 ? [0, i - 500].min : 0
-
-        return results.drop(count)
-      end
+      return results.drop(i) if row.start_with? line_prefix
     end
 
     results
