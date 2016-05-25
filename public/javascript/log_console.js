@@ -114,7 +114,9 @@ LogConsole.prototype = {
 		$(this).trigger("mouseOverTimestamp", [eventObj]);
 	},
 	setEmpty: function() {
-		$("#console").html("<div class='noResults'><i class=\"fa fa-eye-slash\"></i>&nbsp;No Results Found</div>")
+		if ($("#console").html().length < 10) {
+			$("#console").html("<div class='noResults'>&nbsp;No Results Found</div>")
+		}
 	}
 
 };
