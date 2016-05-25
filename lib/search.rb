@@ -164,7 +164,7 @@ class Search
     return results unless line_prefix
 
     results.each_with_index do |row, i|
-      return results.drop(i) if row.start_with? line_prefix
+      return results.drop(i + 1) if row.start_with? line_prefix
     end
 
     results
