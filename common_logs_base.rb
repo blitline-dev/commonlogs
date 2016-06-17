@@ -8,6 +8,7 @@ require 'oj'
 require 'slim'
 require 'awesome_print'
 require 'sinatra/content_for'
+require 'sinatra/cookies'
 
 require_relative 'lib/tags'
 require_relative 'lib/search'
@@ -24,6 +25,7 @@ require_relative 'lib/event_config_manager'
 class CommonLogsBase < Sinatra::Base
   helpers Sinatra::ContentFor
 
+  LAST_NAME_COOKIE = "last_saved_name"
   configure { set :server, :puma }
 
   # Listen to all non-localhost requests
@@ -92,7 +94,13 @@ class CommonLogsBase < Sinatra::Base
   end
 
   def wrap_query_term_with_spans(text, query)
-    return text.gsub(query, "<span class='fructy'>#{query}</span>") if text
+    if query && query.start_with?("/") && query.end_with?("/")
+      p "in wrap"
+      query[0] = ""
+      query[-1] = ""
+    end
+
+    return text.gsub(/(#{query})/i, "<span class='fructy'>\\1</span>") if text
 
     return text
   end
@@ -143,6 +151,14 @@ class CommonLogsBase < Sinatra::Base
       hours: params['hours'] || 2,
       q: params["q"]
     }
+  end
+
+  def save_name_cookie(name)
+    response.set_cookie(LAST_NAME_COOKIE, value: name, expires: Time.now + 31557600)
+  end
+
+  def name_cookie
+    request.cookies[LAST_NAME_COOKIE]
   end
 
 end
