@@ -59,7 +59,6 @@ module Api
 
       results[:data] = latest
       results[:count] = count
-
       results.to_json
     end
   end

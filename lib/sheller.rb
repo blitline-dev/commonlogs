@@ -6,22 +6,25 @@ module Sheller
 
   def execute_shell_command(cmd_string, with_context = false)
     results = nil
-    start_time = Time.now.to_i
-    p "Start cmd '#{cmd_string}'"
+    start_time = Time.now.to_f
+    LOGGER.log "Start cmd '#{cmd_string}'"
     Open3.popen3(cmd_string) do |_stdin, stdout, stderr, _wait_thr|
       output = stdout.read
       output_error = stderr.read
       handle_output_error(output_error)
       results = parse_results(output, with_context)
     end
-    end_time = Time.now.to_i
-    puts "Finished after: #{end_time - start_time} seconds"
+    end_time = Time.now.to_f
+    LOGGER.log "Finished after: #{end_time - start_time} seconds"
 
     return results
   end
 
   def handle_output_error(output_error)
-    fail output_error if output_error && !output_error.empty?
+    if output_error && !output_error.empty?
+      LOGGER.log(output_error)
+      fail output_error
+    end
   end
 
   def parse_results(results, _wait_thrh_context)

@@ -45,7 +45,7 @@ RUN apt-get update \
 	&& apt-get -y install wget memcached build-essential zlib1g-dev libssl-dev libreadline-dev libyaml-dev \
 	&& apt-get -y install libcurl4-openssl-dev curl git-core python-software-properties  \
 	&& apt-get -y install openssl libreadline6 libreadline6-dev curl git-core zlib1g libsqlite3-dev sqlite3 libxml2-dev libxslt-dev \
-        && apt-get -y install libc6-dev ncurses-dev automake libtool subversion
+        && apt-get -y install libc6-dev ncurses-dev automake libtool subversion awscli
 
 RUN echo "touch65"
 RUN git clone https://github.com/blitline-dev/commonlogs.git

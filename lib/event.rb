@@ -83,7 +83,7 @@ class Event
       end
     end
     results.compact!
-    puts "Delta extract_counts = #{time}"
+    LOGGER.log  "Delta extract_counts = #{time}"
     return results
   end
 

@@ -4,6 +4,13 @@ require_relative 'common_logs_base'
 # Basic paths with Auth support
 class ProtectedPaths < CommonLogsBase
 
+  get '/settings' do
+    tags = Tags.list
+    settings = Settings.all_settings["settings"]
+    variables = {  tags: tags, event_name: params['event_name'], settings: settings }.merge(display_variables)
+    slim :settings, locals: variables
+  end
+
   get '/notification' do
     tags = Tags.list
     unless params['name'] && params['event_name']

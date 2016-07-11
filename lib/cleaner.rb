@@ -10,7 +10,7 @@ class Cleaner
     @hours_to_save = @hours_to_save.to_i
     @seconds_offset = @hours_to_save * 3600
 
-    raise "Must have Environment variable 'COMMONLOGS_ROOT_FOLDER' set." unless @log_folder
+    raise "Must have Environment variable 'COMMONLOGS_ROOT_FOLDER' set. For example 'export COMMONLOGS_ROOT_FOLDER=/var/log/commonlogs'" unless @log_folder
     raise "'COMMONLOGS_ROOT_FOLDER' is set to '#{@log_folder}' but that folder doesn't exist" unless File.exist?(@log_folder)
   end
 

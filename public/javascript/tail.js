@@ -8,6 +8,19 @@ $(function() {
 	var _pauseSmoothScroll = false;
 	var _firstLoad = true;
 	var _DELAY = 5000;
+  var ctrlDown = false,
+      ctrlKey = 17,
+      cmdKey = 91,
+      vKey = 86,
+      cKey = 67
+
+   $(window).keydown(function(e) {
+    if (e.keyCode >= 65 && e.keyCode <= 90) {
+      if (e.metaKey && e.keyCode == 75) {
+        logConsole.softClear();
+      }
+    }
+  })
 
 	$(logConsole).on("afterAppend", function() {
 		if (!_pauseSmoothScroll) {

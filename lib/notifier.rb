@@ -7,7 +7,7 @@ require_relative 'cron/cron_service'
 class Notifier
 
   def initialize(log_group, event, path, log_file_folder)
-    raise "Must have a tag and event and path for Notification" unless log_group && event && path
+    validate(log_group, event, path)
     @log_group = log_group
     @event = event
     @path = path
@@ -32,6 +32,10 @@ class Notifier
     @cron_service = CronService.new(args)
   end
 
+  def validate(log_group, event, path)
+    raise "Must have a tag and event and path for Notification" unless log_group && event && path
+  end
+
   def run
     begin
       last_f = last_file
@@ -41,8 +45,7 @@ class Notifier
       save_marker(latest_line)
       @cron_service.notify(latest_line: latest_line, last_file: "#{@path}/#{last_f}")
     rescue => ex
-      puts ex.message
-      puts ex.backtrace
+      LOGGER.log ex
     end
   end
 
@@ -54,7 +57,7 @@ class Notifier
       when "webhook" then call_webhook(data, new_line, last_f)
       when "slack" then call_slack(data, new_line, last_f)
       else
-        puts "Unknown Type for Notification Notify"
+        LOGGER.log "Unknown Type for Notification Notify"
       end
     end
   end
@@ -77,7 +80,7 @@ class Notifier
   end
 
   def marker(count)
-    return "" unless  File.exist?("#{@path}/.marker")
+    return "" unless File.exist?("#{@path}/.marker")
 
     return `tail -n #{count} #{@path}/.marker`
   end
@@ -125,7 +128,7 @@ class Notifier
   def build_context(text, last_file_used)
     begin
       results = nil
-      cmd_string = "export LC_ALL=C && fgrep -A 5 -B 5 '#{text}' #{original_log_file}"
+      cmd_string = "export LC_ALL=C && fgrep -A 5 -B 5 '#{text}' #{last_file_used}"
       Open3.popen3(cmd_string) do |_stdin, stdout, stderr, _wait_thr|
         output = stdout.read
         output_error = stderr.read
@@ -134,8 +137,7 @@ class Notifier
       end
       results
     rescue => ex
-      puts ex.message
-      puts ex.backtrace
+      LOGGER.log ex
     end
   end
 

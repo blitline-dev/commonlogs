@@ -3,6 +3,10 @@ require 'fileutils'
 
 class Util
 
+  def self.filename_from_time(time)
+    time.utc.strftime("%Y-%m-%d-%H") + ".log"
+  end
+
   def self.measure_delta
     start_time = Time.now.to_f
     yield
@@ -35,6 +39,7 @@ class Util
       FileUtils.chown_R nil, 'syslog', path
       FileUtils.chmod_R 0770, path, verbose: false
     rescue => ex
+      LOGGER.log ex
       puts "Failed to create and set perms on folder #{ex.message}"
     end
   end

@@ -24,12 +24,16 @@ require_relative 'lib/event_config_manager'
 # ----------------------------------
 class CommonLogsBase < Sinatra::Base
   helpers Sinatra::ContentFor
-
-  LAST_NAME_COOKIE = "last_saved_name"
-  configure { set :server, :puma }
-
+  set :show_exceptions, false
   # Listen to all non-localhost requests
   set :timeout, 60
+  configure { set :server, :puma }
+
+  error do
+    LOGGER.log "Sinatra Error: " + env['sinatra.error'].message
+  end
+
+  LAST_NAME_COOKIE = "last_saved_name".freeze
 
   # HELPERS
   helpers do
@@ -67,35 +71,8 @@ class CommonLogsBase < Sinatra::Base
 
   private
 
-  def handle_latest_results(tags, search, line_prefix = nil)
-    results = search.latest(line_prefix)
-    latest = results[:data]
-    file = results[:file]
-
-    syslog_format(latest, file)
-
-    { tags: tags, latest: latest, count: 0 }.merge(display_variables)
-  end
-
-  def handle_search_results(tags, search, hours)
-    count = 0
-    query = params["q"]
-    results = search.search(query, hours)
-    latest = results[:data]
-    syslog_format(latest, nil)
-
-    latest = []
-    latest.each do |row|
-      count += row[3].scan(query).count(query)
-      row[3] = wrap_query_term_with_spans(row[3], query)
-    end
-
-    { tags: tags, latest: latest, count: count }.merge(display_variables)
-  end
-
   def wrap_query_term_with_spans(text, query)
     if query && query.start_with?("/") && query.end_with?("/")
-      p "in wrap"
       query[0] = ""
       query[-1] = ""
     end
@@ -121,7 +98,7 @@ class CommonLogsBase < Sinatra::Base
         end
       end
     end
-    puts "SYSLOG FORMAT delta = #{time}"
+    LOGGER.log "SYSLOG FORMAT delta = #{time}"
   end
 
   def simple_grep_row(row, file)
@@ -154,7 +131,7 @@ class CommonLogsBase < Sinatra::Base
   end
 
   def save_name_cookie(name)
-    response.set_cookie(LAST_NAME_COOKIE, value: name, expires: Time.now + 31557600)
+    response.set_cookie(LAST_NAME_COOKIE, value: name, expires: Time.now + 31_557_600)
   end
 
   def name_cookie

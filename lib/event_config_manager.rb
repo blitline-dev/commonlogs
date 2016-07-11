@@ -46,7 +46,7 @@ class EventConfigManager
       FileUtils.rm_rf(full_folder)
       flag_for_rsyslog_restart
     rescue => ex
-      puts "Failed to delete #{full_folder}, EX: #{ex.message}"
+      LOGGER.log "Failed to delete #{full_folder}, EX: #{ex.message}"
     end
   end
 
@@ -137,7 +137,7 @@ class EventConfigManager
     Util.cl_mkdir_p(dirname) unless File.directory?(dirname)
   end
 
-  def assure_name_folderpath(event)
+  def assure_name_folderpath(_event)
     dirname = filter_folderpath
     Util.cl_mkdir_p(dirname) unless File.directory?(dirname)
     dirname = template_folderpath
@@ -148,7 +148,6 @@ class EventConfigManager
 
   def create_prefs_file(event_data)
     filepath = full_event_folder(event_data["event_name"]) + "/prefs.json"
-    puts "Wriign to #{filepath} #{event_data.inspect}"
     File.open(filepath, "w") do |f|
       f.write(event_data.to_json)
     end
@@ -170,7 +169,6 @@ if ($syslogtag == '#{@name}') then {
 
   def assure_syslog_template_include_file
     filepath = template_include_filepath
-    puts "create_syslog_template_include_file #{filepath}"
     data = %{
 $IncludeConfig #{SYSLOG_ROOT}/rsyslog.tl/#{@name}.d/*
     }
@@ -180,7 +178,6 @@ $IncludeConfig #{SYSLOG_ROOT}/rsyslog.tl/#{@name}.d/*
   def create_syslog_template(event)
     assure_name_folderpath(event)
     filepath = template_filepath(event)
-    puts "create_syslog_template #{filepath}"
     data = %{
 template (name="DynFile_#{event}" type="string" string="#{CommonLog::Config.destination_folder}/%syslogtag%/events/#{event}/%$now%-%$hour%.log")
     }
@@ -190,7 +187,6 @@ template (name="DynFile_#{event}" type="string" string="#{CommonLog::Config.dest
   def create_syslog_filter(event, search)
     assure_name_folderpath(event)
     filepath = filter_filepath(event)
-    puts "create_syslog_filter #{filepath}"
 
     data = %{
 if ($msg contains '#{search}') then {

@@ -1,0 +1,136 @@
+link(rel="stylesheet" href="/stylesheets/settings.css?sss")
+
+.main-content.hide-search.hide-tail.hide-hours
+  .page-title
+    .title Settings
+    .sub-title Application Level Configuration
+
+  .card.bg-white
+    .card-header 
+      h3 Settings
+    .card-block
+      .row.m-a-0
+        .col-lg-10.col-sm-12
+          form.form-horizontal(action="/p/settings" method="post" role="form")
+            .form-group
+              label.col-sm-2.control-label &nbsp;
+              .col-sm-10
+                h3 
+                  label.control-label Cleanup <a href="javascript:;" class="text-warning fa fa-question-circle" data-toggle="popover" data-trigger="focus" data-placement="right" title="Warning" data-content="CommonLogs will automatically remove older logs to preserve HD space. Unchecking this may result in 'out of space' errors unless YOU manually remove older log files" ></a>
+                .input-group.fixed-width
+                  hr.hr-pad
+                  .cs-checkbox
+                    - is_true = settings['autodelete'].to_s == 'true'
+                    - input_html = "<input type='checkbox' id='autodelete' name='autodelete' #{is_true ? 'checked=\'checked\'' : ''} />"
+                    == input_html
+                    label for="autodelete"  Delete logs over 7 days old?
+            .form-group
+              label.col-sm-2.control-label &nbsp;
+              .col-sm-10
+                h3 
+                  label.control-label Self-log <a href="javascript:;" class="text-info fa fa-question-circle" data-toggle="popover" data-trigger="focus" data-placement="right" title="Debug" data-content="Store logs for CommonLogs server IN your own logs. It will be added as 'cl_web_log'" ></a>
+                .input-group.fixed-width
+                  hr.hr-pad
+                  .cs-checkbox
+                    - is_true = settings['selflog'].to_s == 'true'
+                    - input_html = "<input type='checkbox' id='selflog' name='selflog' #{is_true ? 'checked=\'checked\'' : ''} />"
+                    == input_html
+                    label for="selflog"  Send this web app logs to your logs files?
+            .form-group.m-b
+              label.col-sm-2.control-label &nbsp;
+              .col-sm-10
+                h3
+                  label.control-label Archive to S3 <a href="javascript:;" class="text-info fa fa-question-circle" data-toggle="popover" data-trigger="focus" data-placement="right" title="Info" data-content="If CommonLogs has credentials, it will automatically upload recent log files to S3. This machine only has so much bandwidth, so sending logs to S3 from this machine may fail if there is not enough 'UP' bandwidth. If your backups aren't happening, and you have 'self-logging' enabled, you should be able to see errors in the cl_web_log log." ></a>
+                .input-group.fixed-width
+                  hr.hr-pad
+                  - description = ""
+                  - if !settings['iam_key'].to_s.empty?
+                    - description = "Backup to <b>s3:#{settings['bucket']}</b> using <b>IAM Key = '#{settings['iam_key']}</b>'"
+                  - if !settings['key_prefix'].to_s.empty?
+                    - description += " using a key prefix of <b>#{settings['key_prefix']}</b>"
+                  - if description
+                    div.text #{{description}}
+                    br
+                  - title = settings['iam_key'].to_s.empty? ? "Add Credentials" : "Update Credentials"
+                  span.btn.btn-info#add-credentials(data-target="#myModal" data-toggle="modal") #{title}
+                  div#credform.hidden
+                    .cs-textbox
+                      label IAM Key&nbsp;
+                      br
+                      input#iam_key placeholder="Example: A1UHDEWRWEIUWERR83" type="textbox" value="#{settings['iam_key']}" class="largish" /
+                    .cs-textbox
+                      label IAM Secret&nbsp;
+                      br
+                      input#iam_secret placeholder="Enter password" type="password" value="" class="largish"  /
+                    .cs-textbox
+                      label Bucket&nbsp;
+                      br
+                      input#bucket placeholder="Example: foo.bar.mybucket" type="textbox" value="#{settings['bucket']}" class="largish"  /
+                    .cs-textbox
+                      label Key Prefix&nbsp;
+                      br
+                      input#key_prefix placeholder="Example: log_backup" type="textbox" value="#{settings['key_prefix']}" class="largish" /
+                    .cs-textbox
+                      label Location&nbsp;
+                      br
+                      input#location placeholder="Example: us-west-1 (optional)" type="textbox" value="#{settings['location'] || 'us-east-1'}" class="largish" /
+                    div &nbsp;
+                br
+                #loglist.input-group.fixed-width
+                  h5
+                    label.control-label Logs to Archive:&nbsp;&nbsp;
+                    span.btn.btn-xs.btn-link#all(href="#") All
+                    span &nbsp;&nbsp;|&nbsp;&nbsp;
+                    span.btn.btn-xs.btn-link#none(href="#") None
+
+                  - tags.each do |tag|
+                    label.checkbox-inline for="Checkboxes_#{tag}" 
+                      input id="Checkboxes_#{tag}" name="archive_tags[]" type="checkbox" value="#{tag}" /
+                      | #{tag}
+
+            span#updateSettings.btn.btn-success.pull-right name="updateButton" style="margin-left: 10px;"  Save
+
+#myModal.modal.fade role="dialog" 
+  .modal-dialog#add-dialog
+    /! Modal content
+    .modal-content
+      .modal-header.bg-default
+        button.close data-dismiss="modal" type="button" &times;
+        h4.modal-title.primary Update S3 Credentials
+      .modal-body
+        form#iamcreds.form-horizontals.form-validation(action="/p/events" method="post" data-toggle="validator" role="form")
+          input(type="hidden" name="name" value="#{name}")
+          .form-group
+            .col-6
+              label.control-label for="iam_key" IAM Key 
+              input#iam_key required="require" placeholder="Example: A1UHDEWRWEIUWERR83" type="textbox" value="#{settings['iam_key']}" class="largish" /
+              div.help-block.with-errors
+          .form-group
+            .col-6
+              label.control-label for="iam_secret" IAM Secret <a href="javascript:;" class="text-info fa fa-question-circle" data-toggle="popover" data-trigger="focus" data-placement="right" title="IAM Secret" data-content="To update these credentials, you will always need to re-enter your secret" ></a>    
+              input#iam_secret required="require"  placeholder="Enter password" type="password" value="" class="largish"  /
+              div.help-block.with-errors
+          .form-group
+            .col-6
+              label.control-label for="bucket" Bucket
+              input#bucket required="require" placeholder="Example: foo.bar.mybucket" type="textbox" value="#{settings['bucket']}" class="largish"  /
+              div.help-block.with-errors
+          .form-group
+            .col-6
+              label.control-label for="key_prefix" Key Prefix <a href="javascript:;" class="text-info fa fa-question-circle" data-toggle="popover" data-trigger="focus" data-placement="right" title="Key Prefix" data-content="This is the 'folder' you want the files put into, inside your bucket. For example, if your key prefix is 'my_logs' the log files will be organized into YOU_BUCKET/my_logs/.." ></a>                
+              input#key_prefix placeholder="Example: log_backup" type="textbox" value="#{settings['key_prefix']}" class="largish" /
+              div.help-block.with-errors
+          .form-group
+            .col-6
+              label.control-label for="location" Locations
+              input#location placeholder="Example: us-west-1 (optional)" type="textbox" value="#{settings['location'] || 'us-east-1'}" class="largish" /
+              div.help-block.with-errors
+          .form-group
+            div.clearfix
+              button#singlebutton.btn.btn-success.pull-right name="singlebutton" type="submit"  Save
+
+
+
+
+- content_for :javascripter
+  script(src="javascript/settings.js?34s443")

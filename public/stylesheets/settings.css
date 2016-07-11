@@ -1,0 +1,71 @@
+.largish {
+  width: 100%;
+}
+
+.fixed-width {
+  width: 100%;
+}
+
+.hr-pad {
+  padding: 0;
+  margin: 0 0 15px 0;
+}
+
+.cs-textbox label {
+  margin-top: 10px;
+}
+
+.popover-content {
+    font-size: 10px;
+}
+
+.description {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+
+label.radio-inline, label.checkbox-inline {
+  background-color: #fff;
+  cursor: pointer;
+  color: #333;
+  font-weight: 400;
+  border: 1px solid #ccc;
+  margin-bottom: 10px !important;
+  margin-right: 2%;
+  margin-left:0;
+  padding: 10px 10px 10px 30px;
+}
+label.radio-inline.checked, label.checkbox-inline.checked {
+  background-color: #266c8e;
+  color: #fff !important;
+  text-shadow: 1px 1px 2px #000 !important;
+}
+.checkbox-inline + .checkbox-inline, .radio-inline + .radio-inline {
+  margin-left: 0;
+}
+.columns label.radio-inline, .columns label.checkbox-inline {
+  min-width: 190px;
+  vertical-align: top;
+  width: 30%;
+}
+.additional-info-wrap {
+  display: inline-block;
+  margin: 0 2% 0 0;
+  min-width: 190px;
+  position: relative;
+  vertical-align: top;
+  width: 30%;
+}
+.additional-info-wrap label.checkbox-inline, .additional-info-wrap label.radio-inline {
+  width: 100% !important;
+}
+.additional-info-wrap .additional-info {
+  background-color: #266c8e;
+  clear: both;
+  color: #fff !important;
+  margin-top: -10px;
+  padding: 0 10px 10px;
+  text-shadow: 1px 1px 2px #000 !important;
+  width: 100%;
+}

@@ -86,7 +86,9 @@ LogConsole.prototype = {
 	clear: function() {
 		$("#console").empty();
 		this.disableLoadMoreEvent = false;
-
+	},
+	softClear: function() {
+		$("#console").find('li:not(:last)').remove();
 	},
 	setLoading: function(isLoading) {
 		this.skipLoadMoreEvent = isLoading;

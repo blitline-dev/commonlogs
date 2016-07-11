@@ -1,6 +1,7 @@
 require_relative 'tags'
 require_relative 'util'
 require_relative 'sheller'
+require_relative 'cl_logger'
 
 require 'time'
 
@@ -154,7 +155,6 @@ class Search
       cmd_string = "export LC_ALL=C && #{app} -m 10000 -ir '#{text}' #{file_paths.join(' ')}"
     end
 
-    p "Cmd string = #{cmd_string}"
     return execute_shell_command(cmd_string, with_context)
   end
 

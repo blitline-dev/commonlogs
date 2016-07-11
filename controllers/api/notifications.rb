@@ -20,7 +20,6 @@ module Api
     end
 
     post '' do
-      ap params
       assure_base_params
       data = validate_notification
       notification = Notification.new(params['name'], params['event'])
@@ -47,9 +46,9 @@ module Api
     end
 
     def derive_type_data(data)
-      if params['ntype'] == "webhook"
+      if params['ntype'] == 'webhook'
         webhook_data(data)
-      elsif params['ntype'] == "slack"
+      elsif params['ntype'] == 'slack'
         slack_data(data)
       end
     end
