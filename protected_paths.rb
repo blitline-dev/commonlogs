@@ -7,8 +7,8 @@ class ProtectedPaths < CommonLogsBase
   get '/stats' do
     tags = Tags.list
     stats = Tags.file_stats
-    ap stats
-    variables = {  tags: tags, event_name: params['event_name'], stats: stats }.merge(display_variables)
+    drives = Tags.drive_space
+    variables = {  tags: tags, event_name: params['event_name'], stats: stats, drives: drives }.merge(display_variables)
     slim :stats, locals: variables
   end
 

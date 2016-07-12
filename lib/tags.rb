@@ -14,9 +14,27 @@ class Tags
       full_events_path = full_path + '/events'
       dir_size = `du -hs #{full_path} | awk '{ print $1 }'`.to_s.strip!
       event_size =  `du -hs #{full_events_path} | awk '{ print $1 }'`.to_s.strip!
-      stats[dir] = { dir_size: dir_size, event_size: event_size}
+      stats[dir] = { dir_size: dir_size, event_size: event_size }
     end
     stats
+  end
+
+  def self.drive_space
+    drives = []
+    begin 
+      v = `df -H`
+      v.lines.each do |l|
+        data = l.split(/ {2}+/)
+        output = {}
+        output[:drive] = data[0].strip
+        output[:size] = data[1].strip
+        output[:available] = data[3].strip
+        drives << output
+      end
+    rescue => ex
+      LOGGER.log ex
+    end
+    return drives
   end
 
   def self.list

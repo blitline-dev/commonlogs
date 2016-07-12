@@ -11,6 +11,9 @@ link(rel="stylesheet" href="/stylesheets/stats.css?sss")
     .card-block
       .row.m-a-0
         .col-lg-10.col-sm-12
+          div.btn.btn-info#add-credentials(data-target="#myModal" data-toggle="modal") Show Drive Info
+          br
+          br
           table.table.table-bordered.table-striped.m-b-0
             thead
               tr
@@ -23,3 +26,24 @@ link(rel="stylesheet" href="/stylesheets/stats.css?sss")
                   td #{name}
                   td #{val[:dir_size]}
                   td #{val[:event_size]}
+#myModal.modal.fade role="dialog" 
+  .modal-dialog#drives
+    /! Modal content
+    .modal-content
+      .modal-header.bg-default
+        button.close data-dismiss="modal" type="button" &times;
+        h4.modal-title.primary Drive Info
+      .modal-body
+        .table-responsive
+          .col-6
+            table.table.m-b-0
+              tbody
+                - drives.each do |drive|
+                  tr
+                    td
+                      span
+                      | #{drive[:drive]}
+                    td #{drive[:size]} 
+                    td #{drive[:available]}
+
+
