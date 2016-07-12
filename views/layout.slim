@@ -68,9 +68,17 @@ html lang="en"
                     i.handle
           ul#timer.nav.navbar-nav.navbar-right
             - if tags && tags.length > 0
-              li
+              li.hidden-sm-down
                 a.ripple data-toggle="dropdown" href="javascript:;" 
                   span Log Name (#{name})&nbsp;
+                  span.caret
+                ul.dropdown-menu
+                 - tags.each do |tag|
+                  li
+                    a.group(data-group="#{tag}") #{tag}
+              li.hidden-md-up
+                a.ripple data-toggle="dropdown" href="javascript:;" 
+                  span #{name}&nbsp;
                   span.caret
                 ul.dropdown-menu
                  - tags.each do |tag|
