@@ -4,6 +4,14 @@ require_relative 'common_logs_base'
 # Basic paths with Auth support
 class ProtectedPaths < CommonLogsBase
 
+  get '/stats' do
+    tags = Tags.list
+    stats = Tags.file_stats
+    ap stats
+    variables = {  tags: tags, event_name: params['event_name'], stats: stats }.merge(display_variables)
+    slim :stats, locals: variables
+  end
+
   get '/settings' do
     tags = Tags.list
     settings = Settings.all_settings["settings"]

@@ -5,6 +5,20 @@ EventFiles = Struct.new(:tag, :event_name, :filenames)
 class Tags
   EVENT_FOLDER_NAME = "events".freeze
 
+  def self.file_stats
+    stats = {}
+    stats_event = {}
+    list_of_dirs = list
+    list_of_dirs.each do |dir|
+      full_path = CommonLog::Config.destination_folder + "/" + dir
+      full_events_path = full_path + '/events'
+      dir_size = `du -hs #{full_path} | awk '{ print $1 }'`.to_s.strip!
+      event_size =  `du -hs #{full_events_path} | awk '{ print $1 }'`.to_s.strip!
+      stats[dir] = { dir_size: dir_size, event_size: event_size}
+    end
+    stats
+  end
+
   def self.list
     Dir.entries(CommonLog::Config.destination_folder).select do |f|
       File.directory?(CommonLog::Config.destination_folder + "/" + f) unless f.start_with?(".")

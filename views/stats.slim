@@ -1,0 +1,25 @@
+link(rel="stylesheet" href="/stylesheets/stats.css?sss")
+
+.main-content.hide-search.hide-tail.hide-hours
+  .page-title
+    .title Stats
+    .sub-title Application Level Statistics
+
+  .card.bg-white
+    .card-header 
+      h3 File System
+    .card-block
+      .row.m-a-0
+        .col-lg-10.col-sm-12
+          table.table.table-bordered.table-striped.m-b-0
+            thead
+              tr
+                th Folder
+                th Overall Size
+                th Event Size
+            tbody
+              - stats.each do |name, val|
+                tr
+                  td #{name}
+                  td #{val[:dir_size]}
+                  td #{val[:event_size]}
