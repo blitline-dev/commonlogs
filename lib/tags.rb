@@ -20,9 +20,10 @@ class Tags
   end
 
   def self.list
-    Dir.entries(CommonLog::Config.destination_folder).select do |f|
+    results = Dir.entries(CommonLog::Config.destination_folder).select do |f|
       File.directory?(CommonLog::Config.destination_folder + "/" + f) unless f.start_with?(".")
     end
+    results.sort!
   end
 
   def self.files(tag)
