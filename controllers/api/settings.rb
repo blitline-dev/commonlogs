@@ -6,15 +6,26 @@ module Api
 
     post '' do
       data = map_settings
-      Settings.set("autodelete", data[:autodelete])
-      Settings.set("selflog", data[:selflog])
+      Settings.set("autodelete", data[:autodelete]) unless data[:autodelete].nil?
+      Settings.set("selflog", data[:selflog]) unless data[:selflog].nil?
+      Settings.save
+      data.to_json
+    end
+
+    post 'aws' do
       Settings.set("iam_key", data[:iam_key]) if data[:iam_key]
       Settings.set("iam_secret", data[:iam_secret]) if data[:iam_secret]
       Settings.set("bucket", data[:bucket]) if data[:bucket]
-      Settings.set("location", data[:location])
+      Settings.set("location", data[:location]) 
       Settings.set("key_prefix", data[:key_prefix])
-      Settings.save
-      data.to_json
+    end
+
+    delete 'aws' do
+      Settings.set("iam_key", nil)
+      Settings.set("iam_secret", nil) 
+      Settings.set("bucket", nil)
+      Settings.set("location", nil)
+      Settings.set("key_prefix", nil)
     end
 
     private

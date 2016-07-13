@@ -38,7 +38,7 @@ class CLLogger
 
   def write_to_destination(output_string, prefix)
     prefix ||= ""
-    unless Settings.get('selflog').to_s.casecmp("false") == 0
+    if Settings.get('selflog').to_s.casecmp("true") == 0
       dirname = CommonLog::Config.destination_folder + "/#{@folder_name}"
       assure_folder_exists(dirname)
       file_path = "#{dirname}/" + Util.filename_from_time(Time.now)

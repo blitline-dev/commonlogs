@@ -15,7 +15,9 @@ class ProtectedPaths < CommonLogsBase
   get '/settings' do
     tags = Tags.list
     settings = Settings.all_settings["settings"]
-    variables = {  tags: tags, event_name: params['event_name'], settings: settings }.merge(display_variables)
+    log_life  = ENV['COMMONLOGS_SAVE_HOURS'] || 168
+
+    variables = {  tags: tags, event_name: params['event_name'], settings: settings, log_life: log_life.to_i }.merge(display_variables)
     slim :settings, locals: variables
   end
 

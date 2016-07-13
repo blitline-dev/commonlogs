@@ -3,7 +3,7 @@ require_relative 'config'
 # App level settings
 module Settings
 
-  DEFAULT = "{\"settings\" : {}}".freeze
+  DEFAULT = "{\"settings\" : { \"selflog\" : false }}".freeze
   SETTINGS_FILE_PATH = CommonLog::Config.destination_folder + "/settings.conf"
 
   def self.load_settings
