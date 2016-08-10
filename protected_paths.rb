@@ -105,6 +105,14 @@ class ProtectedPaths < CommonLogsBase
     redirect "/p/event_manager?name=#{name}"
   end
 
+  post '/tag_delete' do
+    puts params.inspect
+    sleep 3
+    tag_name = params['tag']
+    Tags.delete(tag_name)
+    redirect "/p/settings"
+  end
+
   post '/events' do
     event_name = params['event_name']
     search = params['search']

@@ -5,6 +5,13 @@ EventFiles = Struct.new(:tag, :event_name, :filenames)
 class Tags
   EVENT_FOLDER_NAME = "events".freeze
 
+  def self.delete(tag)
+    folder = tag_folder(tag)
+    event_config_manager = EventConfigManager.new(tag)
+    event_config_manager.delete_all_events
+    FileUtils.rm_rf(folder)
+  end
+
   def self.file_stats
     stats = {}
     stats_event = {}

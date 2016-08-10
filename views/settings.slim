@@ -37,6 +37,28 @@ link(rel="stylesheet" href="/stylesheets/settings.css?sss")
                     == input_html
                     label for="selflog"  Send this web app logs to your logs files?
             span#updateSettings.btn.btn-success.pull-right name="updateButton" style="margin-left: 10px;"  Save
+  .card.bg-white
+    .card-header 
+      h3 Logs
+    .card-block.p-a-0
+      .row.m-a-0
+        .x
+          .xtable-responsive
+            table.table
+              thead
+                tr
+                  th <b>Log Name</b>
+                  th <b>Action</b>
+              tbody
+                - tags.each do |tag|
+                  tr
+                    td #{tag}
+                    td
+                      button.btn.btn-xs.btn-danger.confirmDelete type="button" data-toggle="tooltip" title="Delete"
+                        i.glyphicon.glyphicon-trash
+                          form accept-charset="UTF-8" action="/p/tag_delete" method="POST" style="display:inline" 
+                            input#tag_name(type="hidden" name="tag" value="#{tag}")
+                            input(type="hidden" name="name" value="#{tag}")
     / .card-block
     /   .row.m-a-0
     /     .col-lg-10.col-sm-12

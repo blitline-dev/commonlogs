@@ -68,14 +68,23 @@ html lang="en"
                     i.handle
           ul#timer.nav.navbar-nav.navbar-right
             - if tags && tags.length > 0
+              - split_tags = tags.group_by { |x| x.split("@")[0] }.values
               li.hidden-sm-down
                 a.ripple data-toggle="dropdown" href="javascript:;" 
                   span Log Name (#{name})&nbsp;
                   span.caret
                 ul.dropdown-menu
-                 - tags.each do |tag|
-                  li
-                    a.group(data-group="#{tag}") #{tag}
+                  - split_tags.each do |split_tag|
+                    - if split_tag.length > 1
+                      li.dropdown-header 
+                        hr
+                        strong #{split_tag[0].split("@")[0]}
+                      - split_tag.each do |sub|
+                        li
+                          a.group(data-group="#{sub}") &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#{sub.split("@")[1]}
+                    -else 
+                      li
+                        a.group(data-group="#{split_tag[0]}") #{split_tag[0]}
               li.hidden-md-up
                 a.ripple data-toggle="dropdown" href="javascript:;" 
                   span #{name}&nbsp;

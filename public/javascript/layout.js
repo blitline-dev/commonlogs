@@ -175,7 +175,7 @@ $(function() {
 				closeOnConfirm: false,
 			}, function () {
 					$(_this).find('form').submit();
-					swal('Deleted!', 'Your imaginary file has been deleted!', 'success');
+					swal('Deleted!', 'Your item has been deleted!', 'success');
 				});
 			});
 

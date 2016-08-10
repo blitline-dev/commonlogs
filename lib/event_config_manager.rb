@@ -38,6 +38,12 @@ class EventConfigManager
     @name = name
   end
 
+  def delete_all_events
+    events.each do |event|
+      delete!(event)
+    end
+  end
+
   def delete!(event)
     full_folder = full_event_folder(event)
     begin
