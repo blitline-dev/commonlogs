@@ -36,7 +36,7 @@ class Util
   def self.cl_mkdir_p(path)
     begin
       FileUtils.mkdir_p(path)
-      FileUtils.chown_R nil, 'syslog', path
+#      FileUtils.chown_R nil, 'syslog', path
       FileUtils.chmod_R 0770, path, verbose: false
     rescue => ex
       LOGGER.log ex

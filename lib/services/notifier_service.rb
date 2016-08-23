@@ -7,7 +7,7 @@ require 'fileutils'
 require_relative '../config'
 require_relative '../tags'
 require_relative '../event'
-require_relative '../event_config_manager'
+require_relative '../event_config_manager_json'
 
 # ------------------------------------------
 # Service for sending notifications

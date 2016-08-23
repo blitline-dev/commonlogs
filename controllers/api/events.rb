@@ -14,7 +14,7 @@ module Api
         start_timestamp = start_timestamp.to_i if start_timestamp
         end_timestamp = end_timestamp.to_i if end_timestamp
 
-        start_timestamp = Time.now.to_i - (3600 * hours.to_i) if hours
+        start_timestamp = Time.now.utc.to_i - (3600 * hours.to_i) if hours
 
         events = event.event_and_counts(start_timestamp, end_timestamp)
       end
@@ -33,7 +33,7 @@ module Api
       start_timestamp = start_timestamp.to_i if start_timestamp
       end_timestamp = end_timestamp.to_i if end_timestamp
 
-      start_timestamp = Time.now.to_i - (3600 * hours.to_i) if hours
+      start_timestamp = Time.now.utc.to_i - (3600 * hours.to_i) if hours
 
       events = event.event_list_console(params['event_name'], start_timestamp, end_timestamp, page)
 

@@ -12,10 +12,9 @@ class Event
   def initialize(tag)
     fail "Must have a tag for search" unless tag
     @tag = tag
-    @now = Time.now
+    @now = Time.now.utc
     @now_sec = @now.to_i
 
-    @rsyslog_unix_weird_offset = ENV['CLOFFSET'] ? ENV['offset'].to_i : 0 # 1 Full Day in Seconds
     @timeslice = TIME_SLICE_COUNT
   end
 
@@ -24,6 +23,7 @@ class Event
     results = {}
     colors = {}
     event_files = Tags.all_event_files(@tag, Util.hours_ago(start_timestamp))
+    ap event_files
     event_files.each do |file_info|
       name = file_info.event_name
       results[name] = []
@@ -41,11 +41,11 @@ class Event
     results = []
     event_file_names = Tags.events_files_for(@tag, event_name, Util.hours_ago(start_timestamp))
 
-    start = start_timestamp - @rsyslog_unix_weird_offset
-    end_time = end_timestamp - @rsyslog_unix_weird_offset
+    start = start_timestamp
+    end_time = end_timestamp
     event_file_names.each do |filename|
       # Awk for only items past X timestamp
-      cmd_string = "cat #{filename} | awk -v x=#{start} -v y=#{end_time} '$1 > x && $1 < y'"
+      cmd_string = "cat '#{filename}' | awk -v x=#{start} -v y=#{end_time} '$1 > x && $1 < y'"
       cmd_results = execute_shell_command(cmd_string)
       results += cmd_results.map { |r| "#{filename}: #{r}" }
     end
@@ -73,11 +73,11 @@ class Event
   end
 
   def extract_counts(filename, start_timestamp, end_timestamp)
-    results = `cat #{filename} | awk '{ print $1}'`
+    results = `cat '#{filename}' | awk '{ print $1}'`
     time = Util.measure_delta do
       results = results.split("\n")
       results.map! do |row|
-        ut = row.to_i + @rsyslog_unix_weird_offset
+        ut = row.to_i
         val = (ut >= start_timestamp && ut <= end_timestamp) ? ut : nil
         val
       end
@@ -100,6 +100,7 @@ class Event
 
   def clean_timestamps(start_timestamp, end_timestamp)
     fail "Must have start_timestamp" unless start_timestamp
+    ap [start_timestamp, end_timestamp]
     end_timestamp = @now_sec if end_timestamp.nil?
     start_timestamp = end_timestamp - TIME_SLICE_COUNT if end_timestamp - start_timestamp < TIME_SLICE_COUNT
 

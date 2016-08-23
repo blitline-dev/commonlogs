@@ -8,19 +8,18 @@ class Tags
   def self.delete(tag)
     folder = tag_folder(tag)
     event_config_manager = EventConfigManager.new(tag)
-    event_config_manager.delete_all_events
+    event_config_manager.delete!(tag)
     FileUtils.rm_rf(folder)
   end
 
   def self.file_stats
     stats = {}
-    stats_event = {}
     list_of_dirs = list
     list_of_dirs.each do |dir|
       full_path = CommonLog::Config.destination_folder + "/" + dir
       full_events_path = full_path + '/events'
-      dir_size = `du -hs #{full_path} | awk '{ print $1 }'`.to_s.strip!
-      event_size =  `du -hs #{full_events_path} | awk '{ print $1 }'`.to_s.strip!
+      dir_size = `du -hs '#{full_path}' | awk '{ print $1 }'`.to_s.strip!
+      event_size = `du -hs '#{full_events_path}' | awk '{ print $1 }'`.to_s.strip!
       stats[dir] = { dir_size: dir_size, event_size: event_size }
     end
     stats
@@ -28,14 +27,14 @@ class Tags
 
   def self.drive_space
     drives = []
-    begin 
+    begin
       v = `df -H`
       v.lines.each do |l|
         data = l.split(/ {2}+/)
         output = {}
-        output[:drive] = data[0].strip
-        output[:size] = data[1].strip
-        output[:available] = data[3].strip
+        output[:drive] = data[0].to_s.strip
+        output[:size] = data[1].to_s.strip
+        output[:available] = data[3].to_s.strip
         drives << output
       end
     rescue => ex
@@ -70,8 +69,11 @@ class Tags
   # Get list of all possible event files
   def self.events_files_for(tag, event, last_hours)
     possible_filenames = last_hours_filenames(last_hours).map { |f| event_folder(tag, event) + "/" + f }
+    p "Possible"
+    ap possible_filenames
     actual_filenames = event_files(tag, event)
-
+    p "Actual"
+    ap actual_filenames
     final = possible_filenames & actual_filenames
     return final
   end
@@ -91,8 +93,8 @@ class Tags
 
   def self.last_hours_filenames(hours)
     files = []
-    last_file_time = Time.now
-    current_file_time = Time.now - (3600 * hours)
+    last_file_time = Time.now.utc
+    current_file_time = Time.now.utc - (3600 * hours)
 
     while current_file_time < last_file_time
       files << current_file_time.strftime("%Y-%m-%d-%H.log")

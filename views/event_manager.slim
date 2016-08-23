@@ -23,7 +23,7 @@ link(rel="stylesheet" href="/stylesheets/events_manager.css?222f4g8")
 							tr
 								td  #{event["event_name"]}
 								td.hidden-xs #{event["description"]}
-								td.hidden-xs "#{event["search"]}"
+								td.hidden-xs "#{event["search"] || event["find"]}"
 								td.hidden-xs
 									div(style="background-color: #{event["color"]}")&nbsp;
 								td

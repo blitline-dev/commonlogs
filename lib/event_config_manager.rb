@@ -29,11 +29,13 @@ class EventConfigManager
 
   EVENT_FOLDER_NAME = "events".freeze
   SYSLOG_ROOT = CommonLog::Config.destination_folder + "/.config_includes"
+  EVENTS_JSON_ROOT =  CommonLog::Config.destination_folder + "/.events.json"
   TEMPLATE_FOLDER = "rsyslog.tl".freeze
   FILTER_FOLDER = "rsyslog.rl".freeze
 
   def initialize(name)
     assure_syslog_root
+    assure_events_json_root
     fail "Log Group must be specified!" unless name
     @name = name
   end
@@ -136,6 +138,12 @@ class EventConfigManager
 
   def delete_syslog_filter(event)
     FileUtils.rm_rf(filter_filepath(event))
+  end
+
+  def assure_events_json_root
+    filepath = EVENTS_JSON_ROOT
+    data = "{}"
+    File.write(filepath, data) unless File.exist?(filepath)
   end
 
   def assure_events_folderpath

@@ -82,7 +82,6 @@ class ProtectedPaths < CommonLogsBase
       return
     end
     event = EventConfigManager.new(params['name'])
-
     data = event.get_events_preferences(params['name'])
     save_name_cookie(params['name'])
     variables = { name: params['name'], tags: tags, events: data }.merge(display_variables)
@@ -122,7 +121,6 @@ class ProtectedPaths < CommonLogsBase
 
     event_manager = EventConfigManager.new(log_group)
     event_manager.create!(
-      event_name.strip,
       "event_name"  => event_name.strip,
       "color"       => color.strip,
       "search"      => search.strip,

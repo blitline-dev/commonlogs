@@ -16,7 +16,7 @@ require_relative 'lib/event'
 require_relative 'lib/sheller'
 require_relative 'lib/util'
 require_relative 'lib/notification'
-require_relative 'lib/event_config_manager'
+require_relative 'lib/event_config_manager_json'
 
 # ----------------------------------
 # Root app class that all controller

@@ -4,7 +4,7 @@
 # -------------------
 class Cleaner
   def initialize
-    @now = Time.now
+    @now = Time.now.utc
     @log_folder = ENV['COMMONLOGS_ROOT_FOLDER']
     @hours_to_save = ENV['COMMONLOGS_SAVE_HOURS'] || 168
     @hours_to_save = @hours_to_save.to_i
@@ -35,10 +35,10 @@ class Cleaner
       month = parts[1].to_i
       day = parts[2].to_i
       hour = parts[3].to_i
-      return Time.new(year, month, day, hour)
+      return Time.new(year, month, day, hour).utc
     end
 
-    return Time.now
+    return Time.now.utc
   end
 
 end

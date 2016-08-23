@@ -15,9 +15,8 @@ class Search
   def initialize(tag)
     fail "Must have a tag for search" unless tag
     @tag = tag
-    @now = Time.now
+    @now = Time.now.utc
     @now_sec = @now.to_i
-    @rsyslog_unix_weird_offset = ENV['CLOFFSET'] ? ENV['offset'].to_i : 0 # 1 Full Day in Seconds
   end
 
   # Search should do one of two things.
@@ -55,7 +54,7 @@ class Search
   # Remove everything but items between timestamps
   def filter_search_result(data, start_seconds, end_seconds)
     data.reject! do |row|
-      timestamp = row.to_s.split(" ")[0].split(":")[1].to_i + @rsyslog_unix_weird_offset
+      timestamp = row.to_s.split(" ")[0].split(":")[1].to_i
       timestamp.to_i < start_seconds.to_i || timestamp.to_i > end_seconds.to_i
     end
   end
@@ -70,7 +69,7 @@ class Search
   def latest(from_line_prefix = nil)
     latest_file = Tags.files(@tag).sort.last
 
-    cmd_string = "tail -n 1000 #{latest_file}"
+    cmd_string = "tail -n 1000 '#{latest_file}'"
     results = execute_shell_command(cmd_string)
     results = trim_results(results, from_line_prefix)
 
@@ -125,7 +124,7 @@ class Search
   end
 
   def calculate_hours_ago_from_timestamp(timestamp)
-    (Time.now - Time.at(timestamp)) / 3600
+    (Time.now.utc - Time.at(timestamp)) / 3600
   end
 
   def calculate_filename_from_timestamp(timestamp)
@@ -140,7 +139,7 @@ class Search
   end
 
   def execute_search(files, text, with_context = false)
-    file_paths = files.map { |f| Tags.tag_folder(@tag) + "/" + f }
+    file_paths = files.map { |f| Shellwords.shellescape(Tags.tag_folder(@tag) + "/" + f) }
 
     if text.start_with?('/') &&  text.end_with?('/')
       app = "egrep"

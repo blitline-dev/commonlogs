@@ -64,7 +64,7 @@ $(function(){
       	$("#eventName").val(data.event_name);
       	$("#cp").val(data.color);
       	$("#description").val(data.description);
-      	$("#searchWord").val(data.search);
+      	$("#searchWord").val(data.search || data.find);
       	_colorPicker.colorpicker('setValue', data.color);
       	$(".add").click();
       },

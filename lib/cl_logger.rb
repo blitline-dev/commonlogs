@@ -41,7 +41,7 @@ class CLLogger
     if Settings.get('selflog').to_s.casecmp("true") == 0
       dirname = CommonLog::Config.destination_folder + "/#{@folder_name}"
       assure_folder_exists(dirname)
-      file_path = "#{dirname}/" + Util.filename_from_time(Time.now)
+      file_path = "#{dirname}/" + Util.filename_from_time(Time.now.utc)
       format_output_as_syslog(file_path, prefix + output_string)
       prefix = "Logged: "
     end
@@ -52,7 +52,7 @@ class CLLogger
     @counter += 1
     @counter = 0 if @counter > 999_999_999
     output_string.gsub!('\n', ' ')
-    final_string = [Time.now.to_i.to_s, @counter, @ip, @name, output_string].join(" ")
+    final_string = [Time.now.utc.to_i.to_s, @counter, @ip, @name, output_string].join(" ")
     open(file_path, 'a') do |f|
       f.puts final_string
     end

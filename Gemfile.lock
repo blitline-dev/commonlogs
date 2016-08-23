@@ -3,6 +3,7 @@ GEM
   specs:
     awesome_print (1.6.1)
     backports (3.6.8)
+    byebug (9.0.5)
     dalli (2.7.6)
     mini_portile2 (2.0.0)
     multi_json (1.11.2)
@@ -39,6 +40,7 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print
+  byebug
   dalli
   nokogiri
   oj
@@ -49,4 +51,4 @@ DEPENDENCIES
   slim
 
 BUNDLED WITH
-   1.11.2
+   1.12.5
