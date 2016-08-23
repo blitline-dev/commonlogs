@@ -35,8 +35,17 @@ class EventConfigManager
     fail "Log Group must be specified!" unless name
   end
 
+  def delete_all
+    data = load_events
+    return unless data
+    data.delete(@name)
+    save_events(data)
+  end
+
   def delete!(event)
     data = load_events
+    return unless data[@name]
+
     data[@name].delete(event)
     save_events(data)
   end

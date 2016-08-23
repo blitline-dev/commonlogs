@@ -8,7 +8,7 @@ class Tags
   def self.delete(tag)
     folder = tag_folder(tag)
     event_config_manager = EventConfigManager.new(tag)
-    event_config_manager.delete!(tag)
+    event_config_manager.delete_all
     FileUtils.rm_rf(folder)
   end
 
