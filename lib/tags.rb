@@ -69,11 +69,7 @@ class Tags
   # Get list of all possible event files
   def self.events_files_for(tag, event, last_hours)
     possible_filenames = last_hours_filenames(last_hours).map { |f| event_folder(tag, event) + "/" + f }
-    p "Possible"
-    ap possible_filenames
     actual_filenames = event_files(tag, event)
-    p "Actual"
-    ap actual_filenames
     final = possible_filenames & actual_filenames
     return final
   end
