@@ -36,13 +36,12 @@ $(function() {
 
 			if (!parsedData["has_more"]) {
 				_logConsole.clearLoading();
+			}else {
+				_p += 1;
+				search();				
 			}
 		});
 	}
-
-	$(_logConsole).on("loadMore", function() {
-		search();
-	});
 
 	function eventChanged($el) {
 		var name = $el.attr("data-group");

@@ -47,9 +47,12 @@ RUN apt-get update \
 	&& apt-get -y install openssl libreadline6 libreadline6-dev curl git-core zlib1g libsqlite3-dev sqlite3 libxml2-dev libxslt-dev \
         && apt-get -y install libc6-dev ncurses-dev automake libtool subversion awscli
 
-RUN echo "touch73"
+RUN echo "touch74"
 RUN git clone https://github.com/blitline-dev/commonlogs.git
 RUN cd commonlogs && bundle install
+
+RUN echo "touch73"
+RUN cd commonlogs && git pull && bundle install
 
 EXPOSE 4567/tcp
 WORKDIR /commonlogs
