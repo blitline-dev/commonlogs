@@ -51,10 +51,16 @@ class Tags
   end
 
   def self.files(tag)
-    Dir[CommonLog::Config.destination_folder + '/' + tag + '/*.log']
+    result = []
+    tags = tag.split("|")
+    tags.each do |t|
+      result += Dir[CommonLog::Config.destination_folder + '/' + t + '/*.log']
+    end
+    return result
   end
 
   def self.event_files(tag, event)
+    tag = tag.split("|").first
     Dir[event_folder(tag, event) + '/*.log']
   end
 

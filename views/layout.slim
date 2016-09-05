@@ -66,10 +66,15 @@ html lang="en"
                   input#tail-checkbox checked="" type="checkbox" /
                   span
                     i.handle
+          ul.nav.navbar-nav.navbar-left.search-results(style="display: none")
+            li
+              br
+              span(style="color:#fff; padding: 0 10px 0 10px;") Search Results
+
           ul#timer.nav.navbar-nav.navbar-right
             - if tags && tags.length > 0
               - split_tags = tags.group_by { |x| x.split("@")[0] }.values
-              li.hidden-sm-down
+              li.hidden-sm-down.tag-lister
                 a.ripple data-toggle="dropdown" href="javascript:;" 
                   span Log Name (#{name})&nbsp;
                   span.caret
@@ -85,7 +90,7 @@ html lang="en"
                     -else 
                       li
                         a.group(data-group="#{split_tag[0]}") #{split_tag[0]}
-              li.hidden-md-up
+              li.hidden-md-up.tag-lister
                 a.ripple data-toggle="dropdown" href="javascript:;" 
                   span #{name}&nbsp;
                   span.caret

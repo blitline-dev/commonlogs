@@ -4,7 +4,7 @@ $(function() {
 	
 	$("body").scrollTop($("body").height() + 100);
 	$('#myPleaseWait').modal('show');
-
+	$('.search-results').show();
 
 	function search() {
 		_logConsole.setLoading(true);
@@ -19,11 +19,10 @@ $(function() {
 				if ($(".count").text().length > 0) {
 					count = parseInt($(".count").text(), 10);
 				}
-				console.log("count2", count);
-				count += parsedData["count"];
-				console.log("count3", count);
-				console.log("count4", count.toString());
-				$(".count").text("Count: " + count.toString());
+				count += parseInt(parsedData["count"].toString(), 10);
+				if (count.toString() != "NaN") {
+					$(".count").text("Count: " + count.toString());
+				}
 			}
 			_p = parsedData["page"];
 

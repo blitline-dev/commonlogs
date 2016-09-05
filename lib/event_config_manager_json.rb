@@ -51,6 +51,8 @@ class EventConfigManager
   end
 
   def create!(event_data)
+    assure_new_event_folderpath(event_data["event_name"])
+
     data = load_events
     data[@name] = {} if data[@name].nil?
     data[@name][event_data["event_name"]] = map_data(event_data)
@@ -100,6 +102,12 @@ class EventConfigManager
 
   private
 
+  def assure_new_event_folderpath(event_name)
+    assure_events_folder
+    dirname = single_event_folder(event_name)
+    Util.cl_mkdir_p(dirname) unless File.directory?(dirname)
+  end
+
   def assure_events_folder
     dirname = events_folder
     Util.cl_mkdir_p(dirname) unless File.directory?(dirname)
@@ -107,6 +115,10 @@ class EventConfigManager
 
   def events_folder
     CommonLog::Config.destination_folder + '/' + @name + '/' + EVENT_FOLDER_NAME
+  end
+
+  def single_event_folder(event)
+    events_folder + "/" + event
   end
 
   def full_event_folder(event)

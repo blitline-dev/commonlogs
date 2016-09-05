@@ -22,6 +22,9 @@ $(function() {
 		if ($(".main-content.hide-hours-bottom").length > 0) {
 			$(".hours-bottom").hide();
 		}
+		if ($(".main-content.hide-tags").length > 0) {
+			$(".tag-lister").hide();
+		}
 
 		if ($("#q").length > 0 && $("#q").val().length > 0) {
 			$(".live-tail").hide();
@@ -108,13 +111,14 @@ $(function() {
 				showCancelButton: true,
 				confirmButtonColor: '#DD6B55',
 				confirmButtonText: 'Yes, Go!',
-				closeOnConfirm: false,
+				closeOnConfirm: true,
 			}, function () {
 				$('#myPleaseWait').modal('show');
 				debounce = true;
 				return true;
 				// Yes, continue kind 
 			});
+			$('[data-toggle="popover"]').popover();
 		}else {
 			debounce = true;
 			return true;

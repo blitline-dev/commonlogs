@@ -61,6 +61,7 @@ class EventConfigManager
   def create!(event, event_data)
     full_folder = full_event_folder(event)
     Util.cl_mkdir_p full_folder
+    assure_new_event_folderpath(event)
     create_prefs_file(event_data)
     create_syslog_template(event)
     create_syslog_filter(event, event_data["search"])
