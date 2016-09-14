@@ -1,4 +1,8 @@
 $(function() {
+	$.ajaxSetup({
+  	timeout: 120000
+	});
+
 	debounce = false;
 
 	function hideComponents() {

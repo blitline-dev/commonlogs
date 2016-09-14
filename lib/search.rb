@@ -148,6 +148,14 @@ class Search
       app = "fgrep"
     end
 
+    # Force more than 1 files so that fgrep output ALWAYS prepends the filename for search
+    # For example: If more than 1 files are passed to fgrep, the first entry in the result
+    # is always the full path:
+    # /var/log/commonlogs/blitag/2016-09-14-22.log
+    # BUT, if it's only 1 file, it will only return the filename
+    # 2016-09-14-22.log
+    file_paths << "/dev/null" if file_paths.length < 2
+
     if with_context
       cmd_string = "export LC_ALL=C && #{app} -A 100 -B 100 '#{text}' #{file_paths.join(' ')}"
     else
