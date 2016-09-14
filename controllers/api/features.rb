@@ -27,7 +27,7 @@ module Api
       time = params['time'].to_s.strip
 
       search_text = [time, seq, server, name].join(" ")
-      search = Search.new(name)
+      search = Search.new(name, true)
       latest = search.context(file, search_text)
 
       syslog_format(latest, file)

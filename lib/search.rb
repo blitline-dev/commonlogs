@@ -12,11 +12,12 @@ class Search
   # Default search page size is 24 hours
   PAGE_SIZE = 4
 
-  def initialize(tag)
+  def initialize(tag, force_single = false)
     fail "Must have a tag for search" unless tag
     @tag = tag
     @now = Time.now.utc
     @now_sec = @now.to_i
+    @force_single = force_single
   end
 
   # Search should do one of two things.
@@ -155,6 +156,8 @@ class Search
     # BUT, if it's only 1 file, it will only return the filename
     # 2016-09-14-22.log
     file_paths << "/dev/null" if file_paths.length < 2
+
+    file_paths = file_paths.take(1) if @force_single
 
     if with_context
       cmd_string = "export LC_ALL=C && #{app} -A 100 -B 100 '#{text}' #{file_paths.join(' ')}"
