@@ -40,18 +40,19 @@ RUN gem install bundler \
 
 # don't create ".bundle" in all our apps
 ENV BUNDLE_APP_CONFIG $GEM_HOME
+ENV TERM xterm
 
 RUN apt-get update \
 	&& apt-get -y install wget memcached build-essential zlib1g-dev libssl-dev libreadline-dev libyaml-dev \
 	&& apt-get -y install libcurl4-openssl-dev curl git-core python-software-properties  \
 	&& apt-get -y install openssl libreadline6 libreadline6-dev curl git-core zlib1g libsqlite3-dev sqlite3 libxml2-dev libxslt-dev \
-        && apt-get -y install libc6-dev ncurses-dev automake libtool subversion awscli
+        && apt-get -y install libc6-dev ncurses-dev automake libtool subversion awscli nano
 
 RUN echo "touch74"
 RUN git clone https://github.com/blitline-dev/commonlogs.git
 RUN cd commonlogs && bundle install
 
-RUN echo "touch76"
+RUN echo "touch77"
 RUN cd commonlogs && git pull && bundle install
 
 EXPOSE 4567/tcp

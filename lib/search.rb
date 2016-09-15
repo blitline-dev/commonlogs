@@ -49,7 +49,7 @@ class Search
       p += 1
     end
 
-    return { data: data, page: p, has_more: range_end < files.length, count: data.length }
+    return { data: data, page: p - 1, has_more: range_end < files.length, count: data.length }
   end
 
   # Remove everything but items between timestamps
