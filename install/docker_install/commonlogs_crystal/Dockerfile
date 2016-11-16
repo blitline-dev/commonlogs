@@ -6,7 +6,7 @@ RUn apt-get install -y nano
 RUN mkdir '/var/log/commonlogs'
 RUN chown -R :syslog /var/log/commonlogs
 RUN chmod 771 -R /var/log/commonlogs
-ENV CL_VERSION="1.00.14"
+ENV CL_VERSION="1.00.17"
 
 RUN git clone https://github.com/blitline-dev/crystal_syslog_server.git
 RUN cd crystal_syslog_server/src && crystal compile main.cr -o server --release

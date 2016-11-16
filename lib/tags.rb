@@ -28,13 +28,16 @@ class Tags
   def self.drive_space
     drives = []
     begin
+      drives << { drive: "Drive", size: "Size", available: "Avail" }
       v = `df -H`
-      v.lines.each do |l|
+      data = v.lines
+      data.shift
+      data.each do |l|
         data = l.split(/ {2}+/)
         output = {}
-        output[:drive] = data[0].to_s.strip
-        output[:size] = data[1].to_s.strip
-        output[:available] = data[3].to_s.strip
+        output[:drive] = data[0].to_s.strip[0...20]
+        output[:size] = data[1].to_s.strip[0..20]
+        output[:available] = data[3].to_s.strip[0..20]
         drives << output
       end
     rescue => ex

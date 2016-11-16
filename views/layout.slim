@@ -37,6 +37,8 @@ html lang="en"
         commonLog["q"] = "#{q}";
         commonLog["hours"] = "#{hours}";
         commonLog["name"] = "#{name}";
+        commonLog["st"] = "#{params[:st]}"
+        commonLog["et"] = "#{params[:et]}"
 
   body.page-loading
     main role="main" 
@@ -198,8 +200,6 @@ html lang="en"
                     li
                       a.search-hrs href="#" data-val="168"  Last 7 days
                     li.divider
-                    li
-                      a#custom href="#" data-val="" data-target="#customRange" data-toggle="modal" type="button" Custom
           ul(style="padding-left: 0; float: right; padding: 4px 0 0 0;")
             li
               a.count

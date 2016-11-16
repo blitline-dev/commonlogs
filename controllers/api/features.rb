@@ -39,6 +39,7 @@ module Api
       count = 0
       hours = params['hours']
       query = params["q"]
+
       search = Search.new(params['name'])
       p = params["p"] || 0
       latest = []

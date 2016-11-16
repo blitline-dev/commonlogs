@@ -6,7 +6,7 @@ RUN apt-get update && apt-get -y -q install software-properties-common python-so
 RUN add-apt-repository ppa:adiscon/v8-stable
 RUN apt-get update && apt-get -y -q install rsyslog wget nano vim
 
-RUN echo "touch6"
+RUN echo "touch7"
 # Recreate rsyslog.conf
 
 RUN echo "" > /etc/rsyslog.conf

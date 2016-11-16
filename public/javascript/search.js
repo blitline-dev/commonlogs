@@ -6,9 +6,31 @@ $(function() {
 	$('#myPleaseWait').modal('show');
 	$('.search-results').show();
 
+	$("#customGo").on("event:customTimeSet", function(e) {
+  	handleCustomTimeRange();		
+	});
+
+	function handleCustomTimeRange() {
+		var hours = $("#hours").val();
+		var st = hours.split("-")[0];
+		var et = hours.split("-")[1];
+		window.location.assign("/features/search?&name=" + commonLog.name + "&st=" + st + "&et=" + et + "&q=" + commonLog.q);	
+	}
+
 	function search() {
 		_logConsole.setLoading(true);
-		var url = "/features/search?&name=" + commonLog.name + "&q=" + commonLog.q + "&hours=" + commonLog.hours + "&p=" + _p.toString();
+
+		var time;
+		if (hours) {
+			time = "&hours=" + commonLog.hours.toString();
+		}else if(st) {
+			time = "&st=" + commonLog.st.toString();
+			if (et) {
+				time += "&et=" + commonLog.et.toString();
+			}
+		}
+
+		var url = "/features/search?&name=" + commonLog.name + "&q=" + commonLog.q + time + "&p=" + _p.toString();
 
 		$.get(url, function( data ) {
 			$('#myPleaseWait').modal('hide');

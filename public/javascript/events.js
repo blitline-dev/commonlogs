@@ -68,8 +68,6 @@ $(function()	{
 	}
 
 	function drawChart(colors) {
-		console.dir(colors);
-
 		var data	=	{
 			selection: {
 				enabled: true,
@@ -151,7 +149,7 @@ $(function()	{
 			},
 			legend: {
 				item: {
-					onclick: legendClick
+					onclick: legendClick,
 				}
 			},
 			onrendered: chartRendered,
@@ -175,6 +173,12 @@ $(function()	{
 		_page = 0;
 		_eventName = id.split(" ")[0];
 		getEventsList(_eventName);
+	}
+
+	function legendMouseOver(id) {
+		_eventName = id.split(" ")[0];
+
+
 	}
 
 	function getEventsData(url) {
@@ -299,10 +303,16 @@ $(function()	{
 
 
 		var ts = parseInt($(eventObj).attr("data-t"), 10) * 1000;
-		index = timeAsTimeSlice(new Date(ts + 86400000));
+		index = timeAsTimeSlice(new Date(ts));
 		index = Math.floor(index);
-		var tickLocation = $(".tick:eq(" + index.toString() + ")").offset().left;
-		$("#pointer").css({left: tickLocation});
+		var tickItem = $(".tick:eq(" + index.toString() + ")");
+		if (tickItem && tickItem.length > 0) {
+			var tickLocationNode = $(".tick:eq(" + index.toString() + ")");
+			if (tickLocationNode) {
+				tickLocation = tickLocationNode.offset().left;
+				$("#pointer").css({left: tickLocation});
+			}
+		}
 	});
 
 	$('#myPleaseWait').modal('show');

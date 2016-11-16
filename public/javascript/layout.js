@@ -98,7 +98,7 @@ $(function() {
 		}
 	}
 
-	function performSearch() {
+	function performSearch(skipDialog) {
 		if (debounce) {
 			return true;
 		}
@@ -107,7 +107,7 @@ $(function() {
 			return false;
 		}
 
-		if (searchText && searchText.length < 4) {
+		if (searchText && searchText.length < 4 && !skipDialog) {
 			swal({
 				title: 'Are you sure?',
 				text: "'" + searchText + "' is a small search term. It may result in MANY return results. Are you sure you want to query that?",
@@ -119,6 +119,7 @@ $(function() {
 			}, function () {
 				$('#myPleaseWait').modal('show');
 				debounce = true;
+				performSearch(true)
 				return true;
 				// Yes, continue kind 
 			});

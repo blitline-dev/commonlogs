@@ -48,6 +48,12 @@ class EventConfigManager
 
     data[@name].delete(event)
     save_events(data)
+    delete_folder(event)
+  end
+
+  def delete_folder(event)
+    folder = single_event_folder(event)
+    FileUtils.rm_rf(folder) if File.directory?(folder)
   end
 
   def create!(event_data)
@@ -106,6 +112,7 @@ class EventConfigManager
     assure_events_folder
     dirname = single_event_folder(event_name)
     Util.cl_mkdir_p(dirname) unless File.directory?(dirname)
+    dirname
   end
 
   def assure_events_folder
