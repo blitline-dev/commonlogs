@@ -44,6 +44,20 @@ class Util
     end
   end
 
+  def self.parse_filename_into_time(filename)
+    parts = filename.split("-")
+    if parts.length == 4
+      year = parts[0].to_i
+      month = parts[1].to_i
+      day = parts[2].to_i
+      hour = parts[3].to_i
+      return Time.new(year, month, day, hour).utc
+    end
+
+    return Time.now.utc
+  end
+
+
 end
 
 

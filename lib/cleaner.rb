@@ -16,6 +16,7 @@ class Cleaner
 
   def run
     remove_old_files
+    remove_old_cache
   end
 
   private
@@ -25,6 +26,13 @@ class Cleaner
       filename = File.basename(file, ".log")
       file_time = parse_filename_into_time(filename)
       File.delete(file) if file_time < @now - @seconds_offset
+    end
+  end
+
+  def remove_old_cache
+    Dir.glob("#{@log_folder}/**/cache/*").each do |file|
+      last_modified = File.mtime(file)
+      File.delete(file) if last_modified < @now - @seconds_offset
     end
   end
 

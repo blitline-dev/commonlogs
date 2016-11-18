@@ -2,6 +2,7 @@ require_relative 'tags'
 require_relative 'util'
 require_relative 'sheller'
 require_relative 'cl_logger'
+require_relative 'search_cache'
 
 require 'time'
 
@@ -18,6 +19,7 @@ class Search
     @now = Time.now.utc
     @now_sec = @now.to_i
     @force_single = force_single
+    @search_cache = SearchCache.new(@tag)
   end
 
   # Search should do one of two things.
@@ -142,7 +144,10 @@ class Search
   def execute_search(files, text, with_context = false)
     file_paths = files.map { |f| Shellwords.shellescape(Tags.tag_folder(@tag) + "/" + f) }
 
-    if text.start_with?('/') &&  text.end_with?('/')
+    file_paths = @search_cache.check_cache_for_files(file_paths, text)
+    return [] if file_paths.empty?
+
+    if text.start_with?('/') && text.end_with?('/')
       app = "egrep"
       text = text[1..text.length - 2]
     else
@@ -165,7 +170,13 @@ class Search
       cmd_string = "export LC_ALL=C && #{app} -m 10000 -ir '#{text}' #{file_paths.join(' ')}"
     end
 
-    return execute_shell_command(cmd_string, with_context)
+    shell_results = execute_shell_command(cmd_string, with_context)
+
+    if shell_results && shell_results.empty?
+      @search_cache.set_skip_files(file_paths, text)
+    end
+
+    return shell_results
   end
 
   # Drop results before a particular line prefix so they
