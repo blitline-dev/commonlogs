@@ -52,7 +52,7 @@ RUN echo "touch77"
 RUN git clone https://github.com/blitline-dev/commonlogs.git
 RUN cd commonlogs && bundle install
 
-RUN echo "touch78"
+RUN echo "touch79"
 RUN cd commonlogs && git pull && bundle install
 
 EXPOSE 4567/tcp

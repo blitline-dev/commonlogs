@@ -17,6 +17,13 @@ use Rack::Deflater
 
 LOGGER.log("Starting App #{Time.now.utc.to_s}")
 
+LOGGER.log("Starting memcached")
+begin
+  `service memcached start`
+rescue => ex
+  LOGGER.log("Skipping memcached")
+end
+
 Thread.new do
   begin
     CleanerService.start
