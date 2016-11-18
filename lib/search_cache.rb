@@ -25,6 +25,9 @@ class SearchCache
   end
 
   def set_skip_files(full_filepaths, text)
+    # Don't skip current active file
+    full_filepaths.delete_if { |file| File.basename(file) == Util.get_active_filename }
+
     cache_key = Base64.urlsafe_encode64(text)
     skip_files = get_skip_files(cache_key)
     skip_files += full_filepaths

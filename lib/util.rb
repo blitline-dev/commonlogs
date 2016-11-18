@@ -57,6 +57,11 @@ class Util
     return Time.now.utc
   end
 
+  def self.get_active_filename
+    Time.now.utc.strftime("%Y-%m-%d-%H.log")
+  end
+
+
 
 end
 
