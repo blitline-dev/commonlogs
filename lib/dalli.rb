@@ -1,10 +1,12 @@
+require 'dalli'
+
 module CommonLogs
   class Dalli
     def initialize
       begin
-        @memcached = Dalli::Client.new('localhost:11211', compress: false, expires_in: 86_400)
+        @memcached = ::Dalli::Client.new('localhost:11211', compress: false, expires_in: 86_400)
       rescue => ex
-        puts "Failed to initialize Dalli #{ex.message}"
+        puts "! Failed to initialize Dalli #{ex.message}"
         @memcached = nil
       end
     end
