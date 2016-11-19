@@ -48,13 +48,13 @@ RUN apt-get update \
 	&& apt-get -y install openssl libreadline6 libreadline6-dev curl git-core zlib1g libsqlite3-dev sqlite3 libxml2-dev libxslt-dev \
         && apt-get -y install libc6-dev ncurses-dev automake libtool subversion awscli nano
 # Increase memcache size
-RUN sed -i 's/-m 64/-m 256/g' /etc/memcached.conf
+RUN sed -i 's/-m 64/-m 512/g' /etc/memcached.conf
 
 RUN echo "touch77"
 RUN git clone https://github.com/blitline-dev/commonlogs.git
 RUN cd commonlogs && bundle install
 
-ENV cl_version="0.00.13"
+ENV CL_VERSION "0.00.14"
 RUN cd commonlogs && git pull && bundle install
 
 EXPOSE 4567/tcp

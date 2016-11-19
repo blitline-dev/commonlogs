@@ -88,25 +88,22 @@ class Event
       end
     end
     results.compact!
-    LOGGER.log  "Delta extract_counts = #{time}"
+    LOGGER.log "Delta extract_counts = #{time}"
     return results
   end
 
   def get_from_cache(filename)
-    if filename == Util.get_active_filename
-      puts "Skipping #{filename}"
-    end
+    return nil if File.basename(filename) == Util.get_active_filename
     cache_key = @tag + filename
     hit = @memcached.get(cache_key)
-    LOGGER.log "Hit! #{filename}" if hit
-    LOGGER.log "Miss! #{filename}" unless hit
     return hit
   end
 
   def set_cache(filename, data)
+    return nil if File.basename(filename) == Util.get_active_filename
+
     begin
       cache_key = @tag + filename
-      LOGGER.log("Setting #{cache_key} #{data.size}")
       @memcached.set(cache_key, data)
     rescue => ex
       LOGGER.log ex
