@@ -93,8 +93,14 @@ class Event
   end
 
   def get_from_cache(filename)
+    if filename == Util.get_active_filename
+      puts "Skipping #{filename}"
+    end
     cache_key = @tag + filename
-    @memcached.get(cache_key)
+    hit = @memcached.get(cache_key)
+    LOGGER.log "Hit! #{filename}" if hit
+    LOGGER.log "Miss! #{filename}" unless hit
+    return hit
   end
 
   def set_cache(filename, data)
