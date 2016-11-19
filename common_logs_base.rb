@@ -29,8 +29,10 @@ class CommonLogsBase < Sinatra::Base
   set :show_exceptions, false
   # Listen to all non-localhost requests
   set :timeout, 60
-  configure { set :server, :puma }
-  @memcached = CommonLogs::Dalli.new
+  configure do 
+    set :server, :puma
+    set :memcached, CommonLogs::Dalli.new
+  end
 
   error do
     LOGGER.log "Sinatra Error: " + env['sinatra.error'].message
