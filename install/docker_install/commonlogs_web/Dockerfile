@@ -54,7 +54,7 @@ RUN echo "touch77"
 RUN git clone https://github.com/blitline-dev/commonlogs.git
 RUN cd commonlogs && bundle install
 
-RUN echo "touch80"
+ENV cl_version="0.00.08"
 RUN cd commonlogs && git pull && bundle install
 
 EXPOSE 4567/tcp

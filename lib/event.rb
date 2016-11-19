@@ -74,7 +74,7 @@ class Event
   end
 
   def extract_counts(filename, start_timestamp, end_timestamp)
-    results = get_from_cache
+    results = get_from_cache(filename)
     unless results
       results = `cat '#{filename}' | awk '{ print $1}'`
       set_cache(filename, results)
