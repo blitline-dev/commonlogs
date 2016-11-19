@@ -106,6 +106,7 @@ class Event
   def set_cache(filename, data)
     begin
       cache_key = @tag + filename
+      LOGGER.log("Setting #{cache_key} #{data}")
       @memcached.set(cache_key, data)
     rescue => ex
       LOGGER.log ex

@@ -11,11 +11,13 @@ module CommonLogs
 
     def set(key, data)
       return nil unless @memcached
+      puts "Setting #{key}"
       @memcached.set(key, data)
     end
 
     def get(key)
       return nil unless @memcached
+      puts "Getting #{key}"
       @memcached.get(key)
     end
   end
