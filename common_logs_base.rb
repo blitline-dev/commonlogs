@@ -9,12 +9,14 @@ require 'slim'
 require 'awesome_print'
 require 'sinatra/content_for'
 require 'sinatra/cookies'
+require 'dalli'
 
 require_relative 'lib/tags'
 require_relative 'lib/search'
 require_relative 'lib/event'
 require_relative 'lib/sheller'
 require_relative 'lib/util'
+require_relative 'lib/dalli'
 require_relative 'lib/notification'
 require_relative 'lib/event_config_manager_json'
 
@@ -28,6 +30,7 @@ class CommonLogsBase < Sinatra::Base
   # Listen to all non-localhost requests
   set :timeout, 60
   configure { set :server, :puma }
+  @memcached = CommonLogs::Dalli.new
 
   error do
     LOGGER.log "Sinatra Error: " + env['sinatra.error'].message

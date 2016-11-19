@@ -4,7 +4,7 @@ module Api
   # -------------------------------
   class EventController < CommonLogsBase
     get '/event_counts' do
-      event = Event.new(params['name'])
+      event = Event.new(params['name'], @memcached )
       events = nil
       time = Util.measure_delta do
         start_timestamp = params['st']
@@ -22,7 +22,7 @@ module Api
     end
 
     get '/event_list' do
-      event = Event.new(params['name'])
+      event = Event.new(params['name'], @memcached)
       start_timestamp = params['st']
       end_timestamp = params['et']
       hours = params['hours']

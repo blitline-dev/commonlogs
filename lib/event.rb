@@ -9,13 +9,14 @@ class Event
 
   TIME_SLICE_COUNT = 180
 
-  def initialize(tag)
+  def initialize(tag, memcached)
     fail "Must have a tag for search" unless tag
     @tag = tag
     @now = Time.now.utc
     @now_sec = @now.to_i
 
     @timeslice = TIME_SLICE_COUNT
+    @memcached = memcached
   end
 
   def event_and_counts(start_timestamp, end_timestamp)
@@ -73,7 +74,11 @@ class Event
   end
 
   def extract_counts(filename, start_timestamp, end_timestamp)
-    results = `cat '#{filename}' | awk '{ print $1}'`
+    results = get_from_cache
+    unless results
+      results = `cat '#{filename}' | awk '{ print $1}'`
+      set_cache(filename, results)
+    end
     time = Util.measure_delta do
       results = results.split("\n")
       results.map! do |row|
@@ -86,6 +91,21 @@ class Event
     LOGGER.log  "Delta extract_counts = #{time}"
     return results
   end
+
+  def get_from_cache(filename)
+    cache_key = @tag + filename
+    @memcached.get(cache_key)
+  end
+
+  def set_cache(filename, data)
+    begin
+      cache_key = @tag + filename
+      @memcached.set(cache_key, data)
+    rescue => ex
+      LOGGER.log ex
+    end
+  end
+
 
   # Extract counts of events
   def counts_from_events(events, start_timestamp, end_timestamp)
