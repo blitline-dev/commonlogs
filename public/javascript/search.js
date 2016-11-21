@@ -14,7 +14,7 @@ $(function() {
 		var hours = $("#hours").val();
 		var st = hours.split("-")[0];
 		var et = hours.split("-")[1];
-		window.location.assign("/features/search?&name=" + commonLog.name + "&st=" + st + "&et=" + et + "&q=" + commonLog.q);	
+		window.location.assign("/features/search?&name=" + encodeURIComponent(commonLog.name) + "&st=" + st + "&et=" + et + "&q=" + commonLog.q);	
 	}
 
 	function search() {
@@ -30,7 +30,7 @@ $(function() {
 			}
 		}
 
-		var url = "/features/search?&name=" + commonLog.name + "&q=" + commonLog.q + time + "&p=" + _p.toString();
+		var url = "/features/search?&name=" + encodeURIComponent(commonLog.name) + "&q=" + encodeURIComponent(commonLog.q) + time + "&p=" + _p.toString();
 
 		$.get(url, function( data ) {
 			$('#myPleaseWait').modal('hide');
@@ -66,7 +66,7 @@ $(function() {
 
 	function eventChanged($el) {
 		var name = $el.attr("data-group");
-		var url = "li_home?name=" + name + "&hours=" + commonLog.hours.toString() + "&q=" + commonLog.q;
+		var url = "li_home?name=" + name + "&hours=" + commonLog.hours.toString() + "&q=" + encodeURIComponent(commonLog.q);
 		window.location = url;
 	}
 

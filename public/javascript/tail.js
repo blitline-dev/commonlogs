@@ -43,7 +43,7 @@ $(function() {
 		var dataT = $lastLine.attr("data-t");
 		var dataR = $lastLine.attr("data-r");
 
-		var url = "/features/tail?&name=" + commonLog.name;
+		var url = "/features/tail?&name=" + encodeURIComponent(commonLog.name);
 
 		if (dataT && dataR) {
 			url += "&last_prefix=" + dataT + " " + dataR;
@@ -113,7 +113,7 @@ $(function() {
 
 	function eventChanged($el) {
 		var name = $el.attr("data-group");
-		var url = "li_home?name=" + name + "&hours=" + commonLog.hours.toString();
+		var url = "li_home?name=" + encodeURIComponent(name) + "&hours=" + commonLog.hours.toString();
 		window.location = url;
 	}
 

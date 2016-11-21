@@ -3,7 +3,7 @@ $(function(){
   function loadData() {
     $.ajax({
       method: "GET",
-      url: "/notifications?name=" + commonLog.name + "&event=" + commonLog.eventName,
+      url: "/notifications?name=" + encodeURIComponent(commonLog.name) + "&event=" + encodeURIComponent(commonLog.eventName),
       success: function(data) {
         console.dir(data);
         if (data.ntype == "webhook") {

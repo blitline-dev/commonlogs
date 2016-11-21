@@ -15,7 +15,7 @@ $(function()	{
 
 	function eventChanged($el) {
 		var name = $el.attr("data-group");
-		var url = "events?name=" + name + "&hours=" + commonLog.hours.toString();
+		var url = "events?name=" + encodeURIComponent(name) + "&hours=" + commonLog.hours.toString();
 		window.location = url;
 	}
 
@@ -212,7 +212,7 @@ $(function()	{
 		var st = Utils.getParameterByName("st");
 		var et = Utils.getParameterByName("et");
 
-		var url = "/events/event_list?name=" + commonLog.name + "&event_name=" + eventName + "&page=" + _page;
+		var url = "/events/event_list?name=" + encodeURIComponent(commonLog.name) + "&event_name=" + encodeURIComponent(eventName) + "&page=" + _page;
 
 
 		if (!_customRange) {
@@ -255,7 +255,7 @@ $(function()	{
 		var hours = $("#hours").val();
 		var st = hours.split("-")[0];
 		var et = hours.split("-")[1];
-		window.location.assign("events?name=" + commonLog.name + "&st=" + st + "&et=" + et);
+		window.location.assign("events?name=" + encodeURIComponent(commonLog.name) + "&st=" + st + "&et=" + et);
 	}
 
 	// Load data after page loads
@@ -279,7 +279,7 @@ $(function()	{
 	$(".hrs").click(function() {
 		var $item = $(this);
 		var hours = $item.attr("data-val");
-		window.location.assign("events?name=" + commonLog.name + "&hours=" + hours);
+		window.location.assign("events?name=" + encodeURIComponent(commonLog.name) + "&hours=" + hours);
 	});
 
 	$(".group").click(function() {
