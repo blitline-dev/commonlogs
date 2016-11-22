@@ -76,7 +76,7 @@ class Search
     begin
       if latest_file && File.size(latest_file) == 0
         puts "guess and go"
-        cmd_string = "cd #{Tags.tag_folder(@tag)} && tail -n 1000 $(ls -tp | grep -v /$ | head -2)"
+        cmd_string = "cd #{Tags.tag_folder(@tag)} && tail -n 1000 $(ls -tp | grep -v /$ | head -2) | grep ^[0-9]"
       end
     rescue => ex
       puts "Failed to get last tailable file #{ex.message}"
