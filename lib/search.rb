@@ -70,9 +70,18 @@ class Search
 
   # Latest is just the 'tail' functionality
   def latest(from_line_prefix = nil)
-    latest_file = Tags.files(@tag).sort.last
+    latest_file = Tags.files(@tag).sort.delete_if(&:empty?).last
 
     cmd_string = "tail -n 1000 '#{latest_file}'"
+    begin
+      if latest_file && File.size(latest_file) == 0
+        puts "guess and go"
+        cmd_string = "cd #{Tags.tag_folder(@tag)} && tail -n 1000 $(ls -tp | grep -v /$ | head -2)"
+      end
+    rescue => ex
+      puts "Failed to get last tailable file #{ex.message}"
+    end
+
     results = execute_shell_command(cmd_string)
     results = trim_results(results, from_line_prefix)
 
