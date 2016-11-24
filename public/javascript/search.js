@@ -29,8 +29,8 @@ $(function() {
 				time += "&et=" + commonLog.et.toString();
 			}
 		}
-
-		var url = "/features/search?&name=" + encodeURIComponent(commonLog.name) + "&q=" + encodeURIComponent(commonLog.q) + time + "&p=" + _p.toString();
+		var base64 = window.btoa(commonLog.q);
+		var url = "/features/search?&name=" + encodeURIComponent(commonLog.name) + "&q=" + base64 + time + "&p=" + _p.toString();
 
 		$.get(url, function( data ) {
 			$('#myPleaseWait').modal('hide');

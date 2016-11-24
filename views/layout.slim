@@ -34,7 +34,7 @@ html lang="en"
     script
       | 
         var commonLog = {};
-        commonLog["q"] = "#{q}";
+        commonLog["q"] = "#{{q.to_s.gsub('"',"\\\"")}}";
         commonLog["hours"] = "#{hours}";
         commonLog["name"] = "#{name}";
         commonLog["st"] = "#{params[:st]}"
