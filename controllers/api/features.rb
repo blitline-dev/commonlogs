@@ -38,7 +38,7 @@ module Api
       request.env['HTTP_ACCEPT_ENCODING'] = 'gzip'
       count = 0
       hours = params['hours']
-      query = Base64.decode64(params["q"])
+      query = Base64.urlsafe_decode64(params["q"])
 
       search = Search.new(params['name'])
       p = params["p"] || 0

@@ -29,7 +29,7 @@ $(function() {
 				time += "&et=" + commonLog.et.toString();
 			}
 		}
-		var base64 = window.btoa(commonLog.q);
+		var base64 = Utils.urlSafeBase64Encode(commonLog.q);
 		var url = "/features/search?&name=" + encodeURIComponent(commonLog.name) + "&q=" + base64 + time + "&p=" + _p.toString();
 
 		$.get(url, function( data ) {

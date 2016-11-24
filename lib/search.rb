@@ -173,6 +173,7 @@ class Search
 
     file_paths = file_paths.take(1) if @force_single
 
+    text = text.gsub(/'/) { |m| "'" + "\\" + "''" }
     if with_context
       cmd_string = "export LC_ALL=C && #{app} -A 100 -B 100 '#{text}' #{file_paths.join(' ')}"
     else

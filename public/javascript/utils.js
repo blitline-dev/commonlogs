@@ -1,5 +1,13 @@
 
 Utils = {
+	urlSafeBase64Encode: function(text) {
+		if (!text) {
+			return "";
+		}
+		var reg64 = window.btoa(text);
+		var urlSafe64 = reg64.replace("+","-").replace('/','_');
+		return urlSafe64;
+	},
 	formatDate: function(date, resolution_hours) {
 		var hours = date.getHours();
 		var minutes = date.getMinutes();
