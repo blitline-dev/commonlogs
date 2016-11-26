@@ -1,6 +1,6 @@
 $(function()	{
 	var	_VIEWSIZE = 180;
-	var _chartData = { "columns" : [], "maxY" : 0};
+	var _chartData = { "columns" : [], "maxY" : 0, "id_keys" : {} };
 	var _logConsole = new LogConsole();
 	var _startTime;
 	var _slice;
@@ -28,6 +28,9 @@ $(function()	{
 		for (var k=0; k<keys.length; k++) {
 			var sum = Utils.sumValues(data[keys[k]]);
 			var max = Utils.maxValue(data[keys[k]]);
+
+			_chartData.id_keys[k] = { "maxY" : max };
+
 			if (max > maxAll) {
 				maxAll = max;
 			}
@@ -41,6 +44,7 @@ $(function()	{
 			}
 		}
 		_chartData.maxY = maxAll;
+
 	}
 
 	function timeSliceAsTime(timeSliceIndex) {
@@ -170,11 +174,15 @@ $(function()	{
 	    chart.show();
 	    _logConsole.clear();
 	    _legendSelected = null;
+	    chart.max( { "y" : _chartData.maxY });
+	    chart.flush();
 	    return;
 		}else {
 	    chart.hide();
 	    chart.show(id);
 	    chart.legend.show();
+			chart.max( { "y" : _chartData.id_keys[k].maxY });
+			chart.flush();
 		}
 
 		$('#myPleaseWait').modal('show');
