@@ -29,7 +29,7 @@ $(function()	{
 			var sum = Utils.sumValues(data[keys[k]]);
 			var max = Utils.maxValue(data[keys[k]]);
 
-			_chartData.id_keys[k] = { "maxY" : max };
+			_chartData.id_keys[keys[k]] = { "maxY" : max };
 
 			if (max > maxAll) {
 				maxAll = max;
