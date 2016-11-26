@@ -175,14 +175,15 @@ $(function()	{
 	    _logConsole.clear();
 	    _legendSelected = null;
 	    chart.max( { "y" : _chartData.maxY });
-	    chart.flush();
+	    setTimeout(chart.flush, 300);
 	    return;
 		}else {
 	    chart.hide();
 	    chart.show(id);
 	    chart.legend.show();
 			chart.axis.max( { "y" : _chartData.id_keys[id.split(" ")[0]].maxY });
-			chart.flush();
+	    setTimeout(chart.flush, 300);
+			chart.resize();
 		}
 
 		$('#myPleaseWait').modal('show');
