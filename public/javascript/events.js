@@ -167,6 +167,7 @@ $(function()	{
 	function legendClick(chart, id) {
     chart.hide();
     chart.show(id);
+    chart.legend.show();
 		$('#myPleaseWait').modal('show');
 		_logConsole.clear();
 		resetPointer();
