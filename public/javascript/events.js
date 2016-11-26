@@ -78,8 +78,6 @@ $(function()	{
 				var id = e.id;
 				indexClicked(index, id);
 			},
-			onselected: function(e) {
-			},
 			type: 'spline',
 			color: function (color, d) {
             	// d will be 'id' when called for legends
@@ -173,12 +171,6 @@ $(function()	{
 		_page = 0;
 		_eventName = id.split(" ")[0];
 		getEventsList(_eventName);
-	}
-
-	function legendMouseOver(id) {
-		_eventName = id.split(" ")[0];
-
-
 	}
 
 	function getEventsData(url) {
