@@ -184,7 +184,7 @@ $(function()	{
 	    chart.hide();
 	    chart.show(id);
 	    chart.legend.show();
-			chart.axis.max( { "y" : _chartData.id_keys[id.split(" ")[0]].maxY });
+			chart.axis.max( { "y" : (_chartData.id_keys[id.split(" ")[0]].maxY) * 1.20 });
 	    setTimeout(function() {
 				chart.flush();	    
 		    chart.resize();
