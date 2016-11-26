@@ -7,7 +7,8 @@ $(function()	{
 	var _eventName;
 	var _page = 0;
 	var _customRange = null;
-	
+	var _legendSelected = null;
+
 	function resetPointer() {
 		$("#pointer").hide();
 		$("#pointer").css({ left: -100});
@@ -165,15 +166,25 @@ $(function()	{
 	}
 
 	function legendClick(chart, id) {
-    chart.hide();
-    chart.show(id);
-    chart.legend.show();
+		if (_legendSelected == id) {
+	    chart.show();
+	    _logConsole.clear();
+	    _legendSelected = null;
+	    return;
+		}else {
+	    chart.hide();
+	    chart.show(id);
+	    chart.legend.show();
+		}
+
 		$('#myPleaseWait').modal('show');
 		_logConsole.clear();
 		resetPointer();
 		_page = 0;
 		_eventName = id.split(" ")[0];
 		getEventsList(_eventName);
+		_legendSelected = id;
+
 	}
 
 	function getEventsData(url) {
