@@ -147,7 +147,7 @@ $(function()	{
 			},
 			legend: {
 				item: {
-					onclick: legendClick,
+					onclick: function(id) { legendClick(chart, id) },
 				}
 			},
 			onrendered: chartRendered,
@@ -164,7 +164,9 @@ $(function()	{
 		// Chart Rendered Event
 	}
 
-	function legendClick(id) {
+	function legendClick(chart, id) {
+    chart.hide();
+    chart.show(id);
 		$('#myPleaseWait').modal('show');
 		_logConsole.clear();
 		resetPointer();
