@@ -12,7 +12,7 @@ module Sheller
       output = stdout.read
       output_error = stderr.read
       handle_output_error(output_error)
-      results = parse_results(output, with_context)
+      results = parse_results(output)
     end
     end_time = Time.now.to_f
     LOGGER.log "Finished after: #{end_time - start_time} seconds"
@@ -27,7 +27,7 @@ module Sheller
     end
   end
 
-  def parse_results(results, _wait_thrh_context)
+  def parse_results(results)
     rows = []
     begin
       rows = results.gsub("\n--\n", "").split(/\r?\n|\r/)

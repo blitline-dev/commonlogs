@@ -25,6 +25,26 @@ link(rel="stylesheet" href="/stylesheets/stats.css?sss")
                   td #{name}
                   td #{val[:dir_size]}
                   td #{val[:event_size]}
+/* -------------- Hosts --------------------------------*/
+.main-content.hide-search.hide-tail.hide-hours.hide-tags
+  .card.bg-white
+    .card-header 
+      h3 Recent Hosts Reporting
+    .card-block
+      .row.m-a-0
+        .col-lg-10.col-sm-12
+          table.table.table-bordered.table-striped.m-b-0
+            thead
+              tr
+                th Host
+                th Tag
+                th Last Updated
+            tbody
+              - host_data.each do |host_struct|
+                tr
+                  td #{host_struct.host}
+                  td #{host_struct.tag}
+                  td #{(Time.now.to_i - host_struct.timestamp.to_i) / 60} minutes
 #myModal.modal.fade role="dialog" 
   .modal-dialog#drives
     /! Modal content

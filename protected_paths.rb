@@ -1,6 +1,5 @@
 require_relative 'common_logs_base'
 
-
 # Basic paths with Auth support
 class ProtectedPaths < CommonLogsBase
 
@@ -8,7 +7,8 @@ class ProtectedPaths < CommonLogsBase
     tags = Tags.list
     stats = Tags.file_stats
     drives = Tags.drive_space
-    variables = {  tags: tags, event_name: params['event_name'], stats: stats, drives: drives }.merge(display_variables)
+    host_data = Hosts.recent_data
+    variables = { tags: tags, event_name: params['event_name'], stats: stats, drives: drives, host_data: host_data }.merge(display_variables)
     slim :stats, locals: variables
   end
 

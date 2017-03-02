@@ -37,7 +37,7 @@ class Util
     begin
       FileUtils.mkdir_p(path)
 #      FileUtils.chown_R nil, 'syslog', path
-      FileUtils.chmod_R 0770, path, verbose: false
+      FileUtils.chmod_R "u=wrx", path, verbose: false
     rescue => ex
       LOGGER.log ex
       puts "Failed to create and set perms on folder #{ex.message}"

@@ -12,6 +12,7 @@ require 'sinatra/cookies'
 require 'dalli'
 
 require_relative 'lib/tags'
+require_relative 'lib/hosts'
 require_relative 'lib/search'
 require_relative 'lib/event'
 require_relative 'lib/sheller'
