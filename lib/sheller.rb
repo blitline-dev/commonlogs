@@ -4,7 +4,15 @@ require 'open3'
 module Sheller
   MAX_LIST_SIZE = 50_000
 
-  def execute_shell_command(cmd_string, with_context = false)
+  def raw_shell(cmd_string)
+    output = ""
+    Open3.popen3(cmd_string) do |_stdin, stdout, _stderr, _wait_thr|
+      output = stdout.read
+    end
+    return output
+  end
+
+  def execute_shell_command(cmd_string)
     results = nil
     start_time = Time.now.to_f
     LOGGER.log "Start cmd '#{cmd_string}'"

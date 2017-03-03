@@ -64,8 +64,8 @@ class Search
 
   # Context just searches for the explicit line within a particular
   # file.
-  def context(filename, search_text)
-    return execute_search([filename], search_text, true)
+  def context(filename, search_text, host)
+    return execute_search([filename], search_text, true, host)
   end
 
   # Latest is just the 'tail' functionality
@@ -150,7 +150,7 @@ class Search
     return data
   end
 
-  def execute_search(files, text, with_context = false)
+  def execute_search(files, text, with_context = false, host = nil)
     file_paths = files.map { |f| Shellwords.shellescape(Tags.tag_folder(@tag) + "/" + f) }
 
     file_paths = @search_cache.check_cache_for_files(file_paths, text)
@@ -175,18 +175,35 @@ class Search
 
     text = text.gsub(/'/) { |m| "'" + "\\" + "''" }
     if with_context
-      cmd_string = "export LC_ALL=C && #{app} -A 100 -B 100 '#{text}' #{file_paths.join(' ')}"
+#      cmd_string = "export LC_ALL=C && #{app} -A 100 -B 100 '#{text}' #{file_paths.join(' ')}"
+      cmd_string = find_context_with_host(text, file_paths, host)
     else
       cmd_string = "export LC_ALL=C && #{app} -m 10000 -ir '#{text}' #{file_paths.join(' ')}"
     end
 
-    shell_results = execute_shell_command(cmd_string, with_context)
+    shell_results = execute_shell_command(cmd_string)
 
     if shell_results && shell_results.empty?
       @search_cache.set_skip_files(file_paths, text)
     end
 
     return shell_results
+  end
+
+  def find_context_with_host(text, file_paths, host)
+      regex = "[0-9]* [0-9]* #{host}"
+      buffer = 2000
+      count = 0
+      tries = 0
+      puts "Finding with context..."
+      while tries < 4 && count < 400
+        cmd_string = "export LC_ALL=C && fgrep -B #{buffer} -A 1000 '#{text}' #{file_paths.join(' ')} | egrep -c '#{regex}'"
+        count = raw_shell(cmd_string).to_i
+        buffer += 3000
+        tries += 1
+      end
+      cmd_string = "export LC_ALL=C && fgrep -B #{buffer} -A 1000 '#{text}' #{file_paths.join(' ')} | egrep '#{regex}'"
+      return cmd_string
   end
 
   # Drop results before a particular line prefix so they

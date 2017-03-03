@@ -28,7 +28,7 @@ module Api
 
       search_text = [time, seq, server, name].join(" ")
       search = Search.new(name, true)
-      latest = search.context(file, search_text)
+      latest = search.context(file, search_text, server)
 
       syslog_format(latest, file)
       latest.to_json
