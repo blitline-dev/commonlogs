@@ -66,6 +66,9 @@ class CommonLogsBase < Sinatra::Base
     end
 
     def proper_cookies?
+      puts "---" * 10
+      puts request.cookies.inspect
+      puts "---"
       return ENV["CL_COOKIE"] && request.cookies["clac"] == ENV["CL_COOKIE"]
     end
   end
