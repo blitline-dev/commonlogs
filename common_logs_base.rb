@@ -50,8 +50,8 @@ class CommonLogsBase < Sinatra::Base
     end
 
     def authorized?
-      return true if ENV["CL_BASIC_AUTH_BYPASS"].to_s.casecmp("true") == 0
       return true if proper_cookies?
+      return true if ENV["CL_BASIC_AUTH_BYPASS"].to_s.casecmp("true") == 0
       halt_if_no_env
       return check_auth
     end
