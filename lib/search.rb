@@ -191,19 +191,23 @@ class Search
   end
 
   def find_context_with_host(text, file_paths, host)
-      regex = "[0-9]* [0-9]* #{host}"
-      buffer = 2000
-      count = 0
-      tries = 0
-      puts "Finding with context..."
-      while tries < 4 && count < 400
-        cmd_string = "export LC_ALL=C && fgrep -B #{buffer} -A 1000 '#{text}' #{file_paths.join(' ')} | egrep -c '#{regex}'"
-        count = raw_shell(cmd_string).to_i
-        buffer += 3000
-        tries += 1
-      end
-      cmd_string = "export LC_ALL=C && fgrep -B #{buffer} -A 1000 '#{text}' #{file_paths.join(' ')} | egrep '#{regex}'"
-      return cmd_string
+    # Context tries progressively larger search areas to try to grab at least
+    # 400 lines of context.
+    # TODO: Cross file boundaries.
+    # TODO: Try to balance before and after line counts
+    regex = "[0-9]* [0-9]* #{host}"
+    buffer = 2000
+    count = 0
+    tries = 0
+    puts "Finding with context..."
+    while tries < 4 && count < 400
+      cmd_string = "export LC_ALL=C && fgrep -B #{buffer} -A 1000 '#{text}' #{file_paths.join(' ')} | egrep -c '#{regex}'"
+      count = raw_shell(cmd_string).to_i
+      buffer += 3000
+      tries += 1
+    end
+    cmd_string = "export LC_ALL=C && fgrep -B #{buffer} -A 1000 '#{text}' #{file_paths.join(' ')} | egrep '#{regex}'"
+    return cmd_string
   end
 
   # Drop results before a particular line prefix so they

@@ -10,7 +10,7 @@ RUN chmod 771 -R /var/log/commonlogs
 RUN sudo apt-get update
 RUN sudo apt-get install -y crystal
 
-ENV CL_VERSION="1.00.58"
+ENV CL_VERSION="1.00.59"
 RUN git clone https://github.com/blitline-dev/crystal_syslog_server.git
 RUN cd crystal_syslog_server/src && crystal compile main.cr -o server --release
 

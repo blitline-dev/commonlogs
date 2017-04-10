@@ -51,6 +51,7 @@ class CommonLogsBase < Sinatra::Base
 
     def authorized?
       return true if ENV["CL_BASIC_AUTH_BYPASS"].to_s.casecmp("true") == 0
+      return true if proper_cookies?
       halt_if_no_env
       return check_auth
     end
@@ -62,6 +63,10 @@ class CommonLogsBase < Sinatra::Base
     def check_auth
       @auth ||= Rack::Auth::Basic::Request.new(request.env)
       return @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == [ENV["CL_BASIC_AUTH_USERNAME"], ENV["CL_BASIC_AUTH_PASSWORD"]]
+    end
+
+    def proper_cookies?
+      return ENV["CL_COOKIE"] && request.cookies["clac"] == ENV["CL_COOKIE"]
     end
   end
 
