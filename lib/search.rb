@@ -14,12 +14,13 @@ class Search
   PAGE_SIZE = 4
 
   def initialize(tag, force_single = false)
-    fail "Must have a tag for search" unless tag
+    fail "Must have a tag for search" unless tag && tag != "-" && tag.strip.size > 0
     @tag = tag
     @now = Time.now.utc
     @now_sec = @now.to_i
     @force_single = force_single
-    @search_cache = SearchCache.new(@tag)
+    @search_cache = SearchCache.new(@tag) if @tag
+
   end
 
   # Search should do one of two things.

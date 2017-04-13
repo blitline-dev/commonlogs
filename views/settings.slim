@@ -24,18 +24,6 @@ link(rel="stylesheet" href="/stylesheets/settings.css?sss")
                     - input_html = "<input type='checkbox' id='autodelete' name='autodelete' #{is_true ? 'checked=\'checked\'' : ''} />"
                     == input_html
                     label for="autodelete"  Delete logs over #{log_life / 24} days old?
-            .form-group
-              label.col-sm-2.control-label &nbsp;
-              .col-sm-10
-                h3 
-                  label.control-label Self-log <a href="javascript:;" class="text-info fa fa-question-circle" data-toggle="popover" data-trigger="focus" data-placement="right" title="Debug" data-content="Store logs for CommonLogs server IN your own logs. It will be added as 'cl_web_log'" ></a>
-                .input-group.fixed-width
-                  hr.hr-pad
-                  .cs-checkbox
-                    - is_true = settings['selflog'].to_s == 'true'
-                    - input_html = "<input type='checkbox' id='selflog' name='selflog' #{is_true ? 'checked=\'checked\'' : ''} />"
-                    == input_html
-                    label for="selflog"  Send this web app logs to your logs files?
             span#updateSettings.btn.btn-success.pull-right name="updateButton" style="margin-left: 10px;"  Save
   .card.bg-white
     .card-header 

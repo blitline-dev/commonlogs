@@ -66,10 +66,8 @@ class CommonLogsBase < Sinatra::Base
     end
 
     def proper_cookies?
-      puts "---" * 10
-      puts request.cookies.inspect
-      puts "---"
-      return ENV["CL_COOKIE"] && request.cookies["clac"] == ENV["CL_COOKIE"]
+      @registered = ENV["CL_COOKIE"] && request.cookies["clac"] == ENV["CL_COOKIE"]
+      return @registered
     end
   end
 
@@ -78,6 +76,7 @@ class CommonLogsBase < Sinatra::Base
   # -------------------------------
 
   before do
+    @registered = false
     protected!
     response.headers['X-Frame-Options'] = 'ALLOW-FROM http://localhost/'
   end

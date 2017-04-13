@@ -4,6 +4,8 @@
 # -------------------
 class SearchCache
   def initialize(tag)
+    fail "Invalid tag" if tag == "-" or tag.to_s.empty?
+
     @tag = tag
     @base_path = Tags.tag_folder(@tag)
     ensure_cache_filepath

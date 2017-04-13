@@ -17,54 +17,70 @@
         h4.hidden-xs Let's add some logs...
         .meta
           span.pub-date.hidden-xs Here's how to get started:
-    .row
-      .p-b-lg.col-sm-8.col-sm-offset-2
-        article.article
-          h4(style="padding: 5px;") Every modern Linux distribution has a service called <i>rsyslog</i> which will push your logs to anywhere you want. <br/></br> We are going to configure your server to push to this machine.          
-          br
-          br
-          .card.bg-white.m-b(style='color: #333')
-            .card-header
-              h4 Step 1
-              h6 Copy the following code and replace the highlighted values with your own values
-            .card-block
-              blockquote.configSample
-                div
-                div $Modload imfile
-                div &nbsp;
-                div $InputFileName <span class="label">YOUR LOG FILE</span><a href="javascript:;" class="text-info fa fa-question-circle" data-toggle="popover" data-trigger="focus" data-placement="right" title="Path to file" data-content="This is the path to the log file you want to follow." ></a>
-                div $InputFileTag <span class="label">NAME OF LOG</span><a href="javascript:;" class="text-info fa fa-question-circle" data-toggle="popover" data-trigger="focus" data-placement="right" title="Name to display" data-content="This is how this type of log will be displayed in the UI. You can name multple logs the same thing and they will all be aggregated in the UI." ></a>
-                div $InputFileStateFile commonlog-file1
-                div $InputFileSeverity info
-                div $InputFileFacility local0
-                div $InputRunFileMonitor
-                div &nbsp;
-                div # Only entered once in case of following multiple files
-                div # This will poll the file every 10 seconds
-                div $InputFilePollInterval 10
-                div &nbsp;
-                div "*.*"" <span class="label">@@IP_ADDRESS_OR_URL_OF_THIS_SERVER</span>:6768 <a href="javascript:;" class="text-info fa fa-question-circle" data-toggle="popover" data-trigger="focus" data-placement="right" title="URL of Commonlogs Server" data-content="This is probably the IP of 'this' machine, but could also be a CNAME like logger.exampleapp.com" ></a>
+    - if @registered
+      .row
+        .p-b-lg.col-sm-8.col-sm-offset-2
+          article.article
+            h4(style="padding: 5px;") Every modern Linux distribution has a service called <i>rsyslog</i> which will push your logs to anywhere you want. <br/></br> We are going to configure your server to push to this machine.          
+            br
+            br
+            .card.bg-white.m-b(style='color: #333')
+              .card-header
+                center
+                  h4 Click on the "Configure" menu to the left
+                  br
+                  div
+                    img(src="http://web.blitline.s3.amazonaws.com/monosnap/Commonlogs__Logging_for_developers_2017-04-10_17-05-54.png")
+                  br
+    - else # Not registered
+      .row
+        .p-b-lg.col-sm-8.col-sm-offset-2
+          article.article
+            h4(style="padding: 5px;") Every modern Linux distribution has a service called <i>rsyslog</i> which will push your logs to anywhere you want. <br/></br> We are going to configure your server to push to this machine.          
+            br
+            br
+            .card.bg-white.m-b(style='color: #333')
+              .card-header
+                h4 Step 1
+                h6 Copy the following code and replace the highlighted values with your own values
+              .card-block
+                blockquote.configSample
+                  div
+                  div $Modload imfile
+                  div &nbsp;
+                  div $InputFileName <span class="label">YOUR LOG FILE</span><a href="javascript:;" class="text-info fa fa-question-circle" data-toggle="popover" data-trigger="focus" data-placement="right" title="Path to file" data-content="This is the path to the log file you want to follow." ></a>
+                  div $InputFileTag <span class="label">NAME OF LOG</span><a href="javascript:;" class="text-info fa fa-question-circle" data-toggle="popover" data-trigger="focus" data-placement="right" title="Name to display" data-content="This is how this type of log will be displayed in the UI. You can name multple logs the same thing and they will all be aggregated in the UI." ></a>
+                  div $InputFileStateFile commonlog-file1
+                  div $InputFileSeverity info
+                  div $InputFileFacility local0
+                  div $InputRunFileMonitor
+                  div &nbsp;
+                  div # Only entered once in case of following multiple files
+                  div # This will poll the file every 10 seconds
+                  div $InputFilePollInterval 10
+                  div &nbsp;
+                  div "*.*"" <span class="label">@@IP_ADDRESS_OR_URL_OF_THIS_SERVER</span>:6768 <a href="javascript:;" class="text-info fa fa-question-circle" data-toggle="popover" data-trigger="focus" data-placement="right" title="URL of Commonlogs Server" data-content="This is probably the IP of 'this' machine, but could also be a CNAME like logger.exampleapp.com" ></a>
 
-          .card.bg-white.m-b(style='color: #333')
-            .card-header
-              h4 Step 2
-              h6 Go to your linux machine you have logs on that you want to save
-            .card-block.step2
-              blockquote.configSample            
-                ol
-                  li Go to the linux machine with the files you want to follow
-                  li Open <span>/etc/rsyslog.conf</span> with your editor of choice
-                  li Go to the bottom of the file
-                  li Paste the results of the configuration copied above into this file
-                  li Save the file
-                  li Restart rsyslog: (sudo) service rsyslog restart
+            .card.bg-white.m-b(style='color: #333')
+              .card-header
+                h4 Step 2
+                h6 Go to your linux machine you have logs on that you want to save
+              .card-block.step2
+                blockquote.configSample            
+                  ol
+                    li Go to the linux machine with the files you want to follow
+                    li Open <span>/etc/rsyslog.conf</span> with your editor of choice
+                    li Go to the bottom of the file
+                    li Paste the results of the configuration copied above into this file
+                    li Save the file
+                    li Restart rsyslog: (sudo) service rsyslog restart
 
-          .card.bg-white.m-b(style='color: #333')
-            .card-header
-              h4 Step 3
-              h6 After a few moments refresh this page, and you should start to see logs appear.
-            .card-block.step3
-              p If you don't see logs within about 30 seconds, please visit our documentation site at <a href="http://docs.commonlogs.com">http://docs.commonlogs.com</a> or click the <b>Help</b> menu item from the top of this page for help on debugging and setup.
+            .card.bg-white.m-b(style='color: #333')
+              .card-header
+                h4 Step 3
+                h6 After a few moments refresh this page, and you should start to see logs appear.
+              .card-block.step3
+                p If you don't see logs within about 30 seconds, please visit our documentation site at <a href="http://docs.commonlogs.com">http://docs.commonlogs.com</a> or click the <b>Help</b> menu item from the top of this page for help on debugging and setup.
 
 - content_for :javascripter
   // Date.js interferes with C3 charts, so we have to load it ONLY on this page

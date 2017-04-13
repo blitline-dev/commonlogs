@@ -7,13 +7,17 @@ module Api
     get '/tail' do
       content_type :json
       line_prefix = params['last_prefix']
+      latest = []
+      begin
+        search = Search.new(params['name'])
+        results = search.latest(line_prefix)
+        latest = results[:data]
+        file = results[:file]
 
-      search = Search.new(params['name'])
-      results = search.latest(line_prefix)
-      latest = results[:data]
-      file = results[:file]
-
-      syslog_format(latest, file)
+        syslog_format(latest, file)
+      rescue => ex
+        puts "Exception Tailing #{params.inspect}. #{ex.message}"
+      end
       latest.to_json
     end
 
@@ -39,23 +43,26 @@ module Api
       count = 0
       hours = params['hours']
       query = Base64.urlsafe_decode64(params["q"])
-
-      search = Search.new(params['name'])
-      p = params["p"] || 0
-      latest = []
       results = {}
+      begin
+        search = Search.new(params['name'])
+        p = params["p"] || 0
+        latest = []
 
-      _time = Util.measure_delta do
-        results = search.search(query, hours, p.to_i)
-        latest = results[:data]
-        syslog_format(latest, nil)
-      end
-
-      _time = Util.measure_delta do
-        latest.each do |row|
-          count += row[3].scan(query).count(query)
-          row[3] = wrap_query_term_with_spans(row[3], query)
+        _time = Util.measure_delta do
+          results = search.search(query, hours, p.to_i)
+          latest = results[:data]
+          syslog_format(latest, nil)
         end
+
+        _time = Util.measure_delta do
+          latest.each do |row|
+            count += row[3].scan(query).count(query)
+            row[3] = wrap_query_term_with_spans(row[3], query)
+          end
+        end
+      rescue => ex
+        puts "Exception Searching #{params.inspect}"
       end
 
       results[:data] = latest
