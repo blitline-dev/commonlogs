@@ -43,8 +43,8 @@ module Sheller
 
   def parse_results(results)
     rows = []
-    results = handle_escape(results)
     begin
+      results = handle_escape(results)
       rows = results.gsub("\n--\n", "").split(/\r?\n|\r/)
     rescue => ex
       results = results.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')

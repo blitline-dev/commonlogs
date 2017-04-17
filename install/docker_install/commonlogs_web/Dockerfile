@@ -50,11 +50,11 @@ RUN apt-get update \
 # Increase memcache size
 RUN sed -i 's/-m 64/-m 512/g' /etc/memcached.conf
 
-RUN echo "touch77"
+RUN echo "touch79"
 RUN git clone https://github.com/blitline-dev/commonlogs.git
 RUN cd commonlogs && bundle install
 
-ENV CL_VERSION "0.01.06"
+ENV CL_VERSION "0.01.09"
 RUN cd commonlogs && git pull && bundle install
 
 EXPOSE 4567/tcp
