@@ -19,6 +19,7 @@ LogConsole.prototype = {
 		var allHtml = [];
 		var rowUnixDate;
 		var _this = this;
+		var ansi_up = new AnsiUp();
 
 		this.clearLoading();
 
@@ -53,11 +54,13 @@ LogConsole.prototype = {
 			
 
 			href = "context?name=" + commonLog.name + "&time=" + row[0] + "&server=" + row[2] + "&seq=" + row[1] + "&file=" + row[4];
+			var rowText = ansi_up.ansi_to_html(row[3].toString());
+
 			html = [
 				"<li class='r ts' data-t='" + rowUnixDate.toString() + "' data-r='" + row[1].toString() + "'>",
 				"<span class='muted'>" + rowDate + "&nbsp;</span>",
 				"<a class='text-primary' href='" + href + "'>" + row[2] + "</a>",
-				"<span>&nbsp;" + row[3].autoLink({ target: "_blank", rel: "nofollow", class: "text-info" }) + "</span>",
+				"<span>&nbsp;" + rowText.autoLink({ target: "_blank", rel: "nofollow", class: "text-info" }) + "</span>",
 				"</li>"
 			];
 
@@ -66,6 +69,8 @@ LogConsole.prototype = {
 			}
 			allHtml.push(html.join(""));
 		}
+
+
 
 
 		$newNode = $(allHtml.join(""));
