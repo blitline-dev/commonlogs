@@ -1,4 +1,5 @@
 require 'open3'
+require 'ansi-to-html'
 
 # Extender for running shell commands
 module Sheller
@@ -35,11 +36,17 @@ module Sheller
     end
   end
 
+  def handle_escape(s)
+    as = Ansi::To::Html.new(s)
+    return as.to_html
+  end
+
   def parse_results(results)
     rows = []
+    results = handle_escape(results)
     begin
       rows = results.gsub("\n--\n", "").split(/\r?\n|\r/)
-    rescue
+    rescue => ex
       results = results.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
       rows = results.gsub("\n--\n", "").split(/\r?\n|\r/)
     end
@@ -49,5 +56,22 @@ module Sheller
     end
 
     return rows
+  end
+end
+
+module Ansi
+  module To
+    class Html
+      def push_tag(tag, style=nil)
+        style = STYLES[style] || PALLETE[@pallete || :linux][style] if style && !style.include?(':')
+        @stack.push tag
+        "[[[#{tag}:#{style}]]]"
+      end
+
+      def reset_styles
+        stack, @stack = @stack, []
+        stack.reverse.map { |tag| "[[[#{tag}]]]" }.join
+      end
+    end
   end
 end

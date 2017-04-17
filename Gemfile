@@ -9,6 +9,7 @@ gem 'dalli'
 gem 'slim'
 gem 'puma'
 gem 'nokogiri'
+gem 'ansi-to-html'
 
 group(:development) do
   gem 'byebug'

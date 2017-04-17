@@ -19,7 +19,6 @@ LogConsole.prototype = {
 		var allHtml = [];
 		var rowUnixDate;
 		var _this = this;
-		var ansi_up = new AnsiUp();
 
 		this.clearLoading();
 
@@ -54,7 +53,12 @@ LogConsole.prototype = {
 			
 
 			href = "context?name=" + commonLog.name + "&time=" + row[0] + "&server=" + row[2] + "&seq=" + row[1] + "&file=" + row[4];
-			var rowText = ansi_up.ansi_to_html(row[3].toString());
+//			if (row[3].includes(" 6P3qothq7F1nYH5lNFnED2A --P:7765, host:cuda"))
+//				debugger;
+			var rowText = row[3].toString();
+			if (rowText.includes("[[[")) {
+				rowText = this.highlightAnsi(rowText);
+			}
 
 			html = [
 				"<li class='r ts' data-t='" + rowUnixDate.toString() + "' data-r='" + row[1].toString() + "'>",
@@ -69,9 +73,6 @@ LogConsole.prototype = {
 			}
 			allHtml.push(html.join(""));
 		}
-
-
-
 
 		$newNode = $(allHtml.join(""));
 		$newNode.mouseenter(function(e) {
@@ -104,6 +105,15 @@ LogConsole.prototype = {
     var div = document.createElement('div');
     div.appendChild(document.createTextNode(str));
     return div.innerHTML;
+	},
+	highlightAnsi: function(str) {
+		var v = str;
+		v = str.replace(/\[\[\[span\:(.*?)\]\]\]/g, "<span style='$1'>");
+		v = v.replace(/\[\[\[b\:\]\]\]/g, "<b>");
+		v = v.replace(/\[\[\[b\]\]\]/g, "</b>");
+		v = v.replace(/\[\[\[span\]\]\]/g, "</span>");
+
+		return v;
 	},
 	activateInfinityScroll: function() {
 		var _this = this;
