@@ -24,7 +24,6 @@ class Event
     results = {}
     colors = {}
     event_files = Tags.all_event_files(@tag, Util.hours_ago(start_timestamp))
-    ap event_files
     event_files.each do |file_info|
       name = file_info.event_name
       results[name] = []
@@ -88,7 +87,6 @@ class Event
       end
     end
     results.compact!
-    LOGGER.log "Delta extract_counts = #{time}"
     return results
   end
 

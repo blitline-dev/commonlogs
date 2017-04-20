@@ -19,7 +19,7 @@ class Cleaner
     remove_old_cache
   end
 
-  def get_hourse_to_save
+  def get_hours_to_save
     Settings.reload
     settings = Settings.all_settings["settings"]
     settings["log_life"] || 168
@@ -30,16 +30,20 @@ class Cleaner
   private
 
   def remove_old_files
-    get_hourse_to_save
+    get_hours_to_save
     Dir.glob("#{@log_folder}/**/*.log").each do |file|
-      filename = File.basename(file, ".log")
-      file_time = parse_filename_into_time(filename)
-      File.delete(file) if file_time < @now - @seconds_offset
+      begin
+        filename = File.basename(file, ".log")
+        file_time = parse_filename_into_time(filename)
+        File.delete(file) if file_time < @now - @seconds_offset
+      rescue => ex
+        puts "Error: #{ex.message}\n#{ex.backtrace[0]}"
+      end
     end
   end
 
   def remove_old_cache
-    get_hourse_to_save
+    get_hours_to_save
     Dir.glob("#{@log_folder}/**/cache/*").each do |file|
       last_modified = File.mtime(file)
       File.delete(file) if last_modified < @now - @seconds_offset
