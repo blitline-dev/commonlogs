@@ -62,7 +62,7 @@ module Api
           end
         end
       rescue => ex
-        puts "Exception Searching #{params.inspect}"
+        puts "Exception Searching #{params.inspect} #{ex.message} \n #{ex.backtrace[0]}"
       end
 
       results[:data] = latest

@@ -120,8 +120,8 @@ class Search
     files = []
     guess_files = Tags.files(@tag)
     # Files may have gaps if it's sparsely logged.
-    start = Time.now.utc - (hours_ago * 3600)
-    0.upto(hours_ago) do |h|
+    start = Time.now.utc - (hours_ago.to_i * 3600)
+    0.upto(hours_ago.to_i) do |h|
       filename = Util.filename_from_time(start + (h * 3600))
       files << filename if guess_files.include?(filename)
     end
