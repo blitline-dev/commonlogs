@@ -2,8 +2,12 @@ FROM ubuntu:14.04.4
 ENV DEBIAN_FRONTEND noninteractive
 
 # Ensure UTF-8 locale
-RUN echo "LANG=\"en_GB.UTF-8\"" > /etc/default/locale
-RUN locale-gen en_GB.UTF-8
+RUN echo "LANG=\"en_US.UTF-8\"" > /etc/default/locale
+RUN locale-gen en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+
 RUN dpkg-reconfigure locales
 
 ENV RUBY_MAJOR 2.1

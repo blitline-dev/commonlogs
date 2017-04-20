@@ -14,13 +14,12 @@ class Search
   PAGE_SIZE = 4
 
   def initialize(tag, force_single = false)
-    fail "Must have a tag for search" unless tag && tag != "-" && tag.strip.size > 0
+    fail "Must have a tag for search" unless tag && tag != "-" && !tag.strip.empty?
     @tag = tag
     @now = Time.now.utc
     @now_sec = @now.to_i
     @force_single = force_single
     @search_cache = SearchCache.new(@tag) if @tag
-
   end
 
   # Search should do one of two things.
@@ -118,7 +117,15 @@ class Search
   end
 
   def calculate_files_and_range_form_hours_ago(hours_ago, p)
-    files = Tags.files(@tag).sort.last(hours_ago.to_i + 1)
+    files = []
+    guess_files = Tags.files(@tag)
+    # Files may have gaps if it's sparsely logged.
+    start = Time.now.utc - (hours_ago * 3600)
+    0.upto(hours_ago) do |h|
+      filename = Util.filename_from_time(start + (h * 3600))
+      files << filename if guess_files.include?(filename)
+    end
+
     range_start = PAGE_SIZE * p
     range_end = range_start + (PAGE_SIZE - 1)
 
@@ -174,9 +181,9 @@ class Search
 
     file_paths = file_paths.take(1) if @force_single
 
-    text = text.gsub(/'/) { |m| "'" + "\\" + "''" }
+    text = text.gsub(/'/) { "'" + "\\" + "''" }
+
     if with_context
-#      cmd_string = "export LC_ALL=C && #{app} -A 100 -B 100 '#{text}' #{file_paths.join(' ')}"
       cmd_string = find_context_with_host(text, file_paths, host)
     else
       cmd_string = "export LC_ALL=C && #{app} -m 10000 -ir '#{text}' #{file_paths.join(' ')}"

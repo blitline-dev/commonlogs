@@ -38,7 +38,7 @@ module Sheller
 
   def handle_escape(s)
     as = Ansi::To::Html.new(s)
-    return as.to_html
+    return as.to_html(:tango)
   end
 
   def parse_results(results)
@@ -46,7 +46,7 @@ module Sheller
     begin
       results = handle_escape(results)
       rows = results.gsub("\n--\n", "").split(/\r?\n|\r/)
-    rescue => ex
+    rescue
       results = results.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
       rows = results.gsub("\n--\n", "").split(/\r?\n|\r/)
     end
@@ -59,10 +59,12 @@ module Sheller
   end
 end
 
+# Override Ansi styles, we need to add iterim 'tags' to replace later
+# in javascript on the client.
 module Ansi
   module To
     class Html
-      def push_tag(tag, style=nil)
+      def push_tag(tag, style = nil)
         style = STYLES[style] || PALLETE[@pallete || :linux][style] if style && !style.include?(':')
         @stack.push tag
         "[[[#{tag}:#{style}]]]"
