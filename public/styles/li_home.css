@@ -18,6 +18,7 @@
 /* */
 .dropdown-menu {
 	min-width: 200px;
+  overflow: hidden;
 }
 .dropdown-menu.columns-2 {
 	min-width: 300px;

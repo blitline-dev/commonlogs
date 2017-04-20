@@ -13,8 +13,13 @@ module Settings
 
   def self.save
     File.open(SETTINGS_FILE_PATH, "w") do |f|
+      p "writing #{SETTINGS_FILE_PATH} #{@settings.to_json}"
       f.write(@settings.to_json)
     end
+  end
+
+  def self.reload
+    @settings = load_settings
   end
 
   def self.get(key)

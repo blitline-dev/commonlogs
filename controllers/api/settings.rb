@@ -6,7 +6,8 @@ module Api
 
     post '' do
       data = map_settings
-      Settings.set("autodelete", data[:autodelete]) unless data[:autodelete].nil?
+      Settings.set("autodelete", true)
+      Settings.set("log_life", data[:log_life] || 168)
       Settings.set("selflog", data[:selflog]) unless data[:selflog].nil?
       Settings.save
       data.to_json
@@ -38,6 +39,7 @@ module Api
       data[:bucket] = params[:bucket]
       data[:location] = params[:location]
       data[:selflog] = params[:selflog]
+      data[:log_life] = params[:log_life]
       data[:key_prefix] = params[:key_prefix]
 
       return data

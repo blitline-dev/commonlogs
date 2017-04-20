@@ -3,6 +3,7 @@ require 'sinatra/base'
 require 'sinatra/reloader' if development?
 require 'rubygems'
 require 'logger'
+require 'sinatra_more/markup_plugin'
 
 # Basic home/visitor route without auth
 class App < Sinatra::Base

@@ -2,6 +2,7 @@ require_relative 'common_logs_base'
 
 # Basic paths with Auth support
 class ProtectedPaths < CommonLogsBase
+  register SinatraMore::MarkupPlugin
 
   get '/stats' do
     tags = Tags.list
@@ -15,8 +16,8 @@ class ProtectedPaths < CommonLogsBase
   get '/settings' do
     tags = Tags.list
     settings = Settings.all_settings["settings"]
-    log_life  = ENV['COMMONLOGS_SAVE_HOURS'] || 168
-
+    log_life = settings["log_life"] || 168
+    puts "Settings = #{log_life.to_i}"
     variables = {  tags: tags, event_name: params['event_name'], settings: settings, log_life: log_life.to_i }.merge(display_variables)
     slim :settings, locals: variables
   end

@@ -119,9 +119,7 @@ $(function() {
 			}, function () {
 				$('#myPleaseWait').modal('show');
 				debounce = true;
-				performSearch(true)
-				return true;
-				// Yes, continue kind 
+				$("#footsearch").submit();
 			});
 			$('[data-toggle="popover"]').popover();
 		}else {

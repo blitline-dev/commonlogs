@@ -6,7 +6,7 @@ class Cleaner
   def initialize
     @now = Time.now.utc
     @log_folder = ENV['COMMONLOGS_ROOT_FOLDER']
-    @hours_to_save = ENV['COMMONLOGS_SAVE_HOURS'] || 168
+    @hours_to_save = 168
     @hours_to_save = @hours_to_save.to_i
     @seconds_offset = @hours_to_save * 3600
 
@@ -19,9 +19,18 @@ class Cleaner
     remove_old_cache
   end
 
+  def get_hourse_to_save
+    Settings.reload
+    settings = Settings.all_settings["settings"]
+    settings["log_life"] || 168
+    @hours_to_save = @hours_to_save.to_i
+    @seconds_offset = @hours_to_save * 3600
+  end
+
   private
 
   def remove_old_files
+    get_hourse_to_save
     Dir.glob("#{@log_folder}/**/*.log").each do |file|
       filename = File.basename(file, ".log")
       file_time = parse_filename_into_time(filename)
@@ -30,6 +39,7 @@ class Cleaner
   end
 
   def remove_old_cache
+    get_hourse_to_save
     Dir.glob("#{@log_folder}/**/cache/*").each do |file|
       last_modified = File.mtime(file)
       File.delete(file) if last_modified < @now - @seconds_offset

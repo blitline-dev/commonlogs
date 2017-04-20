@@ -47,10 +47,11 @@ $(function(){
   function getFormData() {
     var data = {};
 
-    data["autodelete"] = $("#autodelete").is(':checked');
+    data["autodelete"] = true;
     data["selflog"] = $("#selflog").is(':checked');
+    data["log_life"] = $("#log_life").val();
 
-    return data;    
+    return data;
   }
 
   function addIfValueExists(hash, id) {

@@ -16,14 +16,12 @@ link(rel="stylesheet" href="/stylesheets/settings.css?sss")
               label.col-sm-2.control-label &nbsp;
               .col-sm-10
                 h3 
-                  label.control-label Cleanup <a href="javascript:;" class="text-warning fa fa-question-circle" data-toggle="popover" data-trigger="focus" data-placement="right" title="Warning" data-content="CommonLogs will automatically remove older logs to preserve HD space. Unchecking this may result in 'out of space' errors unless YOU manually remove older log files" ></a>
+                  label.control-label Cleanup <a href="javascript:;" class="text-warning fa fa-question-circle" data-toggle="popover" data-trigger="focus" data-placement="right" title="Warning" data-content="CommonLogs will automatically remove older logs to preserve HD space." ></a>
                 .input-group.fixed-width
                   hr.hr-pad
-                  .cs-checkbox
-                    - is_true = settings['autodelete'].to_s == 'true'
-                    - input_html = "<input type='checkbox' id='autodelete' name='autodelete' #{is_true ? 'checked=\'checked\'' : ''} />"
-                    == input_html
-                    label for="autodelete"  Delete logs over #{log_life / 24} days old?
+                    span for="autodelete"  Delete logs over 
+                    == select_tag(:log_life, id: "log_life", :options => [['7','168'], ['14', '336'], ['28','672']], :selected => (log_life).to_s)
+                    span &nbsp; days old?
             span#updateSettings.btn.btn-success.pull-right name="updateButton" style="margin-left: 10px;"  Save
   .card.bg-white
     .card-header 
