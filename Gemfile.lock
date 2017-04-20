@@ -18,7 +18,6 @@ GEM
     multi_json (1.11.2)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
-    oj (2.14.5)
     puma (2.15.3)
     rack (1.6.4)
     rack-protection (1.5.3)
@@ -63,7 +62,6 @@ DEPENDENCIES
   byebug
   dalli
   nokogiri
-  oj
   puma
   sinatra
   sinatra-advanced-routes
