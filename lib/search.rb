@@ -123,7 +123,7 @@ class Search
     start = Time.now.utc - (hours_ago.to_i * 3600)
     0.upto(hours_ago.to_i) do |h|
       filename = Util.filename_from_time(start + (h * 3600))
-      files << filename if guess_files.include?(filename)
+      files << filename if guess_files.any? { |s| s.include?(filename) }
     end
 
     range_start = PAGE_SIZE * p
