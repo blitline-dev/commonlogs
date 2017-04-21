@@ -46,7 +46,8 @@ module Sheller
     begin
       results = handle_escape(results)
       rows = results.gsub("\n--\n", "").split(/\r?\n|\r/)
-    rescue
+    rescue => ex
+      LOGGER.log(ex)
       results = results.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
       rows = results.gsub("\n--\n", "").split(/\r?\n|\r/)
     end

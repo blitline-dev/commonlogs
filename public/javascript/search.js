@@ -56,7 +56,11 @@ $(function() {
 			_logConsole.setLoading(false);
 
 			if (!parsedData["has_more"]) {
-				_logConsole.clearLoading();
+				setTimeout(function(){ 
+					// Handle some race condition where the has_more returns before the actual data
+					_logConsole.clearLoading(); 
+				}, 3000);
+				
 			}else {
 				_p += 1;
 				search();				

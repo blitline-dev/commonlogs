@@ -254,6 +254,10 @@ $(function()	{
 				$("#pointer").show();
 				_logConsole.addRows(JSON.parse(data), eventName);
 				_logConsole.setLoading(false);
+				setTimeout(function(){ 
+					// Handle some race condition where the has_more returns before the actual data
+					_logConsole.clearLoading(); 
+				}, 3000);
 				$("#parentChart").addClass("botborder");
 				$('#myPleaseWait').modal('hide');
 			}catch(ex) {
