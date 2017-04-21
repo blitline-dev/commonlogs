@@ -13,7 +13,7 @@ RUN \
 RUN git clone https://github.com/blitline-dev/commonlogs.git
 RUN cd commonlogs && bundle install
 
-ENV CL_VERSION "0.01.17"
+ENV CL_VERSION "0.01.18"
 RUN cd commonlogs && git pull && bundle install
 RUN memcached -d -u root
 RUN ps ax
