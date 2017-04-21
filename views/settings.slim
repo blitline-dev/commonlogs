@@ -20,7 +20,10 @@ link(rel="stylesheet" href="/stylesheets/settings.css?sss")
                 .input-group.fixed-width
                   hr.hr-pad
                     span for="autodelete"  Delete logs over 
-                    == select_tag(:log_life, id: "log_life", :options => [['7','168'], ['14', '336'], ['28','672']], :selected => (log_life).to_s)
+                    select#log_life name="log_life" 
+                      option selected="#{log_life==168 ? 'selected' : ''}" value="168"  7
+                      option selected="#{log_life==336 ? 'selected' : ''}" value="336"  14
+                      option selected="#{log_life==672 ? 'selected' : ''}" value="672"  28
                     span &nbsp; days old?
             span#updateSettings.btn.btn-success.pull-right name="updateButton" style="margin-left: 10px;"  Save
   .card.bg-white

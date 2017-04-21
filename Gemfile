@@ -7,8 +7,8 @@ gem 'sinatra-advanced-routes', require: 'sinatra/advanced_routes'
 gem 'awesome_print'
 gem 'dalli'
 gem 'slim'
-gem 'puma'
 gem 'nokogiri'
+gem 'puma'
 gem 'ansi-to-html'
 
 group(:development) do
