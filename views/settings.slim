@@ -20,10 +20,10 @@ link(rel="stylesheet" href="/stylesheets/settings.css?sss")
                 .input-group.fixed-width
                   hr.hr-pad
                     span for="autodelete"  Delete logs over 
-                    select#log_life name="log_life" 
-                      option selected="#{log_life==168 ? 'selected' : ''}" value="168"  7
-                      option selected="#{log_life==336 ? 'selected' : ''}" value="336"  14
-                      option selected="#{log_life==672 ? 'selected' : ''}" value="672"  28
+                    select#log_life name="log_life"
+                      == "<option value='168' #{log_life==168 ? 'selected' : ''}>7</option>" 
+                      == "<option value='336' #{log_life==336 ? 'selected' : ''}>14</option>" 
+                      == "<option value='672' #{log_life==672 ? 'selected' : ''}>28</option>"
                     span &nbsp; days old?
             span#updateSettings.btn.btn-success.pull-right name="updateButton" style="margin-left: 10px;"  Save
   .card.bg-white
