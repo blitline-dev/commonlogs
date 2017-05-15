@@ -40,6 +40,7 @@ class CommonLogsBase < Sinatra::Base
 
   LAST_NAME_COOKIE = "last_saved_name".freeze
 
+
   # HELPERS
   helpers do
     def protected!
@@ -80,7 +81,6 @@ class CommonLogsBase < Sinatra::Base
   before do
     @registered = false
     protected!
-    response.headers['X-Frame-Options'] = 'ALLOW-FROM http://localhost/'
   end
 
 
