@@ -53,7 +53,7 @@ class ProtectedPaths < CommonLogsBase
   get '/li_home' do
     tags = Tags.list
     unless params['name']
-      tag = name_cookie ? name_cookie : tags.first
+      tag = (name_cookie && !name_cookie.empty?) ? name_cookie : tags.first
       redirect "/p/li_home?name=#{tag}"
       return
     end
