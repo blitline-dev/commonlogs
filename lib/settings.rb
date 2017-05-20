@@ -1,4 +1,5 @@
 require_relative 'config'
+require 'json'
 
 # App level settings
 module Settings
