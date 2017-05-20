@@ -1,3 +1,5 @@
+require_relative 'settings'
+
 # -------------------
 # Cleans out old logs
 # Can be run as stand-alone
