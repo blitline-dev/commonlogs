@@ -39,6 +39,7 @@ class Notifier
   def run
     begin
       last_f = last_file
+      return nil unless last_f
       latest_line = last_line(last_f)
       last_marker = marker(1)
       return nil unless latest_line != last_marker
