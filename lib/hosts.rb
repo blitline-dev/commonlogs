@@ -94,7 +94,7 @@ class Hosts
           host = host.strip
           host.gsub!("_ec2_internal","")
           tag = tag.strip
-          host_data["#{host}::#{tag}"] = CollectDInfo.new(host, tag, data, timestamp.to_i) unless host_data["#{host}::#{tag}"]
+          host_data["#{host}::#{tag}"] = CollectDInfo.new(host, tag, data, timestamp.to_i)
         end
       end
     rescue => ex
