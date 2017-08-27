@@ -33,6 +33,9 @@ class Hosts
       data = stats[key]
       result_hash[host] = [] if result_hash[host].nil?
       result_hash[host] << data
+      host += "_ec2_internal"
+      result_hash[host] = [] if result_hash[host].nil?
+      result_hash[host] << data
     end
     return result_hash
   end
