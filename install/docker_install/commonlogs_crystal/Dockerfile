@@ -9,13 +9,15 @@ RUN chmod 771 -R /var/log/commonlogs
 
 RUN sudo apt-get update
 RUN sudo apt-get install -y crystal
+RUN sudo apt-get install -y wget socat nano tcpdump
 
-ENV CL_VERSION="1.00.66"
+ENV CL_VERSION="1.00.81"
+
 RUN git clone https://github.com/blitline-dev/crystal_syslog_server.git
-RUN cd crystal_syslog_server/src && crystal compile main.cr -o server --release
+RUN cd crystal_syslog_server/src && crystal compile --release main.cr -o server
 
 WORKDIR crystal_syslog_server/src
-EXPOSE 6768/tcp
+
 
 # sudo docker run -d -p 6768:6768 -v /var/log/commonlogs:/var/log/commonlogs commonlogs/commonlogs_crystal:latest crystal main.cr
 

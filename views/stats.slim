@@ -37,12 +37,29 @@ link(rel="stylesheet" href="/stylesheets/stats.css?sss")
                 th Host
                 th Tag
                 th Last Updated
+                - if has_collectd
+                  th % CPU
+                  th % Memory
+                  th Load
             tbody
               - host_data.each do |host_struct|
                 tr
                   td #{host_struct.host}
                   td #{host_struct.tag}
                   td #{(Time.now.to_i - host_struct.timestamp.to_i) / 60} minutes
+                  - if has_collectd
+                    td
+                      - if host_struct.cpu && host_struct.cpu.to_i > 80
+                        span(style="color:red") #{host_struct.cpu}
+                      - else
+                        span #{host_struct.cpu}
+                    td
+                      - if host_struct.memory && host_struct.memory.to_i > 80
+                        span(style="color:red") #{host_struct.memory}
+                      - else
+                        span #{host_struct.memory}
+                    td 
+                      span #{host_struct.load}
 #myModal.modal.fade role="dialog" 
   .modal-dialog#drives
     /! Modal content
