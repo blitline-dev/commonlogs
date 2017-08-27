@@ -55,11 +55,11 @@ class Hosts
   end
 
   def self.determine_memory(stat_hash)
-    used = stat_hash["memory.memory-used"].data.to_i
-    buffered = stat_hash["memory.memory-buffered"].data.to_i
-    cached = stat_hash["memory.memory-cached"].data.to_i
-    free = stat_hash["memory.memory-free"].data.to_i
-    
+    used = stat_hash["memory.memory-used"] ? stat_hash["memory.memory-used"].data.to_i : 0
+    buffered = stat_hash["memory.memory-buffered"] ? stat_hash["memory.memory-buffered"].data.to_i : 0
+    cached = stat_hash["memory.memory-cached"] ? stat_hash["memory.memory-cached"].data.to_i : 0
+    free = stat_hash["memory.memory-free"] ? stat_hash["memory.memory-free"].data.to_i : 0
+
     total = used + buffered + buffered + free
     return nil if total.zero?
 
@@ -76,7 +76,7 @@ class Hosts
   end
 
   def self.determine_load(stat_hash)
-    load = stat_hash["load.load.midterm"].data.to_f
+    load = stat_hash["load.load.midterm"] ? stat_hash["load.load.midterm"].data.to_f : nil
     return nil if load.nil? 
 
     return load
