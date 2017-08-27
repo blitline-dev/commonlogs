@@ -9,7 +9,7 @@ class ProtectedPaths < CommonLogsBase
     stats = Tags.file_stats
     drives = Tags.drive_space
     host_data = Hosts.recent_data
-    has_collectd = host_data.any? { |h| !h.cpu.nil? }
+    has_collectd = host_data.any? { |h| !h.cpu.nil? || !h.memory.nil? }
     variables = { tags: tags, event_name: params['event_name'], stats: stats, drives: drives, host_data: host_data, has_collectd: has_collectd }.merge(display_variables)
     slim :stats, locals: variables
   end

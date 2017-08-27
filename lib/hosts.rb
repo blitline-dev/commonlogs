@@ -71,7 +71,7 @@ class Hosts
   end
 
   def self.determine_cpu(stat_hash)
-    idle = stat_hash["cpu-0.cpu-idle"] ? stat_hash["cpu-0.cpu-idle"].data : nil
+    idle = stat_hash["aggregation-cpu-average.cpu-idle"] ? stat_hash["aggregation-cpu-average.cpu-idle"].data : nil
     return nil if idle.nil? || idle.empty?
 
     percent = 100.0 - idle.to_f
