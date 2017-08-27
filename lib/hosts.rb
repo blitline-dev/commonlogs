@@ -33,9 +33,6 @@ class Hosts
       data = stats[key]
       result_hash[host] = [] if result_hash[host].nil?
       result_hash[host] << data
-      host += "_ec2_internal"
-      result_hash[host] = [] if result_hash[host].nil?
-      result_hash[host] << data
     end
     return result_hash
   end
@@ -43,9 +40,6 @@ class Hosts
   def self.build_host_info(host, tag, timestamp, stats)
     return HostInfo.new(host, tag, timestamp.to_i) if stats.empty? || stats[host].nil? || stats[host].empty?
     stat_hash = build_stat_hash(stats[host])
-    if stat_hash.empty?
-      stat_hash = build_stat_hash(stats[host + "_ec2_internal"])
-    end
     memory = determine_memory(stat_hash)
     cpu = determine_cpu(stat_hash)
     load = determine_load(stat_hash)
@@ -98,6 +92,7 @@ class Hosts
           host_tag, local_timestamp = line.split(" ")
           host, tag, data, timestamp = host_tag.split("::")
           host = host.strip
+          host.gsub!("_ec2_internal","")
           tag = tag.strip
           host_data["#{host}::#{tag}"] = CollectDInfo.new(host, tag, data, timestamp.to_i) unless host_data["#{host}::#{tag}"]
         end
