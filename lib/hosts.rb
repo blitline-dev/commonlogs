@@ -43,6 +43,9 @@ class Hosts
   def self.build_host_info(host, tag, timestamp, stats)
     return HostInfo.new(host, tag, timestamp.to_i) if stats.empty? || stats[host].nil? || stats[host].empty?
     stat_hash = build_stat_hash(stats[host])
+    if stat_hash.empty?
+      stat_hash = build_stat_hash(stats[host + "_ec2_internal"])
+    end
     memory = determine_memory(stat_hash)
     cpu = determine_cpu(stat_hash)
     load = determine_load(stat_hash)
