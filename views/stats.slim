@@ -40,7 +40,7 @@ link(rel="stylesheet" href="/stylesheets/stats.css?sss")
                 - if has_collectd
                   th % CPU
                   th % Memory
-                  th Load
+                  th % Disk Used
             tbody
               - host_data.each do |host_struct|
                 tr
@@ -59,7 +59,7 @@ link(rel="stylesheet" href="/stylesheets/stats.css?sss")
                       - else
                         span #{host_struct.memory}
                     td 
-                      span #{host_struct.load}
+                      span #{host_struct.disk}
 #myModal.modal.fade role="dialog" 
   .modal-dialog#drives
     /! Modal content

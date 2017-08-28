@@ -43,7 +43,8 @@ class Hosts
     memory = determine_memory(stat_hash)
     cpu = determine_cpu(stat_hash)
     load = determine_load(stat_hash)
-    return HostInfo.new(host, tag, timestamp.to_i, cpu, memory, load)
+    disk = determine_disk(stat_hash)
+    return HostInfo.new(host, tag, timestamp.to_i, cpu, memory, load, disk)
   end
 
   def self.build_stat_hash(stat_array)
@@ -61,9 +62,14 @@ class Hosts
     free = stat_hash["memory.memory-free"] ? stat_hash["memory.memory-free"].data.to_i : 0
 
     total = used + buffered + buffered + free
-    return nil if total.zero?
+    if total.zero?
+      percent = stat_hash["memory_usage.percentage"]
+      return nil if percent.nil?
+      percent = percent.to_f
+    else
+      percent = (used.to_f / total.to_f) * 100
 
-    percent = (used.to_f / total.to_f) * 100
+    end
     return percent.round(2)
   end
 
@@ -80,6 +86,13 @@ class Hosts
     return nil if load.nil? 
 
     return load
+  end
+
+  def self.determine_disk(stat_hash)
+    disk_usage = stat_hash["disk_usage.percentage"] ? stat_hash["disk_usage.percentage"].data.to_f : nil
+    return nil if disk_usage.nil? 
+
+    return disk_usage
   end
 
   def self.collectd_stats

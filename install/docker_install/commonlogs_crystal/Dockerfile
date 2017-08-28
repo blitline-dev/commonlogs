@@ -11,7 +11,7 @@ RUN sudo apt-get update
 RUN sudo apt-get install -y crystal
 RUN sudo apt-get install -y wget socat nano tcpdump
 
-ENV CL_VERSION="1.00.82"
+ENV CL_VERSION="1.00.87"
 
 RUN git clone https://github.com/blitline-dev/crystal_syslog_server.git
 RUN cd crystal_syslog_server/src && crystal compile --release main.cr -o server
