@@ -55,7 +55,7 @@ def start
 end
 
 def get_stats
-  output = `df -hBM | sort -k2 | tail -n 1 | awk '{print $5}'`
+  output = `df -hBM | sort -k2 -n | tail -n 1 | awk '{print $5}'`
   disk = output.strip.tr('%', '').to_i
   cpu = @usw.uw_cpuused.to_f
   mem = @usw.uw_memused.to_i

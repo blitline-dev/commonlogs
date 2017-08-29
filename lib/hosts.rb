@@ -63,7 +63,7 @@ class Hosts
 
     total = used + buffered + buffered + free
     if total.zero?
-      percent = stat_hash["memory_usage.percentage"].data
+      percent = stat_hash["memory_usage.percentage"] ? stat_hash["memory_usage.percentage"].data : nil
       return nil if percent.nil?
       percent = percent.to_f
     else
