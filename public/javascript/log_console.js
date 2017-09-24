@@ -47,15 +47,13 @@ LogConsole.prototype = {
 				}
 			}
 
-			
+
 			rowUnixDate = parseInt(row[0], 10);
 			rowDate = Utils.formatDate(new Date(rowUnixDate * 1000));
-			
+
 
 			href = "context?name=" + commonLog.name + "&time=" + row[0] + "&server=" + row[2] + "&seq=" + row[1] + "&file=" + row[4];
-//			if (row[3].includes(" 6P3qothq7F1nYH5lNFnED2A --P:7765, host:cuda"))
-//				debugger;
-			var rowText = row[3].toString();
+			var rowText = escapeHtml(row[3].toString());
 			if (rowText.includes("[[[")) {
 				rowText = this.highlightAnsi(rowText);
 			}
@@ -78,9 +76,9 @@ LogConsole.prototype = {
 		$newNode.mouseenter(function(e) {
 			_this.mouseEnterTimestamp(e, this);
 		});
-		
-		$("#console").append($newNode);		
-		
+
+		$("#console").append($newNode);
+
 		if (eventName) {
 			$("#console").append("<li class='liEndCap'><img class='spin' src='spin.svg'>&nbsp;Looking around for more...</li>");
 		}
@@ -99,13 +97,14 @@ LogConsole.prototype = {
 	setLoading: function(isLoading) {
 		this.skipLoadMoreEvent = isLoading;
 	},
-	// Use the browser's built-in functionality to quickly and safely escape the
-	// string
-	escapeHtml: function(str) {
-    var div = document.createElement('div');
-    div.appendChild(document.createTextNode(str));
-    return div.innerHTML;
-	},
+	escapeHtml: function(s) {
+		var n = s;
+    n = n.replace(/&/g, '&amp;');
+    n = n.replace(/</g, '&lt;');
+    n = n.replace(/>/g, '&gt;');
+    n = n.replace(/"/g, '&quot;');
+    return n;
+  },
 	highlightAnsi: function(str) {
 		var v = str;
 		v = str.replace(/\[\[\[span\:(.*?)\]\]\]/g, "<span style='$1'>");
@@ -137,5 +136,5 @@ LogConsole.prototype = {
 	}
 
 };
- 
+
 

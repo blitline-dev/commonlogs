@@ -59,7 +59,10 @@ link(rel="stylesheet" href="/stylesheets/stats.css?sss")
                       - else
                         span #{host_struct.memory}
                     td 
-                      span #{host_struct.disk}
+                      - if host_struct.disk && host_struct.disk.to_i > 80
+                        span(style="color:red") #{host_struct.disk}
+                      - else
+                        span #{host_struct.disk}
 #myModal.modal.fade role="dialog" 
   .modal-dialog#drives
     /! Modal content

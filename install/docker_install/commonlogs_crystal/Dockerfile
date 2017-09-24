@@ -1,7 +1,7 @@
 FROM crystallang/crystal:latest
 
 RUN apt-get update
-RUn apt-get install -y nano
+RUN apt-get install -y nano
 
 RUN mkdir '/var/log/commonlogs'
 RUN chown -R :syslog /var/log/commonlogs

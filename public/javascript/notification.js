@@ -14,7 +14,7 @@ $(function(){
           $('.nav-pills a[href="#slack"]').tab('show');
         }else {
           $("#webhookUrl").val(data.type_data.webhooks);
-          $('.nav-pills a[href="#webhook"]').tab('show');          
+          $('.nav-pills a[href="#webhook"]').tab('show');
         }
         var checked = (data.type_data.context == "true");
         if (!checked) {
@@ -193,6 +193,10 @@ $(function(){
     return false;
   });
 
+  $("#sw").change(function() {
+    hideShowActionButtons();
+  });
+
   function eventChanged($el) {
     var name = $el.attr("data-group");
     var url = "event_manager?name=" + name;
@@ -206,7 +210,7 @@ $(function(){
   $("#testUrl").click(sendTest);
   $("#webhookUrl").keypress(showHideTest);
   $("#webhookUrl").focusout(showHideTest);
-    
+
   $('.nav-tabs a[href="#webhook"]').tab('show');
 
   loadData();
