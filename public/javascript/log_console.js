@@ -11,6 +11,14 @@ LogConsole.prototype = {
 	clearLoading: function() {
 		$(".liEndCap").remove();
 	},
+	escapeHtml: function(s) {
+		var n = s;
+    n = n.replace(/&/g, '&amp;');
+    n = n.replace(/</g, '&lt;');
+    n = n.replace(/>/g, '&gt;');
+    n = n.replace(/"/g, '&quot;');
+    return n;
+  },
 	addRows: function(data, eventName) {
 		var row;
 		var rowDate;
@@ -97,14 +105,6 @@ LogConsole.prototype = {
 	setLoading: function(isLoading) {
 		this.skipLoadMoreEvent = isLoading;
 	},
-	escapeHtml: function(s) {
-		var n = s;
-    n = n.replace(/&/g, '&amp;');
-    n = n.replace(/</g, '&lt;');
-    n = n.replace(/>/g, '&gt;');
-    n = n.replace(/"/g, '&quot;');
-    return n;
-  },
 	highlightAnsi: function(str) {
 		var v = str;
 		v = str.replace(/\[\[\[span\:(.*?)\]\]\]/g, "<span style='$1'>");
