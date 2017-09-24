@@ -48,7 +48,7 @@ LogConsole.prototype = {
 				try {
 					v = JSON.parse(row[3]);
 					if (v) {
-						row[3] = "<pre>" + JSON.stringify(v, null, 2) + "</pre>";
+						row[3] = JSON.stringify(v, null, 2);
 					}
 				}catch(ex) {
 					// Do Nothing. Not JSON...move on
