@@ -61,7 +61,7 @@ LogConsole.prototype = {
 
 
 			href = "context?name=" + commonLog.name + "&time=" + row[0] + "&server=" + row[2] + "&seq=" + row[1] + "&file=" + row[4];
-			var rowText = escapeHtml(row[3].toString());
+			var rowText = _this.escapeHtml(row[3].toString());
 			if (rowText.includes("[[[")) {
 				rowText = this.highlightAnsi(rowText);
 			}
