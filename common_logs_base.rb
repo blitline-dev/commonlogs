@@ -29,7 +29,7 @@ class CommonLogsBase < Sinatra::Base
   set :show_exceptions, false
   # Listen to all non-localhost requests
   set :timeout, 60
-  configure do 
+  configure do
     set :server, :puma
     set :memcached, CommonLogs::Dalli.new
   end
@@ -92,7 +92,7 @@ class CommonLogsBase < Sinatra::Base
       query[-1] = ""
     end
 
-    return text.gsub(/(#{query})/i, "<span class='fructy'>\\1</span>") if text
+    return text.gsub(/(#{query})/i, "[[*html.span.fructy]]\\1[[*html.end.span]]") if text
 
     return text
   end

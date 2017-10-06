@@ -44,16 +44,7 @@ LogConsole.prototype = {
 				row[2] = "";
 			}
 
-			if (row[3] && row[3].toString().charAt(0) === "{") {
-				try {
-					v = JSON.parse(row[3]);
-					if (v) {
-						row[3] = JSON.stringify(v, null, 2);
-					}
-				}catch(ex) {
-					// Do Nothing. Not JSON...move on
-				}
-			}
+		}
 
 
 			rowUnixDate = parseInt(row[0], 10);
@@ -62,8 +53,25 @@ LogConsole.prototype = {
 
 			href = "context?name=" + commonLog.name + "&time=" + row[0] + "&server=" + row[2] + "&seq=" + row[1] + "&file=" + row[4];
 			var rowText = _this.escapeHtml(row[3].toString());
+
 			if (rowText.includes("[[[")) {
 				rowText = this.highlightAnsi(rowText);
+			}
+
+			if rowText.includes("[[*html.span.fructy]]") {
+				rowText.replace(/\[\[\*html\.span\.fructy\]\]/g, "<span class='fructy'>");
+				rowText.replace(/\[\[\*html\.end\.span\]\]/g, "</span>");
+			}
+
+			if (rowText && rowText.charAt(0) === "{") {
+				try {
+					v = JSON.parse(rowText);
+					if (v) {
+						rowText = JSON.stringify(v, null, 2);
+					}
+				}catch(ex) {
+					// Do Nothing. Not JSON...move on
+				}
 			}
 
 			html = [
