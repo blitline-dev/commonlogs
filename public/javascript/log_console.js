@@ -44,9 +44,6 @@ LogConsole.prototype = {
 				row[2] = "";
 			}
 
-		}
-
-
 			rowUnixDate = parseInt(row[0], 10);
 			rowDate = Utils.formatDate(new Date(rowUnixDate * 1000));
 
@@ -58,7 +55,7 @@ LogConsole.prototype = {
 				rowText = this.highlightAnsi(rowText);
 			}
 
-			if rowText.includes("[[*html.span.fructy]]") {
+			if (rowText.includes("[[*html.span.fructy]]")) {
 				rowText.replace(/\[\[\*html\.span\.fructy\]\]/g, "<span class='fructy'>");
 				rowText.replace(/\[\[\*html\.end\.span\]\]/g, "</span>");
 			}
