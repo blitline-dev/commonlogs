@@ -50,7 +50,8 @@ LogConsole.prototype = {
 				try {
 					v = JSON.parse(rowText);
 					if (v) {
-						rowText = JSON.stringify(v, null, 2).replace(/\n/g, "<br/>");
+						rowText = JSON.stringify(v, null, 2);
+						rowText = "<pre>" + rowText + "</pre>";
 					}
 				}catch(ex) {
 					rowText = _this.escapeHtml(row[3].toString());
