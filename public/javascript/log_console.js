@@ -44,7 +44,8 @@ LogConsole.prototype = {
 				row[2] = "";
 			}
 
-			var rowText = "";
+			var rowText = row[3].toString();
+
 			if (rowText && rowText.charAt(0) === "{") {
 				try {
 					v = JSON.parse(rowText);
@@ -52,7 +53,7 @@ LogConsole.prototype = {
 						rowText = JSON.stringify(v, null, 2);
 					}
 				}catch(ex) {
-					// Do Nothing. Not JSON...move on
+					rowText = _this.escapeHtml(row[3].toString());
 				}
 			}else {
 				rowText = _this.escapeHtml(row[3].toString());
