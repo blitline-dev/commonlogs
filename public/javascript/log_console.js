@@ -56,8 +56,8 @@ LogConsole.prototype = {
 			}
 
 			if (rowText.includes("[[*html.span.fructy]]")) {
-				rowText.replace(/\[\[\*html\.span\.fructy\]\]/g, "<span class='fructy'>");
-				rowText.replace(/\[\[\*html\.end\.span\]\]/g, "</span>");
+				rowText = rowText.replace(/\[\[\*html\.span\.fructy\]\]/g, "<span class='fructy'>");
+				rowText = rowText.replace(/\[\[\*html\.end\.span\]\]/g, "</span>");
 			}
 
 			if (rowText && rowText.charAt(0) === "{") {
