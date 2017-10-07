@@ -1,5 +1,5 @@
 doctype html
-html lang="en" 
+html lang="en"
   head
     meta charset="utf-8"
     meta content="IE=edge" http-equiv="X-UA-Compatible"
@@ -33,7 +33,7 @@ html lang="en"
     link href="vendor/c3/c3.min.css?b=234" rel="stylesheet" /
     link rel="stylesheet" href="/p/styles/li_home.css?bx2xx24g8"
     script
-      | 
+      |
         var commonLog = {};
         commonLog["q"] = "#{{q.to_s.gsub('"',"\\\"")}}";
         commonLog["hours"] = "#{hours}";
@@ -42,7 +42,7 @@ html lang="en"
         commonLog["et"] = "#{params[:et]}"
 
   body.page-loading
-    main role="main" 
+    main role="main"
 
     /! page loading spinner
     .pageload
@@ -78,23 +78,23 @@ html lang="en"
             - if tags && tags.length > 0
               - split_tags = tags.group_by { |x| x.split("@")[0] }.values
               li.hidden-sm-down.tag-lister
-                a.ripple data-toggle="dropdown" href="javascript:;" 
+                a.ripple data-toggle="dropdown" href="javascript:;"
                   span Log Name (#{name})&nbsp;
                   span.caret
                 ul.dropdown-menu
                   - split_tags.each do |split_tag|
                     - if split_tag.length > 1
-                      li.dropdown-header 
+                      li.dropdown-header
                         hr
                         strong #{split_tag[0].split("@")[0]}
                       - split_tag.each do |sub|
                         li
                           a.group(data-group="#{sub}") &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#{sub.split("@")[1]}
-                    -else 
+                    -else
                       li
                         a.group(data-group="#{split_tag[0]}") #{split_tag[0]}
               li.hidden-md-up.tag-lister
-                a.ripple data-toggle="dropdown" href="javascript:;" 
+                a.ripple data-toggle="dropdown" href="javascript:;"
                   span #{name}&nbsp;
                   span.caret
                 ul.dropdown-menu
@@ -103,7 +103,7 @@ html lang="en"
                     a.group(data-group="#{tag}") #{tag}
             - if tags && tags.length > 0
               li.hours
-                a.ripple data-toggle="dropdown" href="javascript:;" 
+                a.ripple data-toggle="dropdown" href="javascript:;"
                   i.fa.fa-clock-o
                   span.hours-text Last 2 hrs
                   span.caret
@@ -136,7 +136,7 @@ html lang="en"
                         li
                         a#custom href="#" data-val="" data-target="#customRange" data-toggle="modal" type="button" Custom
             li
-              a.ripple data-toggle="dropdown" href="javascript:;" 
+              a.ripple data-toggle="dropdown" href="javascript:;"
                 i.fa.fa-cogs
                 span &nbsp;Menu
                 span.caret
@@ -150,7 +150,7 @@ html lang="en"
                     a href="events?name=#{name}&hours=1"  Events
                   li
                     a href="event_manager?name=#{name}"  Event Manager
-                  li.divider role="separator" 
+                  li.divider role="separator"
                 li
                   a href="settings?name=#{name}"  Settings
                 li
@@ -174,10 +174,10 @@ html lang="en"
             li.hours-bottom
               ul#bottom-hours(style="padding-left: 0px;")
                 .dropup
-                  button#dropdownMenu2.btn.btn-default.dropdown-toggle.hours-text aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" type="button" 
+                  button#dropdownMenu2.btn.btn-default.dropdown-toggle.hours-text aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" type="button"
                     | Last 2 hrs.
                     span.caret
-                  ul.dropdown-menu aria-labelledby="dropdownMenu2" 
+                  ul.dropdown-menu aria-labelledby="dropdownMenu2"
                     li
                       a.search-hrs href="#" data-val="1"  Last 1 hr
                     li.divider
@@ -204,16 +204,16 @@ html lang="en"
               a.count
 
     /! /bottom footer
-    
-  script src="/vendor/sugar/sugar.js" 
-  script src="scripts/helpers/modernizr.js" 
-  script src="vendor/jquery/dist/jquery.js" 
-  script src="vendor/bootstrap/dist/js/bootstrap.js" 
-  script src="vendor/fastclick/lib/fastclick.js" 
-  script src="vendor/perfect-scrollbar/js/perfect-scrollbar.jquery.js" 
-  script src="scripts/helpers/smartresize.js" 
-  script src="scripts/constants.js" 
-  script src="scripts/main.js" 
+
+  script src="/vendor/sugar/sugar.js"
+  script src="scripts/helpers/modernizr.js"
+  script src="vendor/jquery/dist/jquery.js"
+  script src="vendor/bootstrap/dist/js/bootstrap.js"
+  script src="vendor/fastclick/lib/fastclick.js"
+  script src="vendor/perfect-scrollbar/js/perfect-scrollbar.jquery.js"
+  script src="scripts/helpers/smartresize.js"
+  script src="scripts/constants.js"
+  script src="scripts/main.js"
   script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/highlight.min.js"
 
   script src="javascript/layout.js?f=45v98"
@@ -226,26 +226,26 @@ html lang="en"
   script src="vendor/sortable/js/sortable.js?f=54444"
   /! endbuild
   /! initialize page scripts
-  script src="scripts/helpers/sameheight.js" 
-  
+  script src="scripts/helpers/sameheight.js"
 
-  script src="vendor/chosen_v1.4.0/chosen.jquery.min.js" 
-  script src="vendor/card/lib/js/jquery.card.js" 
-  script src="vendor/jquery-validation/dist/jquery.validate.min.js" 
-  script src="vendor/checkbo/src/0.1.4/js/checkBo.min.js" 
+
+  script src="vendor/chosen_v1.4.0/chosen.jquery.min.js"
+  script src="vendor/card/lib/js/jquery.card.js"
+  script src="vendor/jquery-validation/dist/jquery.validate.min.js"
+  script src="vendor/checkbo/src/0.1.4/js/checkBo.min.js"
   script src="scripts/helpers/selectfx.js"
   script src="vendor/sweetalert/dist/sweetalert.min.js"
 
 
   /! end initialize page scripts
   script src="javascript/utils.js?x354a22"
-  script src="javascript/log_console.js?35b2x2"
+  script src="javascript/log_console.js?35b2x24"
 
   == yield_content :javascripter
 
 
 /! Modal Start here
-#myPleaseWait.modal.fade.bs-example-modal-sm data-backdrop="static" role="dialog" tabindex="-1" 
+#myPleaseWait.modal.fade.bs-example-modal-sm data-backdrop="static" role="dialog" tabindex="-1"
   .modal-dialog.modal-sm
     .modal-content
       .modal-header
@@ -282,7 +282,7 @@ html lang="en"
           .sk-rect.sk-rect4
           .sk-rect.sk-rect2
 
-#confirmDelete.modal.fade aria-hidden="true" aria-labelledby="confirmDeleteLabel" role="dialog" 
+#confirmDelete.modal.fade aria-hidden="true" aria-labelledby="confirmDeleteLabel" role="dialog"
   .modal-dialog
     .modal-content
       .modal-header
@@ -293,7 +293,7 @@ html lang="en"
       .modal-footer
         button.btn.btn-default data-dismiss="modal" type="button"  Cancel
         button#confirm.btn.btn-danger type="button"  Delete
-#customRange.modal.fade role="dialog" 
+#customRange.modal.fade role="dialog"
   .modal-dialog
     /! Modal content
     .modal-content
@@ -305,7 +305,7 @@ html lang="en"
           .form-group
             .col-6
               label.control-label for="textinput" Start Time
-              input#startTime.form-control.input-md name="startTime" placeholder="Example '1:30pm'" required="true" type="text" 
+              input#startTime.form-control.input-md name="startTime" placeholder="Example '1:30pm'" required="true" type="text"
           .form-group
             .col-6
               label.control-label for="textinput" End Time
