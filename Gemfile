@@ -1,7 +1,9 @@
 source 'https://rubygems.org'
 
 gem 'sinatra'
+gem 'sinatra-contrib'
 gem 'sinatra_more'
+gem 'sinatra-advanced-routes', require: 'sinatra/advanced_routes'
 gem 'awesome_print'
 gem 'dalli'
 gem 'slim'
