@@ -16,8 +16,8 @@ ENV PATH="/truffleruby-20.1.0-linux-amd64/bin:/usr/local/sbin:/usr/local/bin:/us
 
 RUN apt-get install -y nano git memcached
 
-
 RUN apt-get install -y build-essential openssl curl zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf
+ENV CL_VERSION "0.01.57"
 RUN git clone https://github.com/blitline-dev/commonlogs.git
 RUN cd commonlogs &&  bundle install
 
