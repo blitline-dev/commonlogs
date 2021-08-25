@@ -10,6 +10,7 @@ gem 'slim'
 gem 'nokogiri'
 # gem 'puma'
 gem 'ansi-to-html'
+gem 'thin'
 
 group(:development) do
   gem 'byebug'
