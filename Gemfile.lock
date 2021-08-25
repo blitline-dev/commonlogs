@@ -15,15 +15,20 @@ GEM
     dalli (2.7.10)
     i18n (1.8.3)
       concurrent-ruby (~> 1.0)
-    mini_portile2 (2.4.0)
+    mini_portile2 (2.5.3)
     minitest (5.14.1)
     monkey-lib (0.4.2)
       backports
     multi_json (1.14.1)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
-    nokogiri (1.10.9)
-      mini_portile2 (~> 2.4.0)
+    nio4r (2.5.8)
+    nokogiri (1.11.4)
+      mini_portile2 (~> 2.5.0)
+      racc (~> 1.4)
+    puma (5.4.0)
+      nio4r (~> 2.0)
+    racc (1.5.2)
     rack (2.2.2)
     rack-protection (2.0.8.1)
       rack
@@ -73,6 +78,7 @@ DEPENDENCIES
   byebug
   dalli
   nokogiri
+  puma
   sinatra
   sinatra-advanced-routes
   sinatra-contrib
