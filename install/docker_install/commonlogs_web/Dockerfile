@@ -8,7 +8,7 @@ ENV VERSION "0.0.1"
 RUN git clone https://github.com/blitline-dev/commonlogs.git
 RUN cd commonlogs &&  bundle update && bundle install
 
-ENV CL_VERSION "0.01.59"
+ENV CL_VERSION "0.01.67"
 RUN cd commonlogs && git fetch && git reset --hard origin/master && bundle update && bundle install
 RUN memcached -d -u root
 EXPOSE 4567/tcp
