@@ -30,9 +30,8 @@ class CommonLogsBase < Sinatra::Base
   # Listen to all non-localhost requests
   set :timeout, 60
   configure do
-    set :server, :webrick
+    set :server, :puma
     set :memcached, CommonLogs::Dalli.new
-    set :bind, '0.0.0.0'
   end
 
   error do
