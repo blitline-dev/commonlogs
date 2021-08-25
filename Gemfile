@@ -8,7 +8,7 @@ gem 'awesome_print'
 gem 'dalli'
 gem 'slim'
 gem 'nokogiri'
-gem 'puma'
+# gem 'puma'
 gem 'ansi-to-html'
 
 group(:development) do

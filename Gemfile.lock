@@ -22,11 +22,8 @@ GEM
     multi_json (1.14.1)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
-    nio4r (2.5.2)
     nokogiri (1.10.9)
       mini_portile2 (~> 2.4.0)
-    puma (4.3.5)
-      nio4r (~> 2.0)
     rack (2.2.2)
     rack-protection (2.0.8.1)
       rack
@@ -76,10 +73,11 @@ DEPENDENCIES
   byebug
   dalli
   nokogiri
-  puma
   sinatra
   sinatra-advanced-routes
   sinatra-contrib
   sinatra_more
   slim
 
+BUNDLED WITH
+   1.17.3
