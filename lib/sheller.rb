@@ -24,7 +24,7 @@ module Sheller
       results = parse_results(output)
     end
     end_time = Time.now.to_f
-    LOGGER.log "Finished after: #{end_time - start_time} seconds"
+    LOGGER.log "Finished after: #{end_time - start_time} seconds -- #{cmd_string}"
 
     return results
   end

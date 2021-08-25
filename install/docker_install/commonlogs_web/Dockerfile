@@ -1,8 +1,7 @@
-FROM quay.io/evl.ms/fullstaq-ruby:2.6.6-jemalloc-buster-slim
-
+FROM flavorjones/truffleruby:buster-slim
 RUN apt-get update
 RUN apt-get install -y nano git memcached
-
+RUN gem install bundler -v 1.17.3
 
 RUN apt-get install -y build-essential openssl curl zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf
 RUN git clone https://github.com/blitline-dev/commonlogs.git

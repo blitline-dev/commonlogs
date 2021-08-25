@@ -83,5 +83,3 @@ DEPENDENCIES
   sinatra_more
   slim
 
-BUNDLED WITH
-   1.17.3
