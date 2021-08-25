@@ -9,9 +9,9 @@ RUN git clone https://github.com/blitline-dev/commonlogs.git
 RUN cd commonlogs &&  bundle update && bundle install
 
 ENV CL_VERSION "0.01.58"
-RUN cd commonlogs && git pull --force && bundle update && bundle install
+RUN cd commonlogs && git fetch && git reset --hard origin/master && bundle update && bundle install
 RUN memcached -d -u root
 EXPOSE 4567/tcp
 WORKDIR /commonlogs
-ENTRYPOINT memcached -d -u root && bundle exec rackup -p 4567
+ENTRYPOINT memcached -d -u root && bundle exec rackup -p 4567 -o 0.0.0.0
 
