@@ -168,7 +168,7 @@ class Search
       app = "egrep"
       text = text[1..text.length - 2]
     else
-      app = "fgrep"
+      app = "rg -F --no-heading --no-line-number"
     end
 
     # Force more than 1 files so that fgrep output ALWAYS prepends the filename for search
@@ -186,7 +186,7 @@ class Search
     if with_context
       cmd_string = find_context_with_host(text, file_paths, host)
     else
-      cmd_string = "export LC_ALL=C && #{app} -m 10000 -ir '#{text}' #{file_paths.join(' ')}"
+      cmd_string = "export LC_ALL=C && #{app} -m 10000 -F -i '#{text}' #{file_paths.join(' ')}"
     end
 
     shell_results = execute_shell_command(cmd_string)
